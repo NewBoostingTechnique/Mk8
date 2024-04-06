@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" />
+  </ItemGroup>
+  <PropertyGroup>
+    <UserSecretsId>4cfe11b2-1d73-47d9-86bb-695aea43903c</UserSecretsId>
+  </PropertyGroup>
+  <Target Name="CleanFrontEnd" BeforeTargets="Clean">
+    <Exec Command="pnpm run clean" LogStandardErrorAsError="true" />
+  </Target>
+  <Target Name="BuildFrontEnd" BeforeTargets="BeforeBuild">
+    <Exec Command="pnpm run build:$(Configuration)" LogStandardErrorAsError="true" />
+  </Target>
+  <Target Name="RestoreFrontEnd" BeforeTargets="Restore" Inputs="package.json" Outputs="node_modules/.install-stamp">
+    <Exec Command="pnpm i" LogStandardErrorAsError="true" />
+    <Touch Files="node_modules/.install-stamp" AlwaysCreate="true" />
+  </Target>
+</Project>

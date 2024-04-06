@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup>
+    <AssemblyName>Mk8.$(MSBuildProjectName)</AssemblyName>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+</Project>
