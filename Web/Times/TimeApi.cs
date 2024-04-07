@@ -26,13 +26,13 @@ public class TimeApi(
             return BadRequestPropertyRequired(nameof(Time.Span));
 
         if (!await courseService.ExistsAsync(time.CourseName))
-            return BadRequest($"Course '{time.CourseName}' does not exist.");
+            return NotFound(time.CourseName);
 
         if (!await playerService.ExistsAsync(time.PlayerName))
-            return BadRequest($"Player '{time.PlayerName}' does not exist.");
+            return NotFound(time.PlayerName);
 
         if (await timeService.ExistsAsync(time.CourseName, time.PlayerName))
-            return BadRequest($"Player '{time.PlayerName}' already has a time for course '{time.CourseName}'.");
+            return Conflict();
 
         return Ok(await timeService.InsertAsync(time));
     }

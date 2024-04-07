@@ -11,7 +11,8 @@ public class RegionApi(IRegionService regionService) : Api
     [AllowAnonymous, HttpGet("{countryName}")]
     public async Task<IActionResult> ListAsync([FromRoute] string countryName)
     {
-        //TODO: Do we need to defend against null?
+        if (string.IsNullOrWhiteSpace(countryName))
+            return BadRequestPropertyRequired(nameof(countryName));
 
         return Ok(await regionService.ListAsync(countryName));
     }

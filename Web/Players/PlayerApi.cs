@@ -39,7 +39,7 @@ public class PlayerApi(
     }
 
     [HttpPost("")]
-    public async Task<IActionResult> PostAsync([FromBody] Player player)
+    public async Task<IActionResult> InsertAsync([FromBody] Player player)
     {
         if (string.IsNullOrWhiteSpace(player?.CountryName))
             return BadRequestPropertyRequired(nameof(Player.CountryName));
@@ -48,13 +48,13 @@ public class PlayerApi(
             return BadRequestNameRequired();
 
         if (await playerService.ExistsAsync(player.Name))
-            return BadRequest($"Player '{player.Name}' already exists.");
+            return Conflict();
 
         if (string.IsNullOrWhiteSpace(player.ProofTypeDescription))
             return BadRequestPropertyRequired(nameof(Player.ProofTypeDescription));
 
         if (!await proofService.ExistsAsync(player.ProofTypeDescription))
-            return BadRequest($"Proof type '{player.ProofTypeDescription}' does not exist.");
+            return NotFound(player.ProofTypeDescription);
 
         return Ok(await playerService.InsertAsync(player));
     }
@@ -68,7 +68,7 @@ public class PlayerApi(
 
     private BadRequestObjectResult BadRequestNameRequired()
     {
-        return BadRequest(nameof(Player.Name));
+        return BadRequestPropertyRequired(nameof(Player.Name));
     }
 
     private NotFoundObjectResult NotFound(string name)
