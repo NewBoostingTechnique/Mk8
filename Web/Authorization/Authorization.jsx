@@ -17,8 +17,6 @@ export default function Authorization() {
     }
   });
 
-  // TODO: Better indicator.
-  // TODO: Update to reflect when authenticating vs authorizing.
   return (
     <Typography variant='h3'>Authorizing...</Typography>
   );
