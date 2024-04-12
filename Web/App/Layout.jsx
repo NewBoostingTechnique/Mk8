@@ -90,7 +90,7 @@ export default function Layout({ children }) {
         <Box sx={{ width: { md: `calc(100% - ${drawerWidth}px)` } }}>
           <Toolbar />
           <Box component='img' src="/banner.jpg" sx={{ display: 'block', margin: 'auto', objectFit: 'cover', width: '1000px' }} />
-          <Box sx={{ p: 3 }}>
+          <Box sx={{ m: "auto", p: 2, width: "95%" }}>
             {children}
           </Box>
         </Box>

@@ -4,6 +4,7 @@ import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import {
   Button,
   Paper,
+  Stack,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   Typography
 } from '@mui/material';
@@ -67,7 +68,7 @@ export default function PlayerList() {
   }
 
   return (
-    <>
+    <Stack sx={{ gap: 3 }}>
       <Typography variant='h3'>Players</Typography>
       {
         loaderData.authorization === true
@@ -96,6 +97,6 @@ export default function PlayerList() {
           </TableBody>
         </Table>
       </TableContainer>
-    </>
+    </Stack>
   );
 }

@@ -1,5 +1,5 @@
 import useTimeClient from './TimeClient.js';
-import { Button, MenuItem, Select, TextField } from '@mui/material';
+import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import * as React from 'react';
@@ -44,23 +44,24 @@ export default function TimeCreate() {
   // TODO Something better than always loading all players before this page is shown
 
   return (
-    <form onSubmit={onSubmitAsync}>
-      <Select name="playerName" label="Player" value={playerName} onChange={onPlayerChange}>
+    <Stack component="form" onSubmit={onSubmitAsync} sx={{ gap: 3, m: "auto", width: "75%" }}>
+      <Typography variant='h3'>Create Time</Typography>
+      <TextField autoFocus name="playerName" label="Player" onChange={onPlayerChange} required select value={playerName}>
         {loaderData.players.map(player =>
           <MenuItem key={player.name} value={player.name}>{player.name}</MenuItem>
         )}
-      </Select>
-      <Select name="courseName" label="Course" value={courseName} onChange={onCourseChange} required>
+      </TextField>
+      <TextField name="courseName" label="Course" onChange={onCourseChange} required select value={courseName}>
         {loaderData.courses.map(course =>
           <MenuItem key={course.name} value={course.name}>{course.name}</MenuItem>
         )}
-      </Select>
+      </TextField>
       {/* TODO Required doesn't do anything? -> Form validation */}
-      <InputMask mask="9'99&quot;999" label="Time" value={timeSpan} disabled={false} maskChar="-" onChange={onTimeChange} required>
-        {() => <TextField name="span" />}
+      <InputMask mask="9'99&quot;999" value={timeSpan} disabled={false} maskChar="-" onChange={onTimeChange} required>
+        {() => <TextField label="Time" name="span" />}
       </InputMask>
       <DatePicker label="Date" name="date" value={dayjs(date)} onChange={onDateChange} />
       <Button type="submit" variant="contained">Submit</Button>
-    </form>
+    </Stack>
   );
 }

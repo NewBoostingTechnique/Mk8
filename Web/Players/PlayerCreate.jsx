@@ -1,4 +1,4 @@
-import { Button, MenuItem, Select, TextField } from '@mui/material';
+import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import * as React from 'react';
 import usePlayerClient from './PlayerClient.js';
@@ -10,11 +10,8 @@ export default function PlayerCreate() {
   const regionClient = useRegionClient();
   const navigate = useNavigate();
 
-  //TODO: Default select boxes to placeholder.
-  //TODO: Style this form.
-
-  const [country, setCountry] = React.useState(loaderData.countries.find(_ => _)?.name);
-  const [proof, setProof] = React.useState(loaderData.proofTypes.find(_ => _)?.id);
+  const [country, setCountry] = React.useState();
+  const [proof, setProof] = React.useState();
   const [region, setRegion] = React.useState();
   const [regions, setRegions] = React.useState([]);
 
@@ -39,25 +36,32 @@ export default function PlayerCreate() {
     navigate(`/player/detail/${player.name}`);
   }
 
+  // TODO: Factor styles into a new form component
+
+  // TODO: Factory page title into Layout component.
+
+  // TODO: Alignment of MenuItems on narrower screens -> Due to the banner style / size of parent container?
+
   return (
-    <form onSubmit={onSubmitAsync}>
-      <TextField name="name" label="Name" required />
-      <Select name="countryName" label="Country" value={country} onChange={onCountryChange} required>
+    <Stack component="form" onSubmit={onSubmitAsync} sx={{ gap: 3 }}>
+      <Typography variant='h3'>Create Player</Typography>
+      <TextField autoFocus name="name" label="Name" required />
+      <TextField name="countryName" label="Country" onChange={onCountryChange} required select value={country}>
         {loaderData.countries.map(country =>
           <MenuItem key={country.name} value={country.name}>{country.name}</MenuItem>
         )}
-      </Select>
-      <Select name="regionName" label="Town/Region" value={region} onChange={onRegionChange} required>
+      </TextField>
+      <TextField name="regionName" label="Town/Region" onChange={onRegionChange} required select value={region} >
         {regions.map(region =>
           <MenuItem key={region.name} value={region.name}>{region.name}</MenuItem>
         )}
-      </Select>
-      <Select name="proofTypeDescription" label="Proof" value={proof} onChange={onProofChange} required>
+      </TextField>
+      <TextField name="proofTypeDescription" label="Proof" onChange={onProofChange} required select value={proof}>
         {loaderData.proofTypes.map(proofType =>
           <MenuItem key={proofType.description} value={proofType.description}>{proofType.description}</MenuItem>
         )}
-      </Select>
+      </TextField>
       <Button type="submit" variant="contained">Submit</Button>
-    </form>
+    </Stack>
   );
 }

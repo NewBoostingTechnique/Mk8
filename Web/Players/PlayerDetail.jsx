@@ -4,6 +4,7 @@ import {
   Dialog, DialogActions, DialogTitle,
   List, ListItem, ListItemText,
   Paper,
+  Stack,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   Typography
 } from '@mui/material';
@@ -109,7 +110,7 @@ export default function PlayerDetail() {
   }
 
   return (
-    <>
+    <Stack sx={{ gap: 3 }}>
       <Typography variant='h3'>{loaderData.player.name}</Typography>
       <List>
         <ListItem>
@@ -158,6 +159,6 @@ export default function PlayerDetail() {
           </TableBody>
         </Table>
       </TableContainer>
-    </>
+    </Stack>
   );
 }
