@@ -11,5 +11,6 @@ IF NOT DEFINED MK8_DB SET /p "MK8_DB=MK8 DB: "
 ECHO Seeding Database...
 CALL "%~dp0/../Courses/MySql/CourseSeed.cmd"
 CALL "%~dp0/../Locations/MySql/LocationSeed.cmd"
+CALL "%~dp0/../Persons/MySql/PersonSeed.cmd"
 CALL "%~dp0/../ProofTypes/MySql/ProofTypeSeed.cmd"
 CALL "%~dp0/../Users/MySql/UserSeed.cmd"
