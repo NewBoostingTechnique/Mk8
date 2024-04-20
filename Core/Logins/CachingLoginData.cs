@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Mk8.Core.Users;
+namespace Mk8.Core.Logins;
 
-internal class CachingUserData(IMemoryCache cache, IUserData innerData) : IUserData
+internal class CachingLoginData(IMemoryCache cache, ILoginData innerData) : ILoginData
 {
     public Task<bool> ExistsAsync(string email)
     {

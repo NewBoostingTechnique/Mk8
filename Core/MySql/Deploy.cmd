@@ -4,7 +4,7 @@ cmd /c "%~f0" :historySafe
 EXIT /b
 
 :historySafe
-IF NOT DEFINED USER SET /p "USER=User: "
+IF NOT DEFINED USER SET /p "USER=Login: "
 IF NOT DEFINED MYSQL_PWD SET /p "MYSQL_PWD=Password: "
 IF NOT DEFINED MK8_DB SET /p "MK8_DB=MK8 DB: "
 IF NOT DEFINED MK8_PWD SET /p "MK8_PWD=MK8 Password: "
@@ -19,4 +19,4 @@ CALL "%~dp0/../Persons/MySql/PersonDeploy.cmd"
 CALL "%~dp0/../ProofTypes/MySql/ProofTypeDeploy.cmd"
 CALL "%~dp0/../Players/MySql/PlayerDeploy.cmd"
 CALL "%~dp0/../Times/MySql/TimeDeploy.cmd"
-CALL "%~dp0/../Users/MySql/UserDeploy.cmd"
+CALL "%~dp0/../Logins/MySql/LoginDeploy.cmd"

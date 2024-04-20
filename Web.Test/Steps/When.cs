@@ -19,7 +19,7 @@ public class When(Func<IPage> pageAccessor, IMk8Instance softwareUnderTest)
         Player player = new()
         {
             Name = Guid.NewGuid().ToString(),
-            Country = Guid.NewGuid().ToString(),
+            CountryName = Guid.NewGuid().ToString(),
             ProofTypeId = ProofType.NoProof.Id
         };
 

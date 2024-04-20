@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Mk8.Core.Users;
+using Mk8.Core.Logins;
 using Mk8.Web.Authorization;
 
 namespace Mk8.Web.Access;
@@ -8,7 +8,7 @@ namespace Mk8.Web.Access;
 [Route("/api/authorization")]
 public class AuthorizationApi(
     IHttpContextAccessor httpContextAccessor,
-    IUserService userService
+    ILoginService loginService
 ) : ControllerBase
 {
     [HttpPost("")]
@@ -22,7 +22,7 @@ public class AuthorizationApi(
     {
         return Ok
         (
-            await userService.IsCurrentUserAuthorizedAsync(httpContextAccessor.HttpContext)
+            await loginService.IsCurrentLoginAuthorizedAsync(httpContextAccessor.HttpContext)
         );
     }
 }

@@ -33,7 +33,7 @@ public class Player
 
     #region ProofType.
 
-    internal string? ProofTypeId { get; set; }
+    public string? ProofTypeId { get; set; }
 
     public string? ProofTypeDescription { get; set; }
 

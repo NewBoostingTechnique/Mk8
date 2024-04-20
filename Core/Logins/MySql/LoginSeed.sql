@@ -1,4 +1,4 @@
-INSERT INTO `users` (
+INSERT INTO `logins` (
   `Id`,
   `Email`,
   `PersonId`

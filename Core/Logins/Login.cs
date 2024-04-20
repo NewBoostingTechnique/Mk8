@@ -1,6 +1,6 @@
-namespace Mk8.Core.Users;
+namespace Mk8.Core.Logins;
 
-public class User
+public class Login
 {
     internal string? Id { get; init; }
 

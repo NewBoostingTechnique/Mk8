@@ -6,7 +6,7 @@ using Mk8.Core.Locations;
 using Mk8.Core.Players;
 using Mk8.Core.ProofTypes;
 using Mk8.Core.Times;
-using Mk8.Core.Users;
+using Mk8.Core.Logins;
 
 namespace Mk8.Core.Extensions;
 
@@ -21,7 +21,7 @@ public static class HostApplicationBuilderExtensions
             .AddPlayers()
             .AddProofTypes()
             .AddTimes()
-            .AddUsers();
+            .AddLogins();
 
         return builder;
     }

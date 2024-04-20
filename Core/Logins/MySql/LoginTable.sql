@@ -1,16 +1,14 @@
--- TODO: Rename 'User' -> 'Logon' (Person can have multiple logons).
-
 -- TODO: Deduplicate player name with person name.
 -- Keep the Player table, even if it just keys the person table.
 
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE IF NOT EXISTS `logins` (
   `Id` VARCHAR(32) NOT NULL,
   `Email` VARCHAR(255) NOT NULL,
   `PersonId` VARCHAR(32) NOT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE INDEX `Email_UNIQUE` (`Email` ASC) VISIBLE,
   INDEX `Email_INDEX` (`Email` ASC) VISIBLE,
-  CONSTRAINT `User_Person`
+  CONSTRAINT `Login_Person`
     FOREIGN KEY (`PersonId`)
     REFERENCES `persons` (`Id`)
 )
