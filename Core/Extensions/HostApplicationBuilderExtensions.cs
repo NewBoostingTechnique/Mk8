@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mk8.Core.Courses;
 using Mk8.Core.Locations;
+using Mk8.Core.News;
 using Mk8.Core.Players;
 using Mk8.Core.ProofTypes;
 using Mk8.Core.Times;
@@ -18,6 +19,7 @@ public static class HostApplicationBuilderExtensions
             .Configure<Mk8Settings>(builder.Configuration.GetRequiredSection("Mk8"))
             .AddCourses()
             .AddLocations()
+            .AddNews()
             .AddPlayers()
             .AddProofTypes()
             .AddTimes()

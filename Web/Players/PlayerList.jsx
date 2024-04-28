@@ -86,7 +86,7 @@ export default function PlayerList() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {loaderData.players.map((player) => (
+            {loaderData.players.map(player => (
               <TableRow key={player.name} onClick={() => navigate(`/player/detail/${player.name}`)}>
                 <TableCell>{player.name}</TableCell>
                 <TableCell>{getLocation(player)}</TableCell>

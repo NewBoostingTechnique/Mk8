@@ -1,6 +1,7 @@
 {
     "editor.detectIndentation": false,
     "cSpell.words": [
+        "dompurify",
         "onwarn",
         "prooftypes"
     ]
