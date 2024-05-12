@@ -1,7 +1,7 @@
-DROP procedure IF EXISTS `NewsList`;
+DROP procedure IF EXISTS `NewList`;
 
 DELIMITER $$
-CREATE PROCEDURE `NewsList` ()
+CREATE PROCEDURE `NewList` ()
 BEGIN
   SELECT
     persons.Name AS 'AuthorPersonName',
@@ -11,7 +11,9 @@ BEGIN
   FROM
     News
     JOIN
-      persons ON News.AuthorPersonId = persons.Id;
+      persons ON News.AuthorPersonId = persons.Id
+  ORDER BY
+    news.Date DESC;
 END$$
 
 DELIMITER ;

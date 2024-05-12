@@ -6,11 +6,13 @@ using Mk8.Web.App;
 namespace Mk8.Web.News;
 
 [Route("api/news")]
-public class NewsApi(INewsService newsService) : Api
+public class NewsApi(INewService newsService) : Api
 {
     [AllowAnonymous, HttpGet("")]
     public async Task<IActionResult> ListAsync()
     {
         return Ok(await newsService.ListAsync());
     }
+
+    // TODO: insert a sync record in the database.
 }

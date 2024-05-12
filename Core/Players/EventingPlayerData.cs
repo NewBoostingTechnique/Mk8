@@ -3,7 +3,8 @@ using static Mk8.Core.Players.IPlayerDataEvents;
 
 namespace Mk8.Core.Players;
 
-internal class EventingPlayerData(IPlayerData innerData) : IPlayerData, IPlayerDataEvents
+internal class EventingPlayerData(IPlayerData innerData)
+    : IPlayerData, IPlayerDataEvents
 {
 
     #region Delete.

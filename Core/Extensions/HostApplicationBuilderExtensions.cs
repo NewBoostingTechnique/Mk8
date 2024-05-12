@@ -8,24 +8,27 @@ using Mk8.Core.Players;
 using Mk8.Core.ProofTypes;
 using Mk8.Core.Times;
 using Mk8.Core.Logins;
+using Mk8.Core.Syncs;
+using Mk8.Core.Persons;
 
 namespace Mk8.Core.Extensions;
 
 public static class HostApplicationBuilderExtensions
 {
-    public static IHostApplicationBuilder AddMk8(this IHostApplicationBuilder builder)
+    public static void AddMk8(this IHostApplicationBuilder builder)
     {
-        builder.Services
-            .Configure<Mk8Settings>(builder.Configuration.GetRequiredSection("Mk8"))
-            .AddCourses()
-            .AddLocations()
-            .AddNews()
-            .AddPlayers()
-            .AddProofTypes()
-            .AddTimes()
-            .AddLogins();
+        IServiceCollection services = builder.Services;
 
-        return builder;
+        services.Configure<Mk8Settings>(builder.Configuration.GetRequiredSection("Mk8"));
+        services.AddCourses();
+        services.AddLocations();
+        services.AddNews();
+        services.AddPersons();
+        services.AddPlayers();
+        services.AddProofTypes();
+        services.AddSyncs();
+        services.AddTimes();
+        services.AddLogins();
     }
 
     internal static ServiceDescriptor GetServiceDescriptor<TService>(this IServiceCollection services)

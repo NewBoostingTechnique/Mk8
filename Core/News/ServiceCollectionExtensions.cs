@@ -6,27 +6,41 @@ namespace Mk8.Core.News;
 
 internal static class ServiceCollectionExtensions
 {
-    internal static IServiceCollection AddNews(this IServiceCollection services)
+    internal static void AddNews(this IServiceCollection services)
     {
-        return services
-            .AddSingleton<INewsData, MySqlNewsData>()
-            .AddNewsCaching()
-            .AddSingleton<INewsService, NewsService>();
+        services.AddSingleton<INewData, MySqlNewData>();
+        services.AddSingleton<INewSource, Mk8NewsScraper>();
+        services.AddSingleton<INewSync, NewSync>();
+        services.AddNewsCaching();
+        services.AddSingleton<INewService, NewService>();
     }
 
-    private static IServiceCollection AddNewsCaching(this IServiceCollection services)
+    private static void AddNewsCaching(this IServiceCollection services)
     {
         services.AddMemoryCache();
 
-        ServiceDescriptor? descriptor = services.GetServiceDescriptor<INewsData>();
+        ServiceDescriptor? descriptor = services.GetServiceDescriptor<INewData>();
 
-        return services.AddSingleton<INewsData>
+        services.AddSingleton(sp => ActivatorUtilities.CreateInstance<EventingNewData>
         (
-            sp => ActivatorUtilities.CreateInstance<CachingNewsData>
-            (
-                sp,
-                (INewsData)descriptor.CreateInstance(sp)
-            )
+            sp,
+            (INewData)descriptor.CreateInstance(sp))
+        );
+
+        services.AddSingleton<INewDataEvents>(sp => sp.GetRequiredService<EventingNewData>());
+
+        services.AddSingleton<INewData>
+        (
+            sp =>
+            {
+                EventingNewData eventingNewData = sp.GetRequiredService<EventingNewData>();
+                return ActivatorUtilities.CreateInstance<CachingNewData>
+                (
+                    sp,
+                    eventingNewData,
+                    eventingNewData
+                );
+            }
         );
     }
 }

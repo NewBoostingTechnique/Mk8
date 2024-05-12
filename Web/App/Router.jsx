@@ -16,6 +16,7 @@ const NewsList = lazy(() => import('../News/NewsList.jsx'));
 const PlayerCreate = lazy(() => import('../Players/PlayerCreate.jsx'));
 const PlayerDetail = lazy(() => import('../Players/PlayerDetail.jsx'));
 const PlayerList = lazy(() => import('../Players/PlayerList.jsx'));
+const SyncCreate = lazy(() => import('../Syncs/SyncCreate.jsx'));
 const TimeCreate = lazy(() => import('../Times/TimeCreate.jsx'));
 
 const authorizationPromise = useAuthorizationClient().getAsync();
@@ -86,6 +87,10 @@ const router = createBrowserRouter([
             player: player
           });
         }
+      },
+      {
+        path: '/sync/create/',
+        element: <SyncCreate />
       },
       {
         path: '/time/create/:playerName/:courseName/',

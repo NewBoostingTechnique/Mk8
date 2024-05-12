@@ -1,8 +1,8 @@
 
 using System.Data;
-using System.Globalization;
 using Microsoft.Extensions.Options;
 using Mk8.Core.Extensions;
+using Mk8.Core.MySql;
 using MySql.Data.MySqlClient;
 
 namespace Mk8.Core.Times.MySql;
@@ -15,8 +15,8 @@ internal class MySqlTimeData(IOptions<Mk8Settings> mk8Options) : ITimeData
 
         using MySqlCommand command = new("TimeExists", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.Add(new MySqlParameter("CourseId", courseId));
-        command.Parameters.Add(new MySqlParameter("PlayerId", playerId));
+        command.AddParameter("CourseId", courseId);
+        command.AddParameter("PlayerId", playerId);
 
         await connection.OpenAsync().ConfigureAwait(false);
         return await command.ExecuteBoolAsync().ConfigureAwait(false);
@@ -28,11 +28,11 @@ internal class MySqlTimeData(IOptions<Mk8Settings> mk8Options) : ITimeData
 
         using MySqlCommand command = new("TimeInsert", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.Add(new MySqlParameter("CourseId", time.CourseId));
-        command.Parameters.Add(new MySqlParameter("PlayerId", time.PlayerId));
-        command.Parameters.Add(new MySqlParameter("TimeDate", time.Date?.ToString("o", CultureInfo.InvariantCulture)));
-        command.Parameters.Add(new MySqlParameter("TimeId", time.Id));
-        command.Parameters.Add(new MySqlParameter("TimeSpan", time.Span));
+        command.AddParameter("CourseId", time.CourseId);
+        command.AddParameter("PlayerId", time.PlayerId);
+        command.AddParameter("TimeDate", time.Date);
+        command.AddParameter("TimeId", time.Id);
+        command.AddParameter("TimeSpan", time.Span);
 
         await connection.OpenAsync().ConfigureAwait(false);
         await command.ExecuteNonQueryAsync().ConfigureAwait(false);

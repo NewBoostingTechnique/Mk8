@@ -1,0 +1,9 @@
+DROP procedure IF EXISTS `NewClear`;
+
+DELIMITER $$
+CREATE PROCEDURE `NewClear` ()
+BEGIN
+  DELETE FROM News;
+END$$
+
+DELIMITER ;

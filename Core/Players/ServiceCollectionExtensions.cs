@@ -6,15 +6,14 @@ namespace Mk8.Core.Players;
 
 internal static class ServiceCollectionExtensions
 {
-    internal static IServiceCollection AddPlayers(this IServiceCollection services)
+    internal static void AddPlayers(this IServiceCollection services)
     {
-        return services
-            .AddSingleton<IPlayerData, MySqlPlayerData>()
-            .AddPlayerCaching()
-            .AddSingleton<IPlayerService, PlayerService>();
+        services.AddSingleton<IPlayerData, MySqlPlayerData>();
+        services.AddPlayerCaching();
+        services.AddSingleton<IPlayerService, PlayerService>();
     }
 
-    private static IServiceCollection AddPlayerCaching(this IServiceCollection services)
+    private static void AddPlayerCaching(this IServiceCollection services)
     {
         services.AddMemoryCache();
 
@@ -28,7 +27,7 @@ internal static class ServiceCollectionExtensions
 
         services.AddSingleton<IPlayerDataEvents>(sp => sp.GetRequiredService<EventingPlayerData>());
 
-        return services.AddSingleton<IPlayerData>
+        services.AddSingleton<IPlayerData>
         (
             sp =>
             {

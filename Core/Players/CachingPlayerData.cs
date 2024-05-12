@@ -7,8 +7,8 @@ namespace Mk8.Core.Players;
 
 internal class CachingPlayerData(
     IMemoryCache cache,
-    IPlayerDataEvents playerEvents,
     IPlayerData innerData,
+    IPlayerDataEvents playerEvents,
     ITimeDataEvents timeEvents
 ) : IPlayerData
 {
@@ -414,17 +414,17 @@ internal class CachingPlayerData(
 
             private void OnPlayerDeleted(object? sender, IPlayerDataEvents.DeletedEventArgs e)
             {
-                _callback(_state);
+                _callback.Invoke(_state);
             }
 
             private void OnPlayerInserted(object? sender, IPlayerDataEvents.InsertedEventArgs e)
             {
-                _callback(_state);
+                _callback.Invoke(_state);
             }
 
             private void OnTimeInserted(object? sender, ITimeDataEvents.InsertedEventArgs e)
             {
-                _callback(_state);
+                _callback.Invoke(_state);
             }
 
             #region IDisposable.
