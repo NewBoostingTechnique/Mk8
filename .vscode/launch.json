@@ -5,7 +5,7 @@
       "name": "Mk8.Web",
       "type": "coreclr",
       "request": "launch",
-      "preLaunchTask": "build",
+      "preLaunchTask": "dotnet: build",
       "program": "${workspaceFolder}/Web/bin/Debug/net8.0/Mk8.Web.dll",
       "cwd": "${workspaceFolder}/Web",
       "stopAtEntry": false,

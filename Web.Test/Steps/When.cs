@@ -20,7 +20,7 @@ public class When(Func<IPage> pageAccessor, IMk8Instance softwareUnderTest)
         {
             Name = Guid.NewGuid().ToString(),
             CountryName = Guid.NewGuid().ToString(),
-            ProofTypeId = ProofType.NoProof.Id
+            ProofTypeId = "1cafdd6d1ef34b35b41e9962051e4c55"
         };
 
         IAPIResponse response = await Page.APIRequest.PostAsync

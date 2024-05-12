@@ -1,3 +1,6 @@
+-- TODO: Deploy to the internet.
+-- TODO: Add a pipeline to deploy from GitHub.
+
 -- TODO: Deduplicate player name with person name.
 -- Keep the Player table, even if it just keys the person table.
 

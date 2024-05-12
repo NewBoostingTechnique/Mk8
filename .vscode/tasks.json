@@ -2,29 +2,14 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "build",
-      "command": "dotnet",
-      "type": "process",
-      "args": [
-        "build",
-        // TODO: Build entire solution
-        "${workspaceFolder}/Web/Web.csproj",
-        "/property:GenerateFullPaths=true",
-        "/consoleloggerparameters:NoSummary"
-      ],
-      "problemMatcher": "$msCompile"
-    },
-    {
-      "label": "run",
-      "command": "dotnet",
-      "type": "process",
-      "args": [
-        "run",
-        "--project=${workspaceFolder}/Web/Web.csproj",
-        "/property:GenerateFullPaths=true",
-        "/consoleloggerparameters:NoSummary"
-      ],
-      "problemMatcher": "$msCompile"
+      "type": "dotnet",
+      "task": "build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [],
+      "label": "dotnet: build"
     }
   ]
 }
