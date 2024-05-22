@@ -11,27 +11,27 @@ internal class EventingPlayerData(IPlayerData innerData)
 
     public event EventHandler<DeletedEventArgs>? Deleted;
 
-    public async Task DeleteAsync(string playerId)
+    public async Task DeleteAsync(string id)
     {
-        await innerData.DeleteAsync(playerId).ConfigureAwait(false);
-        Deleted?.Invoke(this, new DeletedEventArgs(playerId));
+        await innerData.DeleteAsync(id).ConfigureAwait(false);
+        Deleted?.Invoke(this, new DeletedEventArgs(id));
     }
 
     #endregion Delete.
 
-    public Task<bool> ExistsAsync(string playerName)
+    public Task<bool> ExistsAsync(string name)
     {
-        return innerData.ExistsAsync(playerName);
+        return innerData.ExistsAsync(name);
     }
 
-    public Task<Player?> DetailAsync(string playerId)
+    public Task<Player?> DetailAsync(string id)
     {
-        return innerData.DetailAsync(playerId);
+        return innerData.DetailAsync(id);
     }
 
-    public Task<string?> IdentifyAsync(string playerName)
+    public Task<string?> IdentifyAsync(string name)
     {
-        return innerData.IdentifyAsync(playerName);
+        return innerData.IdentifyAsync(name);
     }
 
     #region Insert.

@@ -1,8 +1,8 @@
 namespace Mk8.Core.Persons;
 
-internal class Person
+public class Person
 {
-    internal required string Id { get; init; }
+    internal string? Id { get; set; }
 
-    internal required string Name { get; init; }
+    public required string Name { get; init; }
 }

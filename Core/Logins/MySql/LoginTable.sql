@@ -1,8 +1,6 @@
--- TODO: Deploy to the internet.
--- TODO: Add a pipeline to deploy from GitHub.
+-- TODO: Deploy to the AWS.
 
--- TODO: Deduplicate player name with person name.
--- Keep the Player table, even if it just keys the person table.
+-- TODO: Add a pipeline to deploy from GitHub.
 
 CREATE TABLE IF NOT EXISTS `logins` (
   `Id` VARCHAR(32) NOT NULL,

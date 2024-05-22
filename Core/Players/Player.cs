@@ -1,13 +1,11 @@
 ﻿using System.Collections.Immutable;
+using Mk8.Core.Persons;
 using Mk8.Core.Times;
 
 namespace Mk8.Core.Players;
 
-public class Player
+public class Player : Person
 {
-    internal string? Id { get; set; }
-
-    public string? Name { get; set; }
 
     public DateOnly? Active { get; init; }
 

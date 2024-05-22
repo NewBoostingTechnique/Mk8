@@ -12,22 +12,22 @@ internal class CachingPlayerData(
     ITimeDataEvents timeEvents
 ) : IPlayerData
 {
-    public Task DeleteAsync(string playerId)
+    public Task DeleteAsync(string id)
     {
-        return innerData.DeleteAsync(playerId);
+        return innerData.DeleteAsync(id);
     }
 
     #region DetailAsync.
 
-    public Task<Player?> DetailAsync(string playerId)
+    public Task<Player?> DetailAsync(string id)
     {
         return cache.GetOrCreateAsync
         (
-            $"Player_Detail:{playerId}",
+            $"Player_Detail:{id}",
             async entry =>
             {
-                Player? player = await innerData.DetailAsync(playerId).ConfigureAwait(false);
-                entry.AddExpirationToken(new DetailChangeToken(playerEvents, player, playerId, timeEvents));
+                Player? player = await innerData.DetailAsync(id).ConfigureAwait(false);
+                entry.AddExpirationToken(new DetailChangeToken(playerEvents, player, id, timeEvents));
                 return player;
             }
         );
@@ -139,15 +139,15 @@ internal class CachingPlayerData(
 
     #region ExistsAsync.
 
-    public Task<bool> ExistsAsync(string playerName)
+    public Task<bool> ExistsAsync(string name)
     {
         return cache.GetOrCreateAsync
         (
-            $"Player_Exists:{playerName}",
+            $"Player_Exists:{name}",
             async entry =>
             {
-                bool exists = await innerData.ExistsAsync(playerName).ConfigureAwait(false);
-                entry.AddExpirationToken(new ExistsChangeToken(playerEvents, playerName));
+                bool exists = await innerData.ExistsAsync(name).ConfigureAwait(false);
+                entry.AddExpirationToken(new ExistsChangeToken(playerEvents, name));
                 return exists;
             }
         );
@@ -239,15 +239,15 @@ internal class CachingPlayerData(
 
     #region IdentifyAsync.
 
-    public Task<string?> IdentifyAsync(string playerName)
+    public Task<string?> IdentifyAsync(string name)
     {
         return cache.GetOrCreateAsync
         (
-            $"Player_Identify:{playerName}",
+            $"Player_Identify:{name}",
             async entry =>
             {
-                string? id = await innerData.IdentifyAsync(playerName).ConfigureAwait(false);
-                entry.AddExpirationToken(new IdentifyChangeToken(playerEvents, id, playerName));
+                string? id = await innerData.IdentifyAsync(name).ConfigureAwait(false);
+                entry.AddExpirationToken(new IdentifyChangeToken(playerEvents, id, name));
                 return id;
             }
         );

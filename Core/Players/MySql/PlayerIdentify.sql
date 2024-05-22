@@ -2,15 +2,17 @@ DROP procedure IF EXISTS `PlayerIdentify`;
 
 DELIMITER $$
 CREATE PROCEDURE `PlayerIdentify` (
-  IN PlayerName VARCHAR(255)
+  IN Name VARCHAR(255)
 )
 BEGIN
   SELECT
     players.Id
   FROM
     players
+    JOIN
+      persons ON players.Id = persons.Id
   WHERE
-    players.Name = PlayerName;
+    persons.Name = Name;
 END$$
 
 DELIMITER ;

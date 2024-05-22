@@ -2,27 +2,29 @@ DROP procedure IF EXISTS `PlayerDetail`;
 
 DELIMITER $$
 CREATE PROCEDURE `PlayerDetail` (
-  IN PlayerId VARCHAR(32)
+  IN Id VARCHAR(32)
 )
 BEGIN
   SELECT
     MAX(times.Date) AS 'Active',
     countries.Name AS 'CountryName',
-    players.Name,
+    persons.Name,
     prooftypes.Description AS 'ProofTypeDescription',
     regions.Name AS 'RegionName'
   FROM
     players
     JOIN
-      prooftypes ON players.ProofTypeId = prooftypes.Id
-    JOIN
       countries ON players.CountryId = countries.Id
+    JOIN
+      persons ON players.Id = persons.Id
+    JOIN
+      prooftypes ON players.ProofTypeId = prooftypes.Id
     JOIN
       regions ON players.RegionId = regions.Id
     LEFT OUTER JOIN
       times ON players.Id = times.PlayerId
   WHERE
-    players.Id = PlayerId
+    players.Id = Id
   GROUP BY
     players.Id;
 
@@ -34,9 +36,9 @@ BEGIN
     LEFT OUTER JOIN
       times ON courses.Id = times.CourseId
   WHERE
-    times.playerId IS NULL
+    times.PlayerId IS NULL
     OR
-      times.playerId = PlayerId;
+      times.PlayerId = Id;
 
 END$$
 

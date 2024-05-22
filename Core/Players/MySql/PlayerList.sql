@@ -6,13 +6,15 @@ BEGIN
   SELECT
     MAX(times.Date) AS 'Active',
     countries.Name AS 'CountryName',
-    players.Name as 'Name',
+    persons.Name AS 'Name',
     prooftypes.Description AS 'ProofTypeDescription',
     regions.Name AS 'RegionName'
   FROM
     players
     JOIN
       countries ON players.CountryId = countries.Id
+    JOIN
+      persons on players.Id = persons.Id
     JOIN
       prooftypes ON players.ProofTypeId = prooftypes.Id
     JOIN

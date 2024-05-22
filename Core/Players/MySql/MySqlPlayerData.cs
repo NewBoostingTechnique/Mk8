@@ -10,37 +10,25 @@ namespace Mk8.Core.Players.MySql;
 
 internal class MySqlPlayerData(IOptions<Mk8Settings> mk8Options) : IPlayerData
 {
-    public async Task DeleteAsync(string playerId)
+    public async Task DeleteAsync(string id)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
         using MySqlCommand command = new("PlayerDelete", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.Add(new MySqlParameter("PlayerId", playerId));
+        command.Parameters.Add(new MySqlParameter("Id", id));
 
         await connection.OpenAsync().ConfigureAwait(false);
         await command.ExecuteNonQueryAsync().ConfigureAwait(false);
     }
 
-    public async Task<bool> ExistsAsync(string playerName)
-    {
-        using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
-
-        using MySqlCommand command = new("PlayerExists", connection);
-        command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.Add(new MySqlParameter("PlayerName", playerName));
-
-        await connection.OpenAsync().ConfigureAwait(false);
-        return await command.ExecuteBoolAsync().ConfigureAwait(false);
-    }
-
-    public async Task<Player?> DetailAsync(string playerId)
+    public async Task<Player?> DetailAsync(string id)
     {
         using var connection = new MySqlConnection(mk8Options.Value.ConnectionString);
 
         using var command = new MySqlCommand("PlayerDetail", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.Add(new MySqlParameter("PlayerId", playerId));
+        command.Parameters.Add(new MySqlParameter("Id", id));
 
         await connection.OpenAsync().ConfigureAwait(false);
         using DbDataReader reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
@@ -50,8 +38,8 @@ internal class MySqlPlayerData(IOptions<Mk8Settings> mk8Options) : IPlayerData
 
         Player player = new()
         {
-            Id = playerId,
             Active = reader.GetDateOnlyNullable(0),
+            Id = id,
             CountryName = reader.GetString(1),
             Name = reader.GetString(2),
             ProofTypeDescription = reader.GetString(3),
@@ -76,13 +64,25 @@ internal class MySqlPlayerData(IOptions<Mk8Settings> mk8Options) : IPlayerData
         return player;
     }
 
-    public async Task<string?> IdentifyAsync(string playerName)
+    public async Task<bool> ExistsAsync(string name)
+    {
+        using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
+
+        using MySqlCommand command = new("PlayerExists", connection);
+        command.CommandType = CommandType.StoredProcedure;
+        command.Parameters.Add(new MySqlParameter("Name", name));
+
+        await connection.OpenAsync().ConfigureAwait(false);
+        return await command.ExecuteBoolAsync().ConfigureAwait(false);
+    }
+
+    public async Task<string?> IdentifyAsync(string name)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
         using MySqlCommand command = new("PlayerIdentify", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.Add(new MySqlParameter("PlayerName", playerName));
+        command.Parameters.Add(new MySqlParameter("Name", name));
 
         await connection.OpenAsync().ConfigureAwait(false);
         return (await command.ExecuteScalarAsync().ConfigureAwait(false)) as string;
@@ -94,9 +94,8 @@ internal class MySqlPlayerData(IOptions<Mk8Settings> mk8Options) : IPlayerData
 
         using MySqlCommand command = new("PlayerInsert", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.Add(new MySqlParameter("PlayerId", player.Id));
-        command.Parameters.Add(new MySqlParameter("PlayerName", player.Name));
         command.Parameters.Add(new MySqlParameter("CountryId", player.CountryId));
+        command.Parameters.Add(new MySqlParameter("Id", player.Id));
         command.Parameters.Add(new MySqlParameter("ProofTypeId", player.ProofTypeId));
         command.Parameters.Add(new MySqlParameter("RegionId", player.RegionId));
 
