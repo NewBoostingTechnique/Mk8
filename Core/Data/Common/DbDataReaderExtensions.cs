@@ -1,15 +1,15 @@
 using System.Data.Common;
 
-namespace Mk8.Core.Extensions;
+namespace Mk8.Data.Common;
 
-internal static class DbDataReaderExtensions
+public static class DbDataReaderExtensions
 {
-    internal static DateOnly GetDateOnly(this DbDataReader reader, int ordinal)
+    public static DateOnly GetDateOnly(this DbDataReader reader, int ordinal)
     {
         return DateOnly.FromDateTime(reader.GetFieldValue<DateTime>(ordinal));
     }
 
-    internal static DateOnly? GetDateOnlyNullable(this DbDataReader reader, int ordinal)
+    public static DateOnly? GetDateOnlyNullable(this DbDataReader reader, int ordinal)
     {
         return reader.IsDBNull(ordinal)
             ? null
@@ -23,7 +23,7 @@ internal static class DbDataReaderExtensions
             : reader.GetDateTime(ordinal);
     }
 
-    internal static TimeSpan? GetTimeSpanNullable(this DbDataReader reader, int ordinal)
+    public static TimeSpan? GetTimeSpanNullable(this DbDataReader reader, int ordinal)
     {
         return reader.IsDBNull(ordinal)
             ? null

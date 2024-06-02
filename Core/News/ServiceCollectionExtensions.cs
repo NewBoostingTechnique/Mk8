@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using Mk8.Core.News.MySql;
 using Mk8.Core.Extensions;
 
 namespace Mk8.Core.News;
@@ -8,7 +7,6 @@ internal static class ServiceCollectionExtensions
 {
     internal static void AddNews(this IServiceCollection services)
     {
-        services.AddSingleton<INewData, MySqlNewData>();
         services.AddSingleton<INewSource, Mk8NewsScraper>();
         services.AddSingleton<INewSync, NewSync>();
         services.AddNewsCaching();

@@ -13,7 +13,7 @@ public class Player : Person
 
     #region Country.
 
-    internal string? CountryId { get; set; }
+    public string? CountryId { get; internal set; }
 
     public string? CountryName { get; set; }
 
@@ -21,7 +21,7 @@ public class Player : Person
 
     #region Region.
 
-    internal string? RegionId { get; set; }
+    public string? RegionId { get; internal set; }
 
     public string? RegionName { get; set; }
 

@@ -1,16 +1,13 @@
 using Microsoft.Extensions.DependencyInjection;
 using Mk8.Core.Extensions;
-using Mk8.Core.Locations.Countries.MySql;
 
 namespace Mk8.Core.Locations.Countries;
 
 internal static class ServiceCollectionExtensions
 {
-    internal static IServiceCollection AddCountries(this IServiceCollection services)
+    internal static void AddCountries(this IServiceCollection services)
     {
-        return services
-            .AddSingleton<ICountryData, MySqlCountryData>()
-            .AddCountryCaching()
+        services.AddCountryCaching()
             .AddSingleton<ICountryService, CountryService>();
     }
 

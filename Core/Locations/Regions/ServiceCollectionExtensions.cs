@@ -5,21 +5,19 @@ namespace Mk8.Core.Locations.Regions;
 
 internal static class ServiceCollectionExtensions
 {
-    internal static IServiceCollection AddRegions(this IServiceCollection services)
+    internal static void AddRegions(this IServiceCollection services)
     {
-        return services
-            .AddSingleton<IRegionData, MySqlRegionData>()
-            .AddRegionCaching()
-            .AddSingleton<IRegionService, RegionService>();
+        services.AddRegionCaching();
+        services.AddSingleton<IRegionService, RegionService>();
     }
 
-    private static IServiceCollection AddRegionCaching(this IServiceCollection services)
+    private static void AddRegionCaching(this IServiceCollection services)
     {
         services.AddMemoryCache();
 
         ServiceDescriptor? descriptor = services.GetServiceDescriptor<IRegionData>();
 
-        return services.AddSingleton<IRegionData>
+        services.AddSingleton<IRegionData>
         (
             sp => ActivatorUtilities.CreateInstance<CachingRegionData>
             (

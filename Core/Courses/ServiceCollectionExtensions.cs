@@ -1,26 +1,24 @@
 using Microsoft.Extensions.DependencyInjection;
-using Mk8.Core.Courses.MySql;
 using Mk8.Core.Extensions;
 
 namespace Mk8.Core.Courses;
 
 internal static class ServiceCollectionExtensions
 {
-    internal static IServiceCollection AddCourses(this IServiceCollection services)
+    internal static void AddCourses(this IServiceCollection services)
     {
-        return services
-            .AddSingleton<ICourseData, MySqlCourseData>()
-            .AddCourseCaching()
-            .AddSingleton<ICourseService, CourseService>();
+        services.AddCourseCaching();
+        services.AddSingleton<ICourseService, CourseService>();
     }
 
-    private static IServiceCollection AddCourseCaching(this IServiceCollection services)
+    private static void AddCourseCaching(this IServiceCollection services)
     {
         services.AddMemoryCache();
 
-        ServiceDescriptor? descriptor = services.GetServiceDescriptor<ICourseData>();
+        ServiceDescriptor? descriptor = services.GetServiceDescriptor<ICourseData>()
+            ?? throw new InvalidOperationException("An implementation of ICourseData must be registered before calling AddCourseCaching.");
 
-        return services.AddSingleton<ICourseData>
+        services.AddSingleton<ICourseData>
         (
             sp => ActivatorUtilities.CreateInstance<CachingCourseData>
             (

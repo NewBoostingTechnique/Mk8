@@ -1,4 +1,5 @@
 using Mk8.Core.Extensions;
+using Mk8.MySql;
 using Mk8.Web.Authentication;
 using Mk8.Web.Authorization;
 using Mk8.Web.Text.Json.Serialization;
@@ -6,6 +7,7 @@ using Mk8.Web.Text.Json.Serialization;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.AddAuthentication();
 builder.AddAuthorization();
+builder.Services.AddMySql();
 builder.AddMk8();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new TimeSpanJsonConverter()));

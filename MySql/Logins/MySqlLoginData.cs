@@ -1,9 +1,10 @@
 using System.Data;
 using Microsoft.Extensions.Options;
-using Mk8.Core.Extensions;
+using Mk8.Core;
+using Mk8.Core.Logins;
 using MySql.Data.MySqlClient;
 
-namespace Mk8.Core.Logins.MySql;
+namespace Mk8.MySql.Logins;
 
 internal class MySqlLoginData(IOptions<Mk8Settings> mk8Options) : ILoginData
 {

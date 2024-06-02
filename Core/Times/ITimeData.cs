@@ -1,6 +1,6 @@
 namespace Mk8.Core.Times;
 
-internal interface ITimeData
+public interface ITimeData
 {
     Task<bool> ExistsAsync(string courseId, string playerId);
 

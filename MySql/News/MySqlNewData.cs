@@ -2,11 +2,12 @@ using System.Collections.Immutable;
 using System.Data;
 using System.Data.Common;
 using Microsoft.Extensions.Options;
-using Mk8.Core.Extensions;
-using Mk8.Core.MySql;
+using Mk8.Core;
+using Mk8.Core.News;
+using Mk8.Data.Common;
 using MySql.Data.MySqlClient;
 
-namespace Mk8.Core.News.MySql;
+namespace Mk8.MySql.News;
 
 internal sealed class MySqlNewData(IOptions<Mk8Settings> options) : INewData
 {

@@ -1,12 +1,14 @@
 using Microsoft.Extensions.Options;
-using Mk8.Core.Extensions;
+using Mk8.Core;
+using Mk8.Core.Players;
 using Mk8.Core.Times;
+using Mk8.Data.Common;
 using MySql.Data.MySqlClient;
 using System.Collections.Immutable;
 using System.Data;
 using System.Data.Common;
 
-namespace Mk8.Core.Players.MySql;
+namespace Mk8.MySql.Players;
 
 internal class MySqlPlayerData(IOptions<Mk8Settings> mk8Options) : IPlayerData
 {

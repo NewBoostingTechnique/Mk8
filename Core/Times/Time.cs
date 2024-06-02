@@ -2,11 +2,11 @@ namespace Mk8.Core.Times;
 
 public class Time
 {
-    internal string? Id { get; set; }
+    public string? Id { get; internal set; }
 
     #region Course.
 
-    internal string? CourseId { get; set; }
+    public string? CourseId { get; internal set; }
 
     public string? CourseName { get; set; }
 
@@ -16,7 +16,7 @@ public class Time
 
     #region Player.
 
-    internal string? PlayerId { get; set; }
+    public string? PlayerId { get; internal set; }
 
     public string? PlayerName { get; set; }
 

@@ -2,10 +2,11 @@ using System.Collections.Immutable;
 using System.Data;
 using System.Data.Common;
 using Microsoft.Extensions.Options;
-using Mk8.Core.Extensions;
+using Mk8.Core;
+using Mk8.Core.Courses;
 using MySql.Data.MySqlClient;
 
-namespace Mk8.Core.Courses.MySql;
+namespace Mk8.MySql.Courses;
 
 internal class MySqlCourseData(IOptions<Mk8Settings> mk8Options) : ICourseData
 {

@@ -1,4 +1,6 @@
 -- TODO: Deploy to the AWS.
+-- Copy 'C:\src\Mk8\Web\bin\Release\net8.0\linux-x64\publish\' to the EC2 instance.
+-- Connect from the EC2 instance to the db server to deploy the schema.
 
 -- TODO: Add a pipeline to deploy from GitHub.
 

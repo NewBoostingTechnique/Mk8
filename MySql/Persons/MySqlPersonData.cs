@@ -1,9 +1,10 @@
 using System.Data;
 using Microsoft.Extensions.Options;
-using Mk8.Core.MySql;
+using Mk8.Core;
+using Mk8.Core.Persons;
 using MySql.Data.MySqlClient;
 
-namespace Mk8.Core.Persons.MySql;
+namespace Mk8.MySql.Persons;
 
 internal class MySqlPersonData(IOptions<Mk8Settings> mk8Options) : IPersonData
 {

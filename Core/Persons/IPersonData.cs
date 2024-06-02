@@ -1,6 +1,6 @@
 namespace Mk8.Core.Persons;
 
-internal interface IPersonData
+public interface IPersonData
 {
     Task<string?> IdentifyAsync(string personName);
 

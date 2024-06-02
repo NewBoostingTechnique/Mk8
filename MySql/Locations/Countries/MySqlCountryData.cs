@@ -2,9 +2,11 @@ using System.Collections.Immutable;
 using System.Data;
 using System.Data.Common;
 using Microsoft.Extensions.Options;
+using Mk8.Core;
+using Mk8.Core.Locations.Countries;
 using MySql.Data.MySqlClient;
 
-namespace Mk8.Core.Locations.Countries.MySql;
+namespace Mk8.MySql.Locations.Countries;
 
 internal class MySqlCountryData(IOptions<Mk8Settings> mk8Options) : ICountryData
 {

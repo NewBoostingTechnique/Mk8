@@ -2,7 +2,7 @@ using System.Collections.Immutable;
 
 namespace Mk8.Core.Locations.Countries;
 
-internal interface ICountryData
+public interface ICountryData
 {
     Task<string?> IdentifyAsync(string countryName);
 

@@ -2,7 +2,7 @@ using System.Collections.Immutable;
 
 namespace Mk8.Core.Players;
 
-internal interface IPlayerData
+public interface IPlayerData
 {
     Task DeleteAsync(string id);
 

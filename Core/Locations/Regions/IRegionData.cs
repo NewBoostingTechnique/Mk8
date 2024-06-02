@@ -2,7 +2,7 @@ using System.Collections.Immutable;
 
 namespace Mk8.Core.Locations.Regions;
 
-internal interface IRegionData
+public interface IRegionData
 {
     Task<string?> IdentifyAsync(string regionName);
 

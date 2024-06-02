@@ -1,17 +1,14 @@
 using Microsoft.Extensions.DependencyInjection;
 using Mk8.Core.Extensions;
-using Mk8.Core.Times.MySql;
 
 namespace Mk8.Core.Times;
 
 internal static class ServiceCollectionExtensions
 {
-    internal static IServiceCollection AddTimes(this IServiceCollection services)
+    internal static void AddTimes(this IServiceCollection services)
     {
-        return services
-            .AddSingleton<ITimeData, MySqlTimeData>()
-            .AddTimeCaching()
-            .AddSingleton<ITimeService, TimeService>();
+        services.AddTimeCaching();
+        services.AddSingleton<ITimeService, TimeService>();
     }
 
     private static IServiceCollection AddTimeCaching(this IServiceCollection services)

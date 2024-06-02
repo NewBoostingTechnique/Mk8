@@ -2,9 +2,11 @@ using System.Collections.Immutable;
 using System.Data;
 using System.Data.Common;
 using Microsoft.Extensions.Options;
+using Mk8.Core;
+using Mk8.Core.Locations.Regions;
 using MySql.Data.MySqlClient;
 
-namespace Mk8.Core.Locations.Regions;
+namespace Mk8.MySql.Locations.Regions;
 
 internal class MySqlRegionData(IOptions<Mk8Settings> mk8Options) : IRegionData
 {

@@ -2,7 +2,7 @@ using System.Collections.Immutable;
 
 namespace Mk8.Core.ProofTypes;
 
-internal interface IProofTypeData
+public interface IProofTypeData
 {
     Task<bool> ExistsAsync(string proofTypeDescription);
 

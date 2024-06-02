@@ -1,11 +1,12 @@
 using Microsoft.Extensions.Options;
-using Mk8.Core.Extensions;
+using Mk8.Core;
+using Mk8.Core.ProofTypes;
 using MySql.Data.MySqlClient;
 using System.Collections.Immutable;
 using System.Data;
 using System.Data.Common;
 
-namespace Mk8.Core.ProofTypes.MySql;
+namespace Mk8.MySql.ProofTypes;
 
 internal class MySqlProofTypeData(IOptions<Mk8Settings> mk8Options) : IProofTypeData
 {

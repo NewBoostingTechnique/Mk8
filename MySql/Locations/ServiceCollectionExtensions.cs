@@ -1,8 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
-using Mk8.Core.Locations.Countries;
-using Mk8.Core.Locations.Regions;
+using Mk8.MySql.Locations.Countries;
+using Mk8.MySql.Locations.Regions;
 
-namespace Mk8.Core.Locations;
+namespace Mk8.MySql.Locations;
 
 internal static class ServiceCollectionExtensions
 {

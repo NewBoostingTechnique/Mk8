@@ -2,7 +2,7 @@ using System.Collections.Immutable;
 
 namespace Mk8.Core.News;
 
-internal interface INewData
+public interface INewData
 {
     Task ClearAsync();
 

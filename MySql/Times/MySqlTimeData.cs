@@ -1,11 +1,10 @@
-
 using System.Data;
 using Microsoft.Extensions.Options;
-using Mk8.Core.Extensions;
-using Mk8.Core.MySql;
+using Mk8.Core;
+using Mk8.Core.Times;
 using MySql.Data.MySqlClient;
 
-namespace Mk8.Core.Times.MySql;
+namespace Mk8.MySql.Times;
 
 internal class MySqlTimeData(IOptions<Mk8Settings> mk8Options) : ITimeData
 {
