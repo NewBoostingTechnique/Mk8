@@ -9,27 +9,27 @@ internal partial class Mk8NewsScraper : INewSource
     {
         HtmlWeb web = new();
 
-        var htmlDoc = web.Load("https://mariokart64.com/mk8/");
+        // TODO: path to come from config?
+        HtmlDocument htmlDocument = web.Load("https://mariokart64.com/mk8/");
 
-        IEnumerable<HtmlNode> nodes = htmlDoc.DocumentNode.SelectNodes("//div[@id='body_panel']/div[@class='info_box grey']")
+        IEnumerable<HtmlNode> nodes = htmlDocument.DocumentNode.SelectNodes("//div[@id='body_panel']/div[@class='info_box grey']")
             .Skip(1);
 
         foreach (var node in nodes)
         {
-            // TODO: Inline these in the yield new where possible.
-            string body = string.Join(Environment.NewLine, node.ChildNodes.Where(child => child.Name != "#text").Skip(2).Select(n => n.OuterHtml));
-            Match? match = AuthorDateRegex().Match(node.SelectSingleNode("div[@class='small_text']").InnerText);
-            string authorName = match.Groups[1].Value;
-            string dateString = match.Groups[2].Value;
-            DateOnly date = DateOnly.Parse(dateString);
-            string title = node.SelectSingleNode("h3").InnerText;
+            Match? subTitleMatch = AuthorDateRegex().Match(node.SelectSingleNode("div[@class='small_text']").InnerText);
 
             yield return new New
             {
-                AuthorName = authorName,
-                Body = body,
-                Date = date,
-                Title = title
+                AuthorName = subTitleMatch.Groups[1].Value,
+                Body = string.Join
+                (
+                    Environment.NewLine,
+                    node.ChildNodes.Where(child => child.Name != "#text").Skip(2).Select(n => n.OuterHtml)
+                ),
+                // TODO: CultureInfo.GetCultureInfo
+                Date = DateOnly.Parse(subTitleMatch.Groups[2].Value),
+                Title = node.SelectSingleNode("h3").InnerText
             };
         }
     }
