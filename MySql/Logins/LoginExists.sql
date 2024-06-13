@@ -1,6 +1,5 @@
 DROP procedure IF EXISTS `LoginExists`;
 
-DELIMITER $$
 CREATE PROCEDURE `LoginExists` (
   IN LoginEmail VARCHAR(32)
 )
@@ -11,6 +10,4 @@ BEGIN
     logins
   WHERE
     logins.Email = LoginEmail;
-END$$
-
-DELIMITER ;
+END;

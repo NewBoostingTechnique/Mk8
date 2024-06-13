@@ -1,6 +1,5 @@
 DROP procedure IF EXISTS `PlayerDetail`;
 
-DELIMITER $$
 CREATE PROCEDURE `PlayerDetail` (
   IN Id VARCHAR(32)
 )
@@ -39,7 +38,4 @@ BEGIN
     times.PlayerId IS NULL
     OR
       times.PlayerId = Id;
-
-END$$
-
-DELIMITER ;
+END;

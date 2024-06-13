@@ -1,6 +1,5 @@
 DROP procedure IF EXISTS `PlayerInsert`;
 
-DELIMITER $$
 CREATE PROCEDURE `PlayerInsert` (
   IN CountryId VARCHAR(32),
   IN Id VARCHAR(32),
@@ -20,6 +19,4 @@ BEGIN
     ProofTypeId,
     RegionId
   );
-END$$
-
-DELIMITER ;
+END;

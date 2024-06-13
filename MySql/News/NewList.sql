@@ -1,6 +1,5 @@
 DROP procedure IF EXISTS `NewList`;
 
-DELIMITER $$
 CREATE PROCEDURE `NewList` ()
 BEGIN
   SELECT
@@ -14,6 +13,4 @@ BEGIN
       persons ON News.AuthorPersonId = persons.Id
   ORDER BY
     news.Date DESC;
-END$$
-
-DELIMITER ;
+END;

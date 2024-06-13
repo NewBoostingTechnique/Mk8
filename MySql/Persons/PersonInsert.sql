@@ -1,6 +1,5 @@
 DROP procedure IF EXISTS `PersonInsert`;
 
-DELIMITER $$
 CREATE PROCEDURE `PersonInsert` (
   IN PersonId VARCHAR(32),
   IN PersonName VARCHAR(255)
@@ -14,6 +13,4 @@ BEGIN
     PersonId,
     PersonName
   );
-END$$
-
-DELIMITER ;
+END;

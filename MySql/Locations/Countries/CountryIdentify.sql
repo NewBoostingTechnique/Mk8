@@ -1,6 +1,5 @@
 DROP procedure IF EXISTS `CountryIdentify`;
 
-DELIMITER $$
 CREATE PROCEDURE `CountryIdentify` (
   IN CountryName VARCHAR(255)
 )
@@ -11,7 +10,4 @@ BEGIN
     countries
   WHERE
     countries.Name = CountryName;
-END$$
-
-DELIMITER ;
-
+END;

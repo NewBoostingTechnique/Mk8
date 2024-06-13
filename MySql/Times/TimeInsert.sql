@@ -1,6 +1,5 @@
 DROP procedure IF EXISTS `TimeInsert`;
 
-DELIMITER $$
 CREATE PROCEDURE `TimeInsert` (
   IN CourseId VARCHAR(32),
   IN PlayerId VARCHAR(32),
@@ -23,6 +22,4 @@ BEGIN
     PlayerId,
     TimeSpan
   );
-END$$
-
-DELIMITER ;
+END;

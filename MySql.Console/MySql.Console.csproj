@@ -2,6 +2,9 @@
   <ItemGroup>
     <ProjectReference Include="..\MySql\MySql.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.CommandLine" />
+  </ItemGroup>
   <PropertyGroup>
     <OutputType>Exe</OutputType>
   </PropertyGroup>

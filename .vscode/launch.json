@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Mk8.Web",
+      "name": "Web",
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "dotnet: build",
@@ -16,6 +16,15 @@
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    {
+      "name": "MySql.Console",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "dotnet: build",
+      "program": "${workspaceFolder}/MySql.Console/bin/Debug/net8.0/Mk8.MySql.Console.dll",
+      "cwd": "${workspaceFolder}/MySql.Console",
+      "stopAtEntry": false
     },
     {
       "name": ".NET Core Attach",

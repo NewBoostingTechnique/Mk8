@@ -1,6 +1,5 @@
 DROP procedure IF EXISTS `ProofTypeIdentify`;
 
-DELIMITER $$
 CREATE PROCEDURE `ProofTypeIdentify` (
   IN ProofTypeDescription VARCHAR(255)
 )
@@ -11,6 +10,4 @@ BEGIN
     prooftypes
   WHERE
     prooftypes.Description = ProofTypeDescription;
-END$$
-
-DELIMITER ;
+END;

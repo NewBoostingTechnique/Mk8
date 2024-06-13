@@ -1,6 +1,5 @@
 DROP procedure IF EXISTS `PlayerList`;
 
-DELIMITER $$
 CREATE PROCEDURE `PlayerList` ()
 BEGIN
   SELECT
@@ -23,6 +22,4 @@ BEGIN
       times ON players.Id = times.PlayerId
   GROUP BY
     players.Id;
-END$$
-
-DELIMITER ;
+END;

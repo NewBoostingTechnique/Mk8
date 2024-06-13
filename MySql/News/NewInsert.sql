@@ -1,6 +1,5 @@
 DROP procedure IF EXISTS `NewInsert`;
 
-DELIMITER $$
 CREATE PROCEDURE `NewInsert` (
   IN AuthorPersonId VARCHAR(32),
   IN NewBody TEXT,
@@ -23,6 +22,4 @@ BEGIN
     NewId,
     NewTitle
   );
-END$$
-
-DELIMITER ;
+END;

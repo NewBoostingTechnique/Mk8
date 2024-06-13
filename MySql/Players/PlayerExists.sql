@@ -1,6 +1,5 @@
 DROP procedure IF EXISTS `PlayerExists`;
 
-DELIMITER $$
 CREATE PROCEDURE `PlayerExists` (
   IN Name VARCHAR(255)
 )
@@ -13,6 +12,4 @@ BEGIN
       persons ON players.Id = persons.Id
   WHERE
     persons.Name = Name;
-END$$
-
-DELIMITER ;
+END;
