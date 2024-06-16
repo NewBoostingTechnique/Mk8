@@ -8,9 +8,9 @@ BEGIN
     news.Date as 'Date',
     news.Title AS 'Title'
   FROM
-    News
+    news
     JOIN
-      persons ON News.AuthorPersonId = persons.Id
+      persons ON news.AuthorPersonId = persons.Id
   ORDER BY
     news.Date DESC;
 END;

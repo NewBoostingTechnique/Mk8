@@ -9,6 +9,10 @@ using Mk8.MySql.Console.Times;
 
 namespace Mk8.MySql.Console;
 
+// TODO: app user and root user currently have same password.
+
+// TODO: Use GitHub issues instead of 'TODO's.
+
 internal static partial class Program
 {
     private static async Task DeployAsync()
@@ -25,7 +29,7 @@ internal static partial class Program
         using MySqlConnection rootConnection = new($"Server={server};Uid={user};Pwd={password}");
         await rootConnection.OpenAsync();
 
-        using MySqlCommand command = new($"CREATE DATABASE {mk8Database};", rootConnection);
+        using MySqlCommand command = new($"CREATE DATABASE IF NOT EXISTS {mk8Database};", rootConnection);
         await command.ExecuteNonQueryAsync();
 
         command.CommandText = $"CREATE USER IF NOT EXISTS 'mk8'@'%%' IDENTIFIED BY '{mk8Password}';";
