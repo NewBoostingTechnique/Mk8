@@ -1,5 +1,5 @@
-using Mk8.Core.Extensions;
-using Mk8.MySql;
+// TODO: REST API Routes should be plural.
+
 using Mk8.Web.Authentication;
 using Mk8.Web.Authorization;
 using Mk8.Web.Text.Json.Serialization;
@@ -13,6 +13,10 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new TimeSpanJsonConverter()));
 
 WebApplication app = builder.Build();
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 else
@@ -22,4 +26,4 @@ app.UseAuthorization();
 app.MapControllers().RequireAuthorization();
 
 app.MapFallbackToFile("App/Index.html");
-app.Run();
+await app.RunAsync();
