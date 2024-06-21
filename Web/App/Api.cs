@@ -8,6 +8,7 @@ public class Api : ControllerBase
 
     protected BadRequestObjectResult BadRequestPropertyRequired(string propertyName)
     {
+        //TODO: Use 'Problem' instead.
         return BadRequest($"Property '{propertyName}' is required.");
     }
 }

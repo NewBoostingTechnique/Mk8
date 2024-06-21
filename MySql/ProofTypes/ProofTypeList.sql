@@ -5,5 +5,5 @@ BEGIN
   SELECT
     prooftypes.Description
   FROM
-    proofTypes;
+    prooftypes;
 END;
