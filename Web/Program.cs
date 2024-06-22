@@ -5,6 +5,8 @@ using Mk8.Web.Text.Json.Serialization;
 using Mk8.MySql;
 using Mk8.Core.Extensions;
 
+// TODO: NuGet package caching in GitHub Actions.
+// TODO: Run CI tests in GitHub Actions.
 // TODO: REST API Routes should be plural.
 // TODO: Make the UI Mobile friendly (reactive).
 
