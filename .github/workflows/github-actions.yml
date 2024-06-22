@@ -16,4 +16,11 @@ jobs:
       - uses: pnpm/action-setup@v4
         with:
           version: 8.6.x
-      - run: dotnet publish -r linux-x64
+      - env:
+          EC2_KEY: |
+            ${{secrets.EC2_KEY}}
+        run: |
+          dotnet publish -r linux-x64
+          echo "$EC2_KEY" > mk8.pem
+          scp -i "mk8.pem" -r "Web/bin/Release/net8.0/linux-x64/publish" ec2-user@16.170.153.81:/home/ec2-user/mk8/web
+
