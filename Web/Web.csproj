@@ -15,7 +15,7 @@
   <Target Name="BuildFrontEnd" BeforeTargets="BeforeBuild">
     <Exec Command="pnpm run build:$(Configuration)" LogStandardErrorAsError="true" />
   </Target>
-  <Target Name="RestoreFrontEnd" BeforeTargets="Restore" Inputs="package.json" Outputs="node_modules/.install-stamp">
+  <Target Name="RestoreFrontEnd" BeforeTargets="_GenerateRestoreProjectSpec" Inputs="package.json" Outputs="node_modules/.install-stamp">
     <Exec Command="pnpm i" LogStandardErrorAsError="true" />
     <Touch Files="node_modules/.install-stamp" AlwaysCreate="true" />
   </Target>
