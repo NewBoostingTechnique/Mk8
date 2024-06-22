@@ -16,4 +16,4 @@ jobs:
       - uses: pnpm/action-setup@v4
         with:
           version: 8.6.x
-      - run: dotnet build
+      - run: dotnet publish -r linux-x64
