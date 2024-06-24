@@ -5,8 +5,8 @@ on:
 jobs:
   Build:
     permissions:
-        id-token: write
-        contents: read
+      id-token: write
+      contents: read
     runs-on: ubuntu-24.04
     steps:
 
@@ -16,7 +16,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-            dotnet-version: 8.0.x
+          dotnet-version: 8.0.x
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -36,10 +36,16 @@ jobs:
         with:
           aws-region: eu-north-1
           role-to-assume: arn:aws:iam::637423522450:role/github-actions-role
+          
+      - name: Get Build Server CIDR
+        run: |
+          echo "CIDR="$(curl ipinfo.io/ip)/32" >> $GITHUB_OUTPUT
+        id: cidr
 
       - name: Authorize EC2 Ingress
-        run: aws ec2 authorize-security-group-ingress --group-id sg-0fdf309951d8b36d4 --protocol tcp --port 22 --cidr "$(curl ipinfo.io/ip)"/32
+        run: aws ec2 authorize-security-group-ingress --group-id sg-0fdf309951d8b36d4 --protocol tcp --port 22 --cidr ${{steps.cidr.outputs.CIDR}}
 
+        # TODO: Use AWS CLI instead of SCP.
       - name: Deploy Web App
         run: |
             echo "${{secrets.EC2_KEY}}" > mk8.pem
@@ -47,5 +53,5 @@ jobs:
           
       - name: Revoke EC2 Ingress
         if: always()
-        run: aws ec2 revoke-security-group-ingress --group-id sg-0fdf309951d8b36d4 --protocol tcp --port 22 --cidr "$(curl ipinfo.io/ip)"/32
+        run: aws ec2 revoke-security-group-ingress --group-id sg-0fdf309951d8b36d4 --protocol tcp --port 22 --cidr ${{steps.cidr.outputs.CIDR}}
         
