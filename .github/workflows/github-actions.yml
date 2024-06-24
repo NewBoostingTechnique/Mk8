@@ -34,7 +34,7 @@ jobs:
       - name: Authenticate with AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: us-east-2
+          aws-region: eu-north-1
           role-to-assume: arn:aws:iam::637423522450:policy/mk8-security-group-admin
 
       - name: Authorize EC2 Ingress
