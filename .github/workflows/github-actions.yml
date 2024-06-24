@@ -35,7 +35,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: eu-north-1
-          role-to-assume: arn:aws:iam::637423522450:role/mk8-security-group-admin-role
+          role-to-assume: arn:aws:iam::637423522450:role/github-actions-role
 
       - name: Authorize EC2 Ingress
         run: aws ec2 authorize-security-group-ingress --group-id sg-0fdf309951d8b36d4 --protocol tcp --port 22 --cidr "$(curl ipinfo.io/ip)"
