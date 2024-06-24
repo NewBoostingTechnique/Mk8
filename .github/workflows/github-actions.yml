@@ -38,7 +38,7 @@ jobs:
           role-to-assume: arn:aws:iam::637423522450:role/github-actions-role
 
       - name: Authorize EC2 Ingress
-        run: aws ec2 authorize-security-group-ingress --group-id sg-0fdf309951d8b36d4 --protocol tcp --port 22 --cidr "$(curl ipinfo.io/ip)"
+        run: aws ec2 authorize-security-group-ingress --group-id sg-0fdf309951d8b36d4 --protocol tcp --port 22 --cidr "$(curl ipinfo.io/ip)"/32
 
       - name: Deploy Web App
         run: |
@@ -47,5 +47,5 @@ jobs:
           
       - name: Revoke EC2 Ingress
         if: always()
-        run: aws ec2 revoke-security-group-ingress --group-id sg-0fdf309951d8b36d4 --protocol tcp --port 22 --cidr "$(curl ipinfo.io/ip)"
+        run: aws ec2 revoke-security-group-ingress --group-id sg-0fdf309951d8b36d4 --protocol tcp --port 22 --cidr "$(curl ipinfo.io/ip)"/32
         
