@@ -4,18 +4,47 @@ on:
       - main
 jobs:
   Build:
+    permissions:
+        id-token: write
+        contents: read
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v3
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 8.0.x
-      - uses: actions/setup-node@v4
+            dotnet-version: 8.0.x
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 18.17.x
-      - uses: pnpm/action-setup@v4
+            node-version: 18.17.x
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
-          version: 8.6.x
-      - run: dotnet publish -r linux-x64
-      - run: echo "${{secrets.EC2_KEY}}" > mk8.pem
-      - run: scp -i "mk8.pem" -r "Web/bin/Release/net8.0/linux-x64/publish" ec2-user@16.170.153.81:/home/ec2-user/mk8/web
+            version: 8.6.x
+
+      - name: Compile Code
+        run: dotnet publish -r linux-x64
+
+      - name: Authenticate with AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+            managed-session-policies: arn:aws:iam::637423522450:policy/mk8-security-group-admin
+
+      - name: Authorize EC2 Ingress
+        run: aws ec2 authorize-security-group-ingress --group-id sg-0b3e7b3b3b3b3b3b3 --protocol tcp --port 22 --cidr
+
+      - name: Deploy Web App
+        run: |
+            echo "${{secrets.EC2_KEY}}" > mk8.pem
+            scp -i "mk8.pem" -r "Web/bin/Release/net8.0/linux-x64/publish" ec2-user@16.170.153.81:/home/ec2-user/mk8/web
+          
+      - name: Revoke EC2 Ingress
+        if: always()
+        run: aws ec2 revoke-security-group-ingress --group-id sg-0b3e7b3b3b3b3b3b3 --protocol tcp --port 22 --cidr
+        
