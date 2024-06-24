@@ -53,8 +53,8 @@ jobs:
           chmod 600 mk8.pem
 
       - name: Copy Files to EC2
-        run: scp -i "mk8.pem" -o stricthostkeychecking=no -r "Web/bin/Release/net8.0/linux-x64/publish" ec2-user@16.170.153.81:/home/ec2-user/mk8/web
-          
+        run: scp -i "mk8.pem" -o stricthostkeychecking=no -r "Web/bin/Release/net8.0/linux-x64/publish/" ec2-user@16.170.153.81:/home/ec2-user/mk8/web
+
       - name: Revoke EC2 Ingress
         if: always()
         run: aws ec2 revoke-security-group-ingress --group-id sg-0fdf309951d8b36d4 --protocol tcp --port 22 --cidr ${{steps.cidr.outputs.CIDR}}
