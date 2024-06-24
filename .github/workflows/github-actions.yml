@@ -54,6 +54,7 @@ jobs:
         # Host key verification failed.
       - name: Copy Files to EC2
         run: |
+          ssh-keygen -R 16.170.153.81
           scp -i "mk8.pem" -r "Web/bin/Release/net8.0/linux-x64/publish" ec2-user@16.170.153.81:/home/ec2-user/mk8/web
           
       - name: Revoke EC2 Ingress
