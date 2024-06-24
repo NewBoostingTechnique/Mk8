@@ -39,7 +39,7 @@ jobs:
           
       - name: Get Build Server CIDR
         run: |
-          echo "CIDR="$(curl ipinfo.io/ip)/32" >> $GITHUB_OUTPUT
+          echo "CIDR=$(curl ipinfo.io/ip)/32" >> $GITHUB_OUTPUT
         id: cidr
 
       - name: Authorize EC2 Ingress
