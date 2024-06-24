@@ -34,10 +34,11 @@ jobs:
       - name: Authenticate with AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
-            managed-session-policies: arn:aws:iam::637423522450:policy/mk8-security-group-admin
+          aws-region: us-east-2
+          role-to-assume: arn:aws:iam::637423522450:policy/mk8-security-group-admin
 
       - name: Authorize EC2 Ingress
-        run: aws ec2 authorize-security-group-ingress --group-id sg-0b3e7b3b3b3b3b3b3 --protocol tcp --port 22 --cidr
+        run: aws ec2 authorize-security-group-ingress --group-id sg-0fdf309951d8b36d4 --protocol tcp --port 22 --cidr "$(curl ipinfo.io/ip)"
 
       - name: Deploy Web App
         run: |
@@ -46,5 +47,5 @@ jobs:
           
       - name: Revoke EC2 Ingress
         if: always()
-        run: aws ec2 revoke-security-group-ingress --group-id sg-0b3e7b3b3b3b3b3b3 --protocol tcp --port 22 --cidr
+        run: aws ec2 revoke-security-group-ingress --group-id sg-0fdf309951d8b36d4 --protocol tcp --port 22 --cidr "$(curl ipinfo.io/ip)"
         
