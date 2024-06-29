@@ -53,7 +53,7 @@ jobs:
           chmod 600 mk8.pem
 
       - name: Copy Files to EC2
-        run: rsync -avzP --delete -e "ssh -i -v mk8.pem" "Web/bin/Release/net8.0/linux-x64/publish/" ec2-user@16.170.153.81:/home/ec2-user/mk8/web
+        run: rsync -avzP --delete -e "ssh -v -o StrictHostKeyChecking=no -i mk8.pem" "Web/bin/Release/net8.0/linux-x64/publish/" ec2-user@16.170.153.81:/home/ec2-user/mk8/web
 
       - name: Revoke EC2 Ingress
         if: always()
