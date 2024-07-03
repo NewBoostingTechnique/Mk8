@@ -74,12 +74,13 @@ jobs:
           MK8_PASSWORD: ${{secrets.MK8_PASSWORD}}
         run: |
           ssh -o StrictHostKeyChecking=no -i mk8.pem ec2-user@16.170.153.81 '
-            export MYSQL_USER=root &
-            export MYSQL_PASSWORD=$MYSQL_PASSWORD &
-            export MYSQL_SERVER=mk8.cnyqsikgs8d2.eu-north-1.rds.amazonaws.com &
-            export MK8_DATABASE=mk8 &
-            export MK8_PASSWORD=$MK8_PASSWORD &
-            dotnet /home/ec2-user/mk8/mysql.console/Mk8.MySql.Console.dll'
+            export MYSQL_USER=root
+            export MYSQL_PASSWORD=$MYSQL_PASSWORD
+            export MYSQL_SERVER=mk8.cnyqsikgs8d2.eu-north-1.rds.amazonaws.com
+            export MK8_DATABASE=mk8
+            export MK8_PASSWORD=$MK8_PASSWORD
+            dotnet /home/ec2-user/mk8/mysql.console/Mk8.MySql.Console.dll
+          '
 
       - name: Revoke EC2 Ingress
         if: always()
