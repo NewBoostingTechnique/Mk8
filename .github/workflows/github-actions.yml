@@ -80,7 +80,7 @@ jobs:
             export MK8_DATABASE=mk8
             export MK8_PASSWORD=$MK8_PASSWORD
             dotnet /home/ec2-user/mk8/mysql.console/Mk8.MySql.Console.dll
-          ""
+          "
 
       - name: Revoke EC2 Ingress
         if: always()
