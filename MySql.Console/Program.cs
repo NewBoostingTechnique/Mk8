@@ -24,30 +24,65 @@ internal static partial class Program
 
     private static string GetUser()
     {
-        // TODO: Set to USER variable if not already set.
-        System.Console.Write("Login: ");
-        return System.Console.ReadLine();
+        string? user = Environment.GetEnvironmentVariable("MYSQL_USER");
+
+        while (user is null)
+            user = getUserFromConsole();
+
+        return user;
+
+        static string? getUserFromConsole()
+        {
+            System.Console.Write("Login: ");
+            return System.Console.ReadLine();
+        }
     }
 
-    private static string GetPassword()
+    private static string GetPassword() => GetPassword("MYSQL_PASSWORD");
+
+    private static string GetPassword(string environmentVariableName)
     {
-        // TODO: Require that this is provided as an environment variable.
-        System.Console.Write("Password: ");
-        return System.Console.ReadLine();
+        string? password = Environment.GetEnvironmentVariable(environmentVariableName);
+
+        if (password is null)
+        {
+            System.Console.Error.WriteLine($"Environment variable '{environmentVariableName}' is not set.");
+            Environment.Exit(ExitCodes.MissingEnvironmentVariable);
+        }
+
+        return password;
     }
 
     private static string GetServer()
     {
-        // TODO: Use command line arguments
-        System.Console.Write("MK8 DB Server: ");
-        return System.Console.ReadLine();
+        string? server = Environment.GetEnvironmentVariable("MYSQL_SERVER");
+
+        while (server is null)
+            server = getServerFromConsole();
+
+        return server;
+
+        static string? getServerFromConsole()
+        {
+            System.Console.Write("MK8 DB Server: ");
+            return System.Console.ReadLine();
+        }
     }
 
     private static string GetMk8Database()
     {
-        // TODO: Use command line arguments
-        System.Console.Write("MK8 DB: ");
-        return System.Console.ReadLine();
+        string? mk8Database = Environment.GetEnvironmentVariable("MK8_DATABASE");
+
+        while (mk8Database is null)
+            mk8Database = getMk8DatabaseFromConsole();
+
+        return mk8Database;
+
+        static string? getMk8DatabaseFromConsole()
+        {
+            System.Console.Write("MK8 DB: ");
+            return System.Console.ReadLine();
+        }
     }
 
     private static async Task<MySqlConnection> GetMk8ConnectionAsync(

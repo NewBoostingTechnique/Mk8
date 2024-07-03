@@ -6,6 +6,8 @@ using Mk8.MySql.Console.Persons;
 using Mk8.MySql.Console.Players;
 using Mk8.MySql.Console.ProofTypes;
 using Mk8.MySql.Console.Times;
+using Org.BouncyCastle.Security;
+using Org.BouncyCastle.Tls;
 
 namespace Mk8.MySql.Console;
 
@@ -21,10 +23,7 @@ internal static partial class Program
         string password = GetPassword();
         string server = GetServer();
         string mk8Database = GetMk8Database();
-
-        // TODO: Set to MK8_PWD variable if not already set.
-        System.Console.Write("MK8 Password: ");
-        string? mk8Password = System.Console.ReadLine();
+        string mk8Password = GetMk8Password();
 
         using MySqlConnection rootConnection = new($"Server={server};Uid={user};Pwd={password}");
         await rootConnection.OpenAsync();
@@ -49,4 +48,6 @@ internal static partial class Program
         await LoginDeploy.ExecuteAsync(mk8Connection);
         await NewDeploy.ExecuteAsync(mk8Connection);
     }
+
+    private static string GetMk8Password() => GetPassword("MK8_PASSWORD");
 }

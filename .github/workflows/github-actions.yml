@@ -53,10 +53,20 @@ jobs:
           chmod 600 mk8.pem
 
       - name: Copy MySql.Console to EC2
-        run: rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no -i mk8.pem" "MySql.Console/bin/Release/net8.0/linux-x64/publish/" ec2-user@16.170.153.81:/home/ec2-user/mk8/mysql.console
+        run: >
+            rsync
+            -avz --delete
+            -e "ssh -o StrictHostKeyChecking=no -i mk8.pem" 
+            "MySql.Console/bin/Release/net8.0/linux-x64/publish/"
+            ec2-user@16.170.153.81:/home/ec2-user/mk8/mysql.console
 
       - name: Copy Web to EC2
-        run: rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no -i mk8.pem" "Web/bin/Release/net8.0/linux-x64/publish/" ec2-user@16.170.153.81:/home/ec2-user/mk8/web
+        run: >
+            rsync -avz --delete
+            --exclude='appsettings.json'
+            -e "ssh -o StrictHostKeyChecking=no -i mk8.pem"
+            "Web/bin/Release/net8.0/linux-x64/publish/"
+            ec2-user@16.170.153.81:/home/ec2-user/mk8/web
       
       - name: Upgrade Database
         env: 
