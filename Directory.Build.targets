@@ -1,0 +1,6 @@
+<Project>
+  <ItemGroup>
+    <Content Update="**/appsettings.*.json" CopyToPublishDirectory="Never" />
+    <Content Update="**/appsettings.$(DOTNET_ENVIRONMENT).json" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

@@ -61,6 +61,7 @@ jobs:
             ec2-user@16.170.153.81:/home/ec2-user/mk8/mysql.console
 
       - name: Copy Web to EC2
+      # TODO: Secure ClientSecret on EC2.
         run: >
             rsync -avz --delete
             --exclude='appsettings.json'
