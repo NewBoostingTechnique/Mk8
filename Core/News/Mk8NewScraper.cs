@@ -1,18 +1,20 @@
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
+using Microsoft.Extensions.Options;
 
 namespace Mk8.Core.News;
 
-internal partial class Mk8NewsScraper : INewSource
+// TODO: Indicate on UI when sync has completed.
+
+internal partial class Mk8NewsScraper(IOptionsMonitor<Mk8Settings> settings) : INewSource
 {
     public IEnumerable<New> GetNews()
     {
         HtmlWeb web = new();
 
-        // TODO: path to come from config?
-        HtmlDocument htmlDocument = web.Load("https://mariokart64.com/mk8/");
-
-        IEnumerable<HtmlNode> nodes = htmlDocument.DocumentNode.SelectNodes("//div[@id='body_panel']/div[@class='info_box grey']")
+        IEnumerable<HtmlNode> nodes = web.Load(settings.CurrentValue.ScrapeUrl)
+            .DocumentNode
+            .SelectNodes("//div[@id='body_panel']/div[@class='info_box grey']")
             .Skip(1);
 
         foreach (var node in nodes)
