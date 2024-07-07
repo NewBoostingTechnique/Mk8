@@ -5,9 +5,8 @@ using Mk8.MySql.Console.News;
 using Mk8.MySql.Console.Persons;
 using Mk8.MySql.Console.Players;
 using Mk8.MySql.Console.ProofTypes;
+using Mk8.MySql.Console.Syncs;
 using Mk8.MySql.Console.Times;
-using Org.BouncyCastle.Security;
-using Org.BouncyCastle.Tls;
 
 namespace Mk8.MySql.Console;
 
@@ -47,6 +46,7 @@ internal static partial class Program
         await TimeDeploy.ExecuteAsync(mk8Connection);
         await LoginDeploy.ExecuteAsync(mk8Connection);
         await NewDeploy.ExecuteAsync(mk8Connection);
+        await SyncDeploy.ExecuteAsync(mk8Connection);
     }
 
     private static string GetMk8Password() => GetPassword("MK8_PASSWORD");

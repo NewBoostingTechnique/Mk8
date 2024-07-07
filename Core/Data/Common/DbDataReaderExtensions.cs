@@ -16,7 +16,7 @@ public static class DbDataReaderExtensions
             : GetDateOnly(reader, ordinal);
     }
 
-    internal static DateTime? GetDateTimeNullable(this DbDataReader reader, int ordinal)
+    public static DateTime? GetDateTimeNullable(this DbDataReader reader, int ordinal)
     {
         return reader.IsDBNull(ordinal)
             ? null

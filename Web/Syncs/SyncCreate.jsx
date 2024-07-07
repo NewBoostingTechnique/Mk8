@@ -1,12 +1,16 @@
 import useSyncClient from './SyncClient.js';
 import { Button, Typography, Stack } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 export default function SyncCreate() {
   const syncClient = useSyncClient();
+  const navigate = useNavigate();
 
   async function onSubmitAsync(e) {
     e.preventDefault();
-    return syncClient.insertAsync();
+    let sync = {};
+    sync = await syncClient.insertAsync(sync);
+    navigate(`/syncs/detail/${sync.id}`);
   }
 
   return (

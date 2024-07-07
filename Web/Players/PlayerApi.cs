@@ -31,7 +31,7 @@ public class PlayerApi(
     public async Task<IActionResult> DetailAsync([FromRoute] string playerName)
     {
         if (string.IsNullOrWhiteSpace(playerName))
-            return BadRequestNameRequired();
+            return BadRequestNameRequired(); // TODO: Use Problem.
 
         Player? player = await playerService.FindAsync(playerName);
 

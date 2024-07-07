@@ -59,7 +59,7 @@ internal class PlayerService(
         player.Id = await personData.IdentifyAsync(player.Name).ConfigureAwait(false);
         if (player.Id is null)
         {
-            player.Id = Guid.NewGuid().ToString("N");
+            player.Id = Identifier.Generate();
             await personData.InsertAsync(player).ConfigureAwait(false);
         }
 

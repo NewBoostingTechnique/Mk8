@@ -31,7 +31,7 @@ internal class TimeService(
         ArgumentException.ThrowIfNullOrEmpty(time.CourseName);
         ArgumentException.ThrowIfNullOrEmpty(time.PlayerName);
 
-        time.Id = Guid.NewGuid().ToString("N");
+        time.Id = Identifier.Generate();
         time.CourseId = await courseData.IdentifyRequiredAsync(time.CourseName).ConfigureAwait(false);
         time.PlayerId = await playerData.IdentifyRequiredAsync(time.PlayerName).ConfigureAwait(false);
 

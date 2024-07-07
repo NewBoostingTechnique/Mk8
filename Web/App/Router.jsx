@@ -6,6 +6,7 @@ import useCountryClient from '../Locations/Countries/CountryClient.js';
 import useNewsClient from '../News/NewsClient.js';
 import usePlayerClient from '../Players/PlayerClient.js';
 import useProofTypeClient from '../ProofTypes/ProofTypeClient.js';
+import useSyncClient from '../Syncs/SyncClient.js';
 import App from './App.jsx'
 import getLocaleNameAsync from './Locale.jsx';
 import { lazy } from 'react';
@@ -17,6 +18,7 @@ const PlayerCreate = lazy(() => import('../Players/PlayerCreate.jsx'));
 const PlayerDetail = lazy(() => import('../Players/PlayerDetail.jsx'));
 const PlayerList = lazy(() => import('../Players/PlayerList.jsx'));
 const SyncCreate = lazy(() => import('../Syncs/SyncCreate.jsx'));
+const SyncDetail = lazy(() => import('../Syncs/SyncDetail.jsx'));
 const TimeCreate = lazy(() => import('../Times/TimeCreate.jsx'));
 
 const authorizationPromise = useAuthorizationClient().getAsync();
@@ -25,6 +27,7 @@ const countryClient = useCountryClient();
 const newsClient = useNewsClient();
 const playerClient = usePlayerClient();
 const proofClient = useProofTypeClient();
+const syncClient = useSyncClient();
 
 const router = createBrowserRouter([
   {
@@ -89,9 +92,20 @@ const router = createBrowserRouter([
         }
       },
       {
-        path: '/sync/create/',
+        path: '/syncs/create/',
         element: <SyncCreate />
       },
+      {
+        path: '/syncs/detail/:syncId/',
+        element: <SyncDetail />,
+        loader: async ({ params }) => {
+          return ({
+            sync: await syncClient.detailAsync(params.syncId)
+          });
+        }
+      },
+      // TODO: Modularise these routes.
+      // E.g. /Players/Routes.js
       {
         path: '/time/create/:playerName/:courseName/',
         element: <TimeCreate />,

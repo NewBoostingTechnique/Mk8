@@ -2,5 +2,7 @@ namespace Mk8.Core.Syncs;
 
 public interface ISyncService
 {
-    void Insert();
+    Task<Sync?> FindAsync(string id);
+
+    Task<Sync> InsertAsync(Sync sync);
 }

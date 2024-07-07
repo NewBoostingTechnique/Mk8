@@ -1,15 +1,28 @@
 import ApiClient from '../App/ApiClient'
 
 class SyncClient extends ApiClient {
-  static baseUri = '/api/sync/';
+  static baseUri = '/api/syncs/';
 
-  async insertAsync() {
-    return super.fetchAsync(
+  async detailAsync(syncId) {
+    const response = await super.fetchAsync(`${SyncClient.baseUri}${syncId}/`);
+    return (response.status >= 200 && response.status <= 300)
+      ? await response.json()
+      : null;
+  }
+
+  async insertAsync(sync) {
+    const response = await super.fetchAsync(
       SyncClient.baseUri,
       {
-        method: "POST"
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify(sync),
       }
     );
+    return await response.json();
   }
 }
 

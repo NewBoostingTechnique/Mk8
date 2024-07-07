@@ -4,8 +4,6 @@ using Microsoft.Extensions.Options;
 
 namespace Mk8.Core.News;
 
-// TODO: Indicate on UI when sync has completed.
-
 internal partial class Mk8NewsScraper(IOptionsMonitor<Mk8Settings> settings) : INewSource
 {
     public IEnumerable<New> GetNews()

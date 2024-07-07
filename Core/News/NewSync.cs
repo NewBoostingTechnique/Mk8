@@ -10,7 +10,7 @@ internal class NewSync(
 ) : INewSync
 {
     // TODO: Should this be a method on a NewService?
-    public async void SyncNews()
+    public async Task SyncNewsAsync()
     {
         // TODO: News import gets the author name wrong, and there are some funky characters.
 
@@ -27,14 +27,14 @@ internal class NewSync(
             {
                 Person authorPerson = new()
                 {
-                    Id = Guid.NewGuid().ToString("N"),
+                    Id = Identifier.Generate(),
                     Name = @new.AuthorName
                 };
                 await personData.InsertAsync(authorPerson).ConfigureAwait(false);
                 @new.AuthorPersonId = authorPerson.Id;
             }
 
-            @new.Id = Guid.NewGuid().ToString("N");
+            @new.Id = Identifier.Generate();
             await newData.InsertAsync(@new).ConfigureAwait(false);
         }
 
