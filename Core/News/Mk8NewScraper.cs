@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using Microsoft.Extensions.Options;
@@ -27,8 +28,7 @@ internal partial class Mk8NewsScraper(IOptionsMonitor<Mk8Settings> settings) : I
                     Environment.NewLine,
                     node.ChildNodes.Where(child => child.Name != "#text").Skip(2).Select(n => n.OuterHtml)
                 ),
-                // TODO: CultureInfo.GetCultureInfo
-                Date = DateOnly.Parse(subTitleMatch.Groups[2].Value),
+                Date = DateOnly.Parse(subTitleMatch.Groups[2].Value, CultureInfo.GetCultureInfo("en-US")),
                 Title = node.SelectSingleNode("h3").InnerText
             };
         }
