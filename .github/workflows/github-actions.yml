@@ -9,7 +9,6 @@ jobs:
       contents: read
     runs-on: ubuntu-24.04
     steps:
-
       - name: Checkout Code
         uses: actions/checkout@v4
 
@@ -31,58 +30,3 @@ jobs:
       - name: Compile Code
         run: dotnet publish -r linux-x64
 
-      - name: Authenticate with AWS
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: eu-north-1
-          role-to-assume: arn:aws:iam::637423522450:role/github-actions-role
-          
-      - name: Get Build Server CIDR
-        run: |
-          echo "CIDR=$(curl ipinfo.io/ip)/32" >> $GITHUB_OUTPUT
-        id: cidr
-
-      - name: Authorize EC2 Ingress
-        run: aws ec2 authorize-security-group-ingress --group-id sg-0fdf309951d8b36d4 --protocol tcp --port 22 --cidr ${{steps.cidr.outputs.CIDR}}
-
-      - name: Write Private Key to File
-        env:
-          EC2_KEY: ${{secrets.EC2_KEY}}
-        run: |
-          echo "$EC2_KEY" > mk8.pem
-          chmod 600 mk8.pem
-
-      - name: Copy MySql.Console to EC2
-        run: >
-            rsync
-            -avz --delete
-            -e "ssh -o StrictHostKeyChecking=no -i mk8.pem" 
-            "MySql.Console/bin/Release/net8.0/linux-x64/publish/"
-            ec2-user@16.170.153.81:/home/ec2-user/mk8/mysql.console
-
-      - name: Copy Web to EC2
-      # TODO: Secure ClientSecret on EC2.
-        run: >
-            rsync -avz --delete
-            --exclude='appsettings.json'
-            -e "ssh -o StrictHostKeyChecking=no -i mk8.pem"
-            "Web/bin/Release/net8.0/linux-x64/publish/"
-            ec2-user@16.170.153.81:/home/ec2-user/mk8/web
-      
-      - name: Upgrade Database
-        env: 
-          MYSQL_PASSWORD: ${{secrets.MYSQL_PASSWORD}}
-          MK8_PASSWORD: ${{secrets.MK8_PASSWORD}}
-        run: |
-          ssh -o StrictHostKeyChecking=no -i mk8.pem ec2-user@16.170.153.81 "
-            export MYSQL_USER=root
-            export MYSQL_PASSWORD=$MYSQL_PASSWORD
-            export MYSQL_SERVER=mk8.cnyqsikgs8d2.eu-north-1.rds.amazonaws.com
-            export MK8_DATABASE=mk8
-            export MK8_PASSWORD=$MK8_PASSWORD
-            dotnet /home/ec2-user/mk8/mysql.console/Mk8.MySql.Console.dll
-          "
-
-      - name: Revoke EC2 Ingress
-        if: always()
-        run: aws ec2 revoke-security-group-ingress --group-id sg-0fdf309951d8b36d4 --protocol tcp --port 22 --cidr ${{steps.cidr.outputs.CIDR}}
