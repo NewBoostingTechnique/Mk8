@@ -3,7 +3,7 @@ import ErrorBoundary from '../Errors/ErrorBoundary.jsx';
 import useAuthorizationClient from '../Authorization/AuthorizationClient.js';
 import useCourseClient from '../Courses/CourseClient.js';
 import useCountryClient from '../Locations/Countries/CountryClient.js';
-import useNewsClient from '../News/NewsClient.js';
+import useNewClient from '../News/NewClient.js';
 import usePlayerClient from '../Players/PlayerClient.js';
 import useProofTypeClient from '../ProofTypes/ProofTypeClient.js';
 import useSyncClient from '../Syncs/SyncClient.js';
@@ -13,7 +13,7 @@ import { lazy } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 
-const NewsList = lazy(() => import('../News/NewsList.jsx'));
+const NewList = lazy(() => import('../News/NewList.jsx'));
 const PlayerCreate = lazy(() => import('../Players/PlayerCreate.jsx'));
 const PlayerDetail = lazy(() => import('../Players/PlayerDetail.jsx'));
 const PlayerList = lazy(() => import('../Players/PlayerList.jsx'));
@@ -24,7 +24,7 @@ const TimeCreate = lazy(() => import('../Times/TimeCreate.jsx'));
 const authorizationPromise = useAuthorizationClient().getAsync();
 const courseClient = useCourseClient();
 const countryClient = useCountryClient();
-const newsClient = useNewsClient();
+const newClient = useNewClient();
 const playerClient = usePlayerClient();
 const proofClient = useProofTypeClient();
 const syncClient = useSyncClient();
@@ -37,8 +37,8 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <NewsList />,
-        loader: newsClient.listAsync
+        element: <NewList />,
+        loader: newClient.listAsync
       },
       {
         path: '/authorization/',
@@ -46,8 +46,8 @@ const router = createBrowserRouter([
       },
       {
         path: '/news/',
-        element: <NewsList />,
-        loader: newsClient.listAsync
+        element: <NewList />,
+        loader: newClient.listAsync
       },
       {
         path: '/player/',

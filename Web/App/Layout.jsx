@@ -1,6 +1,7 @@
 import Menu from '../Menu/Menu.jsx';
 import CancelIcon from '@mui/icons-material/Cancel';
 import MenuIcon from '@mui/icons-material/Menu';
+import Image from 'mui-image'
 import {
   AppBar,
   Backdrop,
@@ -9,6 +10,7 @@ import {
   CssBaseline,
   Divider,
   Drawer,
+  Grid,
   IconButton,
   Toolbar,
   Typography
@@ -89,10 +91,18 @@ export default function Layout({ children }) {
         </Box>
         <Box sx={{ width: { md: `calc(100% - ${drawerWidth}px)` } }}>
           <Toolbar />
-          <Box component='img' src="/banner.jpg" sx={{ display: 'block', margin: 'auto', objectFit: 'cover', width: '1000px' }} />
-          <Box sx={{ m: "auto", p: 2, width: "95%" }}>
-            {children}
-          </Box>
+          <Grid container justifyContent="space-evenly" rowSpacing={3}>
+            <Grid item>
+              <Image alt="Banner" src="./banner.jpg" shift="left" />
+            </Grid>
+            <Grid item>
+              <Grid container justifyContent="space-evenly">
+                <Grid item md={10}>
+                  {children}
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
         </Box>
       </Box >
       <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={isProgressShown}>
