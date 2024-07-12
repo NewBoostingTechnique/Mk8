@@ -9,7 +9,6 @@ internal class NewSync(
     IPersonData personData
 ) : INewSync
 {
-    // TODO: Should this be a method on a NewService?
     public async Task SyncNewsAsync()
     {
         // TODO: News import gets the author name wrong, and there are some funky characters.

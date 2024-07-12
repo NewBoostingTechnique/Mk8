@@ -19,7 +19,7 @@ public class Step
 
     //TODO: Use an interceptor to wrap/extend the IPage interface.
     // Supply our own interface that has everything IPage has and more.
-    // So we don't go to different places for methods that should be togterh.
+    // So we don't go to different places for methods that should be together.
     // Page.GoToAsync and Step.GoToPathSync.
     protected async Task GoToPathAsync(string path)
     {

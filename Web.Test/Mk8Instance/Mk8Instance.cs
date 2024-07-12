@@ -40,7 +40,6 @@ internal sealed class Mk8Instance : IMk8Instance
                         }
                     };
 
-                    // TODO: Write errors to the test's stdout.
                     _process.Exited += OnProcessExit;
 
                     _process.Start();

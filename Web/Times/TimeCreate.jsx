@@ -41,8 +41,6 @@ export default function TimeCreate() {
     navigate(`/player/detail/${playerName}`);
   }
 
-  // TODO Something better than always loading all players before this page is shown
-
   return (
     <Stack component="form" onSubmit={onSubmitAsync} sx={{ gap: 3, m: "auto", width: "75%" }}>
       <Typography variant='h3'>Create Time</Typography>

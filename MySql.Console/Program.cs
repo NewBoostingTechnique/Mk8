@@ -8,7 +8,6 @@ internal static partial class Program
     {
         RootCommand rootCommand = new("MK8 MySQL Console");
 
-        // TODO: Make 'help' the default command.
         rootCommand.SetHandler(DeployAsync);
 
         Command deploy = new("deploy");

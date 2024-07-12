@@ -10,8 +10,6 @@ using Mk8.MySql.Console.Times;
 
 namespace Mk8.MySql.Console;
 
-// TODO: app user and root user currently have same password.
-
 // TODO: Use GitHub issues instead of 'TODO's.
 
 internal static partial class Program

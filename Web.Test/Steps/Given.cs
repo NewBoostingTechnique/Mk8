@@ -16,8 +16,6 @@ public class Given(Func<IPage> pageAccessor, IMk8Instance mk8Instance)
         return ImSignedInAsAsync(GoogleAccount.Unauthorized);
     }
 
-    // TODO: Secrets.
-
     private async Task ImSignedInAsAsync(GoogleAccount googleAccount)
     {
         await GoToPathAsync("/authorization/");
