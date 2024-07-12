@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Web;
 using HtmlAgilityPack;
 using Microsoft.Extensions.Options;
 
@@ -16,7 +17,7 @@ internal partial class Mk8NewsScraper(IOptionsMonitor<Mk8Settings> settings) : I
             .SelectNodes("//div[@id='body_panel']/div[@class='info_box grey']")
             .Skip(1);
 
-        foreach (var node in nodes)
+        foreach (HtmlNode node in nodes)
         {
             Match? subTitleMatch = AuthorDateRegex().Match(node.SelectSingleNode("div[@class='small_text']").InnerText);
 
@@ -26,10 +27,10 @@ internal partial class Mk8NewsScraper(IOptionsMonitor<Mk8Settings> settings) : I
                 Body = string.Join
                 (
                     Environment.NewLine,
-                    node.ChildNodes.Where(child => child.Name != "#text").Skip(2).Select(n => n.OuterHtml)
+                    node.ChildNodes.Where(child => child.Name != "#text").Skip(2).Select(n => HttpUtility.HtmlDecode(n.OuterHtml))
                 ),
                 Date = DateOnly.Parse(subTitleMatch.Groups[2].Value, CultureInfo.GetCultureInfo("en-US")),
-                Title = node.SelectSingleNode("h3").InnerText
+                Title = HttpUtility.HtmlDecode(node.SelectSingleNode("h3").InnerText)
             };
         }
     }
