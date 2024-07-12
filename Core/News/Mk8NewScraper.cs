@@ -34,6 +34,6 @@ internal partial class Mk8NewsScraper(IOptionsMonitor<Mk8Settings> settings) : I
         }
     }
 
-    [GeneratedRegex("(By .* on )(.*)")]
+    [GeneratedRegex("By (.*) on (.*)")]
     private static partial Regex AuthorDateRegex();
 }

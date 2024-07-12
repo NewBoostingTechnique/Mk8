@@ -11,7 +11,7 @@ internal class NewSync(
 {
     public async Task SyncNewsAsync()
     {
-        // TODO: News import gets the author name wrong, and there are some funky characters.
+        // TODO: There are some funky characters.
 
         List<New> news = newSource.GetNews().ToList();
 
