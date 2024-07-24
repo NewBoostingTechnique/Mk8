@@ -2,15 +2,15 @@
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{7EAE7DF2-B934-4815-99FF-90B6054E16E6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "src\Core\Core.csproj", "{7EAE7DF2-B934-4815-99FF-90B6054E16E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySql.Console", "MySql.Console\MySql.Console.csproj", "{463FFFCD-2ABC-4E91-8714-D80597B2588E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySql.Console", "src\MySql.Console\MySql.Console.csproj", "{463FFFCD-2ABC-4E91-8714-D80597B2588E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySql", "MySql\MySql.csproj", "{B8A4151F-E43B-4F48-95C8-16D7176B9824}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySql", "src\MySql\MySql.csproj", "{B8A4151F-E43B-4F48-95C8-16D7176B9824}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{7D68E900-0D43-4FB0-92A1-A4BB51186A06}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "src\Web\Web.csproj", "{7D68E900-0D43-4FB0-92A1-A4BB51186A06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Test", "Web.Test\Web.Test.csproj", "{F25B9081-D655-46AA-8D43-D2657720ABCB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Test", "tests\Web.Test\Web.Test.csproj", "{F25B9081-D655-46AA-8D43-D2657720ABCB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
