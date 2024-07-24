@@ -1,3 +1,4 @@
+import BannerUrl from '../wwwroot/banner.jpg';
 import Menu from '../Menu/Menu.jsx';
 import CancelIcon from '@mui/icons-material/Cancel';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -93,7 +94,9 @@ export default function Layout({ children }) {
           <Toolbar />
           <Grid container justifyContent="space-evenly" rowSpacing={3}>
             <Grid item>
-              <Image alt="Banner" src="./banner.jpg" shift="left" />
+              {/* TODO: Image goes beside content when content is narrow. Stack? */}
+              <Image alt="Banner" src={BannerUrl} shift="left" />
+              {/* TODO: This doesn't need to be a grid */}
             </Grid>
             <Grid item>
               <Grid container justifyContent="space-evenly">
