@@ -15,8 +15,8 @@ export default function NewsList() {
         <Typography variant='h2'>News</Typography>
       </Grid>
       {loaderData.map(news => (
-        <Grid item>
-          <Card key={news.title} sx={{ padding: { xs: 1, md: 3 } }}>
+        <Grid item key={news.title}>
+          <Card sx={{ padding: { xs: 1, md: 3 } }}>
             <Typography variant='h4'>{news.title}</Typography>
             <Typography variant='p'>By {news.authorName} on {dayjs(news.date).format('LL')}.</Typography>
             <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(news.body, { USE_PROFILES: { html: true } }) }} />
