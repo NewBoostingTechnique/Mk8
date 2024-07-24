@@ -1,8 +1,8 @@
 import usePlayerClient from './PlayerClient';
 import {
   Button,
+  Card,
   Dialog, DialogActions, DialogTitle,
-  List, ListItem, ListItemText,
   Paper,
   Stack,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
@@ -105,31 +105,13 @@ export default function PlayerDetail() {
 
   if (!loaderData.player) {
     return (
-      <Typography variant='h3'>Player Not Found</Typography>
+      <Typography variant='h2'>Player Not Found</Typography>
     );
   }
 
   return (
     <Stack sx={{ gap: 3 }}>
-      <Typography variant='h3'>{loaderData.player.name}</Typography>
-      <List>
-        <ListItem>
-          <ListItemText>Player's Name</ListItemText>
-          <ListItemText>{loaderData.player.name}</ListItemText>
-        </ListItem>
-        <ListItem>
-          <ListItemText>Country</ListItemText>
-          <ListItemText>{loaderData.player.countryName}</ListItemText>
-        </ListItem>
-        <ListItem>
-          <ListItemText>Town/Region</ListItemText>
-          <ListItemText>{loaderData.player.regionName}</ListItemText>
-        </ListItem>
-        <ListItem>
-          <ListItemText>Proof Status</ListItemText>
-          <ListItemText>{loaderData.player.proofTypeDescription}</ListItemText>
-        </ListItem>
-      </List >
+      <Typography variant='h2'>{loaderData.player.name}</Typography>
       {
         loaderData.authorization === true
           ? <>
@@ -144,6 +126,22 @@ export default function PlayerDetail() {
           </>
           : null
       }
+      <TableContainer component={Card}>
+        <Table>
+          <TableRow>
+            <TableCell>Country</TableCell>
+            <TableCell>{loaderData.player.countryName}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Town/Region</TableCell>
+            <TableCell>{loaderData.player.regionName}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Proof Status</TableCell>
+            <TableCell>{loaderData.player.proofTypeDescription}</TableCell>
+          </TableRow>
+        </Table>
+      </TableContainer>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
