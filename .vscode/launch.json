@@ -6,8 +6,8 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "dotnet: build",
-      "program": "${workspaceFolder}/Web/bin/Debug/net8.0/Mk8.Web.dll",
-      "cwd": "${workspaceFolder}/Web",
+      "program": "${workspaceFolder}/src/Web/bin/Debug/net8.0/Mk8.Web.dll",
+      "cwd": "${workspaceFolder}/src/Web",
       "stopAtEntry": false,
       "serverReadyAction": {
         "action": "openExternally",
@@ -22,8 +22,8 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "dotnet: build",
-      "program": "${workspaceFolder}/MySql.Console/bin/Debug/net8.0/Mk8.MySql.Console.dll",
-      "cwd": "${workspaceFolder}/MySql.Console",
+      "program": "${workspaceFolder}/src/MySql.Console/bin/Debug/net8.0/Mk8.MySql.Console.dll",
+      "cwd": "${workspaceFolder}/src/MySql.Console",
       "stopAtEntry": false
     },
     {
