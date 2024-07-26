@@ -69,7 +69,7 @@ export default function Layout({ children }) {
             <IconButton onClick={openDrawer} sx={{ mr: 2, display: { md: 'none' } }}>
               <MenuIcon />
             </IconButton>
-            <Typography variant='h6'>Mario Kart 8</Typography>
+            <Typography variant='h6'>Mario Kart 8 Players' Page</Typography>
           </Toolbar>
         </AppBar>
         <Box sx={{ width: { md: drawerWidth } }} >
@@ -92,17 +92,13 @@ export default function Layout({ children }) {
         </Box>
         <Box sx={{ width: { md: `calc(100% - ${drawerWidth}px)` } }}>
           <Toolbar />
-          <Grid container justifyContent="space-evenly" rowSpacing={3}>
-            <Grid item>
-              {/* TODO: Image goes beside content when content is narrow. Stack? */}
-              <Image alt="Banner" src={BannerUrl} shift="left" />
-              {/* TODO: This doesn't need to be a grid */}
-            </Grid>
-            <Grid item>
-              <Grid container justifyContent="space-evenly">
-                <Grid item md={10}>
-                  {children}
-                </Grid>
+          <Box height="auto" width={{ xs: '%100', sm: 580, md: 680, lg: 980 }} margin="auto" >
+            <Image alt="Banner" src={BannerUrl} shift="right" />
+          </Box>
+          <Grid item>
+            <Grid container justifyContent="space-evenly">
+              <Grid item md={10}>
+                {children}
               </Grid>
             </Grid>
           </Grid>
