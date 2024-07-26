@@ -92,7 +92,7 @@ export default function Layout({ children }) {
         </Box>
         <Box sx={{ width: { md: `calc(100% - ${drawerWidth}px)` } }}>
           <Toolbar />
-          <Box height="auto" width={{ xs: '%100', sm: 580, md: 680, lg: 980 }} margin="auto" >
+          <Box margin="auto" mb="1em" width={{ xs: '%100', sm: 580, md: 680, lg: 980 }} >
             <Image alt="Banner" src={BannerUrl} shift="right" />
           </Box>
           <Grid container justifyContent="space-evenly">
