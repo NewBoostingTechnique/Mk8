@@ -11,7 +11,6 @@ import {
   CssBaseline,
   Divider,
   Drawer,
-  Grid,
   IconButton,
   Toolbar,
   Typography
@@ -90,20 +89,12 @@ export default function Layout({ children }) {
             <Menu showProgress={showProgress} />
           </Drawer>
         </Box>
-        <Box sx={{ width: { md: `calc(100% - ${drawerWidth}px)` } }}>
+        <Box margin="auto" sx={{ width: { md: `calc(100% - ${drawerWidth}px)` } }}>
           <Toolbar />
-          <Grid container justifyContent="space-evenly">
-            <Grid item xs={12}>
-              <Box margin="auto" mb="1em" width={{ xs: '%100', sm: 582, md: 682, lg: 982 }} >
-                <Image alt="Banner" src={BannerUrl} shift="right" />
-              </Box>
-            </Grid>
-            <Grid item xs={12}>
-              <Box margin="auto" width={{ xs: '%100', sm: 582, md: 682, lg: 982 }} >
-                {children}
-              </Box>
-            </Grid>
-          </Grid>
+          <Box margin="auto" mb="1em" width={{ xs: '%100', sm: 583, md: 683, lg: 983 }} >
+            <Image alt="Banner" src={BannerUrl} shift="right" sx={{ mb: '1em' }} />
+            {children}
+          </Box>
         </Box>
       </Box >
       <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={isProgressShown}>
