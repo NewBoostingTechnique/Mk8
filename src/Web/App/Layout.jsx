@@ -92,12 +92,16 @@ export default function Layout({ children }) {
         </Box>
         <Box sx={{ width: { md: `calc(100% - ${drawerWidth}px)` } }}>
           <Toolbar />
-          <Box margin="auto" mb="1em" width={{ xs: '%100', sm: 580, md: 680, lg: 980 }} >
-            <Image alt="Banner" src={BannerUrl} shift="right" />
-          </Box>
           <Grid container justifyContent="space-evenly">
-            <Grid item md={10}>
-              {children}
+            <Grid item xs={12}>
+              <Box margin="auto" mb="1em" width={{ xs: '%100', sm: 582, md: 682, lg: 982 }} >
+                <Image alt="Banner" src={BannerUrl} shift="right" />
+              </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <Box margin="auto" width={{ xs: '%100', sm: 582, md: 682, lg: 982 }} >
+                {children}
+              </Box>
             </Grid>
           </Grid>
         </Box>
