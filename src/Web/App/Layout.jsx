@@ -95,11 +95,9 @@ export default function Layout({ children }) {
           <Box height="auto" width={{ xs: '%100', sm: 580, md: 680, lg: 980 }} margin="auto" >
             <Image alt="Banner" src={BannerUrl} shift="right" />
           </Box>
-          <Grid item>
-            <Grid container justifyContent="space-evenly">
-              <Grid item md={10}>
-                {children}
-              </Grid>
+          <Grid container justifyContent="space-evenly">
+            <Grid item md={10}>
+              {children}
             </Grid>
           </Grid>
         </Box>
