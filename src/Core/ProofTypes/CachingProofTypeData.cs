@@ -14,7 +14,7 @@ internal class CachingProofTypeData(IMemoryCache cache, IProofTypeData innerData
         );
     }
 
-    public Task<string?> IdentifyAsync(string proofTypeDescription)
+    public Task<Ulid?> IdentifyAsync(string proofTypeDescription)
     {
         return cache.GetOrCreateAsync
         (

@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS `times` (
-  `Id` VARCHAR(32) NOT NULL,
-  `CourseId` VARCHAR(32) NOT NULL,
+  `Id` BINARY(16) NOT NULL,
+  `CourseId` BINARY(16) NOT NULL,
   `Date` DATE NOT NULL,
-  `PlayerId` VARCHAR(32) NOT NULL,
+  `PlayerId` BINARY(16) NOT NULL,
   `TimeSpan` TIME(3) NOT NULL,
   PRIMARY KEY (`Id`),
   INDEX `Player_idx` (`PlayerId` ASC) VISIBLE,

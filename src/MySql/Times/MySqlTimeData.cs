@@ -8,7 +8,7 @@ namespace Mk8.MySql.Times;
 
 internal class MySqlTimeData(IOptions<Mk8Settings> mk8Options) : ITimeData
 {
-    public async Task<bool> ExistsAsync(string courseId, string playerId)
+    public async Task<bool> ExistsAsync(Ulid courseId, Ulid playerId)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 

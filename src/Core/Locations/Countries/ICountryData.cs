@@ -4,7 +4,7 @@ namespace Mk8.Core.Locations.Countries;
 
 public interface ICountryData
 {
-    Task<string?> IdentifyAsync(string countryName);
+    Task<Ulid?> IdentifyAsync(string countryName);
 
     Task<IImmutableList<Country>> ListAsync();
 }

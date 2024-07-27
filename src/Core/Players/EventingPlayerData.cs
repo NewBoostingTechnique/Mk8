@@ -11,7 +11,7 @@ internal class EventingPlayerData(IPlayerData innerData)
 
     public event EventHandler<DeletedEventArgs>? Deleted;
 
-    public async Task DeleteAsync(string id)
+    public async Task DeleteAsync(Ulid id)
     {
         await innerData.DeleteAsync(id).ConfigureAwait(false);
         Deleted?.Invoke(this, new DeletedEventArgs(id));
@@ -24,12 +24,12 @@ internal class EventingPlayerData(IPlayerData innerData)
         return innerData.ExistsAsync(name);
     }
 
-    public Task<Player?> DetailAsync(string id)
+    public Task<Player?> DetailAsync(Ulid id)
     {
         return innerData.DetailAsync(id);
     }
 
-    public Task<string?> IdentifyAsync(string name)
+    public Task<Ulid?> IdentifyAsync(string name)
     {
         return innerData.IdentifyAsync(name);
     }

@@ -12,14 +12,14 @@ internal class CachingPlayerData(
     ITimeDataEvents timeEvents
 ) : IPlayerData
 {
-    public Task DeleteAsync(string id)
+    public Task DeleteAsync(Ulid id)
     {
         return innerData.DeleteAsync(id);
     }
 
     #region DetailAsync.
 
-    public Task<Player?> DetailAsync(string id)
+    public Task<Player?> DetailAsync(Ulid id)
     {
         return cache.GetOrCreateAsync
         (
@@ -36,7 +36,7 @@ internal class CachingPlayerData(
     private sealed class DetailChangeToken(
         IPlayerDataEvents playerEvents,
         Player? player,
-        string playerId,
+        Ulid playerId,
         ITimeDataEvents timeEvents
     ) : IChangeToken
     {
@@ -68,7 +68,7 @@ internal class CachingPlayerData(
             private readonly Action<object?> _callback;
             private readonly IPlayerDataEvents _playerEvents;
             private readonly Player? _player;
-            private readonly string? _playerId;
+            private readonly Ulid? _playerId;
             private readonly object? _state;
             private readonly ITimeDataEvents _timeEvents;
 
@@ -76,7 +76,7 @@ internal class CachingPlayerData(
                 Action<object?> callback,
                 IPlayerDataEvents playerEvents,
                 Player? player,
-                string playerId,
+                Ulid playerId,
                 object? state,
                 ITimeDataEvents timeEvents
             )
@@ -239,14 +239,14 @@ internal class CachingPlayerData(
 
     #region IdentifyAsync.
 
-    public Task<string?> IdentifyAsync(string name)
+    public Task<Ulid?> IdentifyAsync(string name)
     {
         return cache.GetOrCreateAsync
         (
             $"Player_Identify:{name}",
             async entry =>
             {
-                string? id = await innerData.IdentifyAsync(name).ConfigureAwait(false);
+                Ulid? id = await innerData.IdentifyAsync(name).ConfigureAwait(false);
                 entry.AddExpirationToken(new IdentifyChangeToken(playerEvents, id, name));
                 return id;
             }
@@ -255,7 +255,7 @@ internal class CachingPlayerData(
 
     private sealed class IdentifyChangeToken(
         IPlayerDataEvents events,
-        string? playerId,
+        Ulid? playerId,
         string playerName
     ) : IChangeToken
     {
@@ -286,13 +286,13 @@ internal class CachingPlayerData(
             private readonly Action<object?> _callback;
             private readonly IPlayerDataEvents _events;
             private readonly string _playerName;
-            private readonly string? _playerId;
+            private readonly Ulid? _playerId;
             private readonly object? _state;
 
             internal IdentifyChangeTokenRegistration(
                 Action<object?> callback,
                 IPlayerDataEvents events,
-                string? playerId,
+                Ulid? playerId,
                 string playerName,
                 object? state
             )

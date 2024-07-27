@@ -5,7 +5,7 @@ namespace Mk8.Core.Locations.Countries;
 
 internal class CachingCountryData(IMemoryCache cache, ICountryData innerData) : ICountryData
 {
-    public Task<string?> IdentifyAsync(string countryName)
+    public Task<Ulid?> IdentifyAsync(string countryName)
     {
         return cache.GetOrCreateAsync
         (

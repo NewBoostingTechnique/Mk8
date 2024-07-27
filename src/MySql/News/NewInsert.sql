@@ -1,10 +1,10 @@
 DROP procedure IF EXISTS `NewInsert`;
 
 CREATE PROCEDURE `NewInsert` (
-  IN AuthorPersonId VARCHAR(32),
+  IN AuthorPersonId BINARY(16),
   IN NewBody TEXT,
   IN NewDate DATE,
-  IN NewId VARCHAR(32),
+  IN NewId BINARY(16),
   IN NewTitle VARCHAR(255)
 )
 BEGIN

@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `news` (
-  `Id` VARCHAR(32) NOT NULL,
-  `AuthorPersonId` VARCHAR(32) NOT NULL,
+  `Id` BINARY(16) NOT NULL,
+  `AuthorPersonId` BINARY(16) NOT NULL,
   `Body` TEXT NOT NULL,
   `Date` DATE NOT NULL,
   `Title` VARCHAR(255) NOT NULL,

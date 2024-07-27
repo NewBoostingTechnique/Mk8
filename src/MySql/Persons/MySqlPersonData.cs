@@ -8,7 +8,7 @@ namespace Mk8.MySql.Persons;
 
 internal class MySqlPersonData(IOptions<Mk8Settings> mk8Options) : IPersonData
 {
-    public async Task<string?> IdentifyAsync(string personName)
+    public async Task<Ulid?> IdentifyAsync(string personName)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
@@ -17,7 +17,7 @@ internal class MySqlPersonData(IOptions<Mk8Settings> mk8Options) : IPersonData
         command.AddParameter("PersonName", personName);
 
         await connection.OpenAsync().ConfigureAwait(false);
-        return await command.ExecuteScalarAsync().ConfigureAwait(false) as string;
+        return await command.ExecuteScalarAsync().ConfigureAwait(false) as Ulid?;
     }
 
     public async Task InsertAsync(Person person)

@@ -2,7 +2,7 @@ namespace Mk8.Core.Syncs;
 
 public interface ISyncData
 {
-    Task<Sync?> DetailAsync(string id);
+    Task<Sync?> DetailAsync(Ulid id);
 
     Task InsertAsync(Sync sync);
 

@@ -6,7 +6,7 @@ public interface ICourseData
 {
     Task<bool> ExistsAsync(string courseName);
 
-    Task<string?> IdentifyAsync(string courseName);
+    Task<Ulid?> IdentifyAsync(string courseName);
 
     Task<IImmutableList<Course>> ListAsync();
 }

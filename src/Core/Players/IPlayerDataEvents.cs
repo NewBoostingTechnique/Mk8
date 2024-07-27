@@ -7,9 +7,9 @@ internal interface IPlayerDataEvents
 
     event EventHandler<DeletedEventArgs>? Deleted;
 
-    internal sealed class DeletedEventArgs(string id) : EventArgs
+    internal sealed class DeletedEventArgs(Ulid id) : EventArgs
     {
-        internal string Id { get; } = id;
+        internal Ulid Id { get; } = id;
     }
 
     #endregion Deleted.

@@ -2,7 +2,7 @@ namespace Mk8.Core.Times;
 
 public interface ITimeData
 {
-    Task<bool> ExistsAsync(string courseId, string playerId);
+    Task<bool> ExistsAsync(Ulid courseId, Ulid playerId);
 
     Task InsertAsync(Time time);
 }

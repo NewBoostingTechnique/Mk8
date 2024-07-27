@@ -22,7 +22,7 @@ internal class MySqlCourseData(IOptions<Mk8Settings> mk8Options) : ICourseData
         return await command.ExecuteBoolAsync().ConfigureAwait(false);
     }
 
-    public async Task<string?> IdentifyAsync(string courseName)
+    public async Task<Ulid?> IdentifyAsync(string courseName)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
@@ -31,7 +31,7 @@ internal class MySqlCourseData(IOptions<Mk8Settings> mk8Options) : ICourseData
         command.Parameters.Add(new MySqlParameter("CourseName", courseName));
 
         await connection.OpenAsync().ConfigureAwait(false);
-        return await command.ExecuteScalarAsync().ConfigureAwait(false) as string;
+        return await command.ExecuteScalarAsync().ConfigureAwait(false) as Ulid?;
     }
 
     public async Task<IImmutableList<Course>> ListAsync()

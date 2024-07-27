@@ -12,14 +12,14 @@ internal class CachingPersonData(
 
     #region IdentifyAsync.
 
-    public Task<string?> IdentifyAsync(string personName)
+    public Task<Ulid?> IdentifyAsync(string personName)
     {
         return cache.GetOrCreateAsync
         (
             $"Person_Identify_{personName}",
             async entry =>
             {
-                string? id = await innerData.IdentifyAsync(personName).ConfigureAwait(false);
+                Ulid? id = await innerData.IdentifyAsync(personName).ConfigureAwait(false);
                 entry.AddExpirationToken(new IdentifyChangeToken(personEvents, personName));
                 return id;
             }

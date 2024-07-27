@@ -10,7 +10,7 @@ namespace Mk8.MySql.Locations.Regions;
 
 internal class MySqlRegionData(IOptions<Mk8Settings> mk8Options) : IRegionData
 {
-    public async Task<string?> IdentifyAsync(string regionName)
+    public async Task<Ulid?> IdentifyAsync(string regionName)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
@@ -19,10 +19,10 @@ internal class MySqlRegionData(IOptions<Mk8Settings> mk8Options) : IRegionData
         command.Parameters.AddWithValue("RegionName", regionName);
 
         await connection.OpenAsync().ConfigureAwait(false);
-        return await command.ExecuteScalarAsync().ConfigureAwait(false) as string;
+        return await command.ExecuteScalarAsync().ConfigureAwait(false) as Ulid?;
     }
 
-    public async Task<IImmutableList<Region>> ListAsync(string countryId)
+    public async Task<IImmutableList<Region>> ListAsync(Ulid countryId)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 

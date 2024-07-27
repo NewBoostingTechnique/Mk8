@@ -9,7 +9,7 @@ internal class CachingTimeData(
     ITimeDataEvents timeEvents
 ) : ITimeData
 {
-    public Task<bool> ExistsAsync(string courseId, string playerId)
+    public Task<bool> ExistsAsync(Ulid courseId, Ulid playerId)
     {
         return cache.GetOrCreateAsync
         (
@@ -24,8 +24,8 @@ internal class CachingTimeData(
     }
 
     private sealed class ExistsChangeToken(
-        string courseId,
-        string playerId,
+        Ulid courseId,
+        Ulid playerId,
         ITimeDataEvents timeEvents
     ) : IChangeToken
     {
@@ -54,15 +54,15 @@ internal class CachingTimeData(
         private sealed class ExistsChangeTokenRegistration : IDisposable
         {
             private readonly Action<object?> _callback;
-            private readonly string _courseId;
-            private readonly string _playerId;
+            private readonly Ulid _courseId;
+            private readonly Ulid _playerId;
             private readonly object? _state;
             private readonly ITimeDataEvents _timeEvents;
 
             internal ExistsChangeTokenRegistration(
                 Action<object?> callback,
-                string courseId,
-                string playerId,
+                Ulid courseId,
+                Ulid playerId,
                 object? state,
                 ITimeDataEvents timeEvents
             )

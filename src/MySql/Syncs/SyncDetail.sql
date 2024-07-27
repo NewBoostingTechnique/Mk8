@@ -1,7 +1,7 @@
 DROP procedure IF EXISTS `SyncDetail`;
 
 CREATE PROCEDURE `SyncDetail`(
-  IN Id VARCHAR(32)
+  IN Id BINARY(16)
 )
 BEGIN
   SELECT

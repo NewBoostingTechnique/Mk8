@@ -2,7 +2,7 @@ namespace Mk8.Core.Times;
 
 internal class EventingTimeData(ITimeData innerData) : ITimeData, ITimeDataEvents
 {
-    public Task<bool> ExistsAsync(string courseId, string playerId)
+    public Task<bool> ExistsAsync(Ulid courseId, Ulid playerId)
     {
         return innerData.ExistsAsync(courseId, playerId);
     }

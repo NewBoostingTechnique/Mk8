@@ -4,7 +4,7 @@ namespace Mk8.Core.Locations.Regions;
 
 public interface IRegionData
 {
-    Task<string?> IdentifyAsync(string regionName);
+    Task<Ulid?> IdentifyAsync(string regionName);
 
-    Task<IImmutableList<Region>> ListAsync(string countryId);
+    Task<IImmutableList<Region>> ListAsync(Ulid countryId);
 }

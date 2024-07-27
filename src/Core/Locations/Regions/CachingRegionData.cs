@@ -5,7 +5,7 @@ namespace Mk8.Core.Locations.Regions;
 
 internal class CachingRegionData(IMemoryCache cache, IRegionData innerData) : IRegionData
 {
-    public Task<string?> IdentifyAsync(string regionName)
+    public Task<Ulid?> IdentifyAsync(string regionName)
     {
         return cache.GetOrCreateAsync
         (
@@ -14,7 +14,7 @@ internal class CachingRegionData(IMemoryCache cache, IRegionData innerData) : IR
         );
     }
 
-    public Task<IImmutableList<Region>> ListAsync(string countryId)
+    public Task<IImmutableList<Region>> ListAsync(Ulid countryId)
     {
         return cache.GetOrCreateAsync
         (

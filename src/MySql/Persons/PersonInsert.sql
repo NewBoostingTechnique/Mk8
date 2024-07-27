@@ -1,7 +1,7 @@
 DROP procedure IF EXISTS `PersonInsert`;
 
 CREATE PROCEDURE `PersonInsert` (
-  IN PersonId VARCHAR(32),
+  IN PersonId BINARY(16),
   IN PersonName VARCHAR(255)
 )
 BEGIN

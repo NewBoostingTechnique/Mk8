@@ -6,7 +6,7 @@ public interface IProofTypeData
 {
     Task<bool> ExistsAsync(string proofTypeDescription);
 
-    Task<string?> IdentifyAsync(string proofTypeDescription);
+    Task<Ulid?> IdentifyAsync(string proofTypeDescription);
 
     Task<IImmutableList<ProofType>> ListAsync();
 }

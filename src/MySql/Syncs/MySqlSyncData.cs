@@ -10,7 +10,7 @@ namespace Mk8.MySql.Syncs;
 
 internal class MySqlSyncData(IOptions<Mk8Settings> mk8Options) : ISyncData
 {
-    public async Task<Sync?> DetailAsync(string id)
+    public async Task<Sync?> DetailAsync(Ulid id)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 

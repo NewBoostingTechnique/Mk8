@@ -21,7 +21,7 @@ public class PlayerTests : Mk8PageTest
     }
 
     [Test]
-    public async Task GivenImAuthenticatedAsAnAuthorizedUser_WhenIPostANewPlayerToApiPlayer_ThenIRecieve200Ok_AndThePlayerIsCreated()
+    public async Task GivenImAuthenticatedAsAnAuthorizedUser_WhenIPostANewPlayerToApiPlayer_ThenIReceive200Ok_AndThePlayerIsCreated()
     {
         // Given I'm authenticated as an authorized user.
         await Given.ImAuthenticatedAsAnAuthorizedUserAsync();
@@ -29,14 +29,14 @@ public class PlayerTests : Mk8PageTest
         // When I POST to a new player to '/api/player/create/'.
         PostPlayerResult result = await When.IPostANewPlayerToAsync("/api/player/");
 
-        // Then I recieve a '200 Ok' response.
+        // Then I receive a '200 Ok' response.
         Then.TheResponseHasStatus(result, HttpStatusCode.OK);
         // And the player is created.
         await Then.ThePlayerIsCreatedAsync(result.Player);
     }
 
     [Test]
-    public async Task GivenImAuthenticatedAsAnUnathorizedUser_WhenIPostToApiPlayer_ThenIRecieve403Forbidden()
+    public async Task GivenImAuthenticatedAsAnUnauthorizedUser_WhenIPostToApiPlayer_ThenIReceive403Forbidden()
     {
         // Given I'm authenticated as an unauthorized user.
         await Given.ImAuthenticatedAsAnUnauthorizedUserAsync();
@@ -87,7 +87,7 @@ public class PlayerTests : Mk8PageTest
         // When I POST to '/api/player/'.
         PostPlayerResult result = await When.IPostANewPlayerToAsync("/api/player/");
 
-        // Then I receive a '401 Unuauthorized' response.
+        // Then I receive a '401 Unauthorized' response.
         Then.TheResponseHasStatus(result, HttpStatusCode.Unauthorized);
     }
 }

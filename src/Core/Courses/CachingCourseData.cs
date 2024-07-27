@@ -14,7 +14,7 @@ internal class CachingCourseData(IMemoryCache cache, ICourseData innerData) : IC
         );
     }
 
-    public Task<string?> IdentifyAsync(string courseName)
+    public Task<Ulid?> IdentifyAsync(string courseName)
     {
         return cache.GetOrCreateAsync
         (

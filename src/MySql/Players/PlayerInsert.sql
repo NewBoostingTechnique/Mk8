@@ -1,10 +1,10 @@
 DROP procedure IF EXISTS `PlayerInsert`;
 
 CREATE PROCEDURE `PlayerInsert` (
-  IN CountryId VARCHAR(32),
-  IN Id VARCHAR(32),
-  IN ProofTypeId VARCHAR(32),
-  IN RegionId VARCHAR(32)
+  IN CountryId BINARY(16),
+  IN Id BINARY(16),
+  IN ProofTypeId BINARY(16),
+  IN RegionId BINARY(16)
 )
 BEGIN
   INSERT INTO players(

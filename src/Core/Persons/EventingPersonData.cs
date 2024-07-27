@@ -6,7 +6,7 @@ internal class EventingPersonData(IPersonData innerData)
     : IPersonData, IPersonDataEvents
 {
 
-    public Task<string?> IdentifyAsync(string personName)
+    public Task<Ulid?> IdentifyAsync(string personName)
     {
         return innerData.IdentifyAsync(personName);
     }

@@ -1,7 +1,7 @@
 DROP procedure IF EXISTS `SyncInsert`;
 
 CREATE PROCEDURE `SyncInsert` (
-  IN Id VARCHAR(32),
+  IN Id BINARY(16),
   IN StartTime DATETIME
 )
 BEGIN

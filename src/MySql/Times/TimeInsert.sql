@@ -1,10 +1,10 @@
 DROP procedure IF EXISTS `TimeInsert`;
 
 CREATE PROCEDURE `TimeInsert` (
-  IN CourseId VARCHAR(32),
-  IN PlayerId VARCHAR(32),
+  IN CourseId BINARY(16),
+  IN PlayerId BINARY(16),
   In TimeDate DATE,
-  IN TimeId VARCHAR(32),
+  IN TimeId BINARY(16),
   IN TimeSpan TIME(3)
 )
 BEGIN

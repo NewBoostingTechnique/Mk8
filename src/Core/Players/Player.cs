@@ -13,7 +13,7 @@ public class Player : Person
 
     #region Country.
 
-    public string? CountryId { get; internal set; }
+    public Ulid? CountryId { get; internal set; }
 
     public string? CountryName { get; set; }
 
@@ -21,7 +21,7 @@ public class Player : Person
 
     #region Region.
 
-    public string? RegionId { get; internal set; }
+    public Ulid? RegionId { get; internal set; }
 
     public string? RegionName { get; set; }
 
@@ -31,7 +31,7 @@ public class Player : Person
 
     #region ProofType.
 
-    public string? ProofTypeId { get; set; }
+    public Ulid? ProofTypeId { get; set; }
 
     public string? ProofTypeDescription { get; set; }
 

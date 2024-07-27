@@ -8,12 +8,15 @@ namespace Mk8.Web.Syncs;
 public class SyncApi(ISyncService syncService) : Api
 {
     [HttpGet("{syncId}")]
-    public async Task<IActionResult> DetailAsync([FromRoute] string syncId)
+    public async Task<IActionResult> DetailAsync([FromRoute] Ulid? syncId)
     {
-        if (string.IsNullOrWhiteSpace(syncId))
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        if (!syncId.HasValue)
             return BadRequestPropertyRequired(nameof(syncId));
 
-        Sync? sync = await syncService.FindAsync(syncId);
+        Sync? sync = await syncService.FindAsync(syncId.Value);
 
         return sync is null ? NotFound(syncId) : Ok(sync);
     }
@@ -21,9 +24,9 @@ public class SyncApi(ISyncService syncService) : Api
     [HttpPost("")]
     public async Task<IActionResult> InsertAsync([FromBody] Sync sync)
     {
-        return Ok
-        (
-            await syncService.InsertAsync(sync)
-        );
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        return Ok(await syncService.InsertAsync(sync));
     }
 }

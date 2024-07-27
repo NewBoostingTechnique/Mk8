@@ -23,7 +23,12 @@ import { useLocation } from 'react-router-dom'
 const drawerWidth = 200;
 let progressTimeout;
 
+import PropTypes from 'prop-types';
+
 export default function Layout({ children }) {
+Layout.propTypes = {
+  children: PropTypes.node.isRequired
+};
   // Progress indicator state (open/close).
   const [isProgressShown, setIsProgressShown] = useState(false);
   function showProgress() {

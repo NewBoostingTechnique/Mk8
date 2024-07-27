@@ -12,7 +12,7 @@ namespace Mk8.MySql.Players;
 
 internal class MySqlPlayerData(IOptions<Mk8Settings> mk8Options) : IPlayerData
 {
-    public async Task DeleteAsync(string id)
+    public async Task DeleteAsync(Ulid id)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
@@ -24,7 +24,7 @@ internal class MySqlPlayerData(IOptions<Mk8Settings> mk8Options) : IPlayerData
         await command.ExecuteNonQueryAsync().ConfigureAwait(false);
     }
 
-    public async Task<Player?> DetailAsync(string id)
+    public async Task<Player?> DetailAsync(Ulid id)
     {
         using var connection = new MySqlConnection(mk8Options.Value.ConnectionString);
 
@@ -78,7 +78,7 @@ internal class MySqlPlayerData(IOptions<Mk8Settings> mk8Options) : IPlayerData
         return await command.ExecuteBoolAsync().ConfigureAwait(false);
     }
 
-    public async Task<string?> IdentifyAsync(string name)
+    public async Task<Ulid?> IdentifyAsync(string name)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
@@ -87,7 +87,7 @@ internal class MySqlPlayerData(IOptions<Mk8Settings> mk8Options) : IPlayerData
         command.Parameters.Add(new MySqlParameter("Name", name));
 
         await connection.OpenAsync().ConfigureAwait(false);
-        return (await command.ExecuteScalarAsync().ConfigureAwait(false)) as string;
+        return await command.ExecuteScalarAsync().ConfigureAwait(false) as Ulid?;
     }
 
     public async Task InsertAsync(Player player)

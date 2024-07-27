@@ -21,10 +21,10 @@ internal class PlayerService(
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(playerName);
 
-        string? id = await playerData.IdentifyAsync(playerName).ConfigureAwait(false);
+        Ulid? id = await playerData.IdentifyAsync(playerName).ConfigureAwait(false);
 
-        if (id is not null)
-            await playerData.DeleteAsync(id).ConfigureAwait(false);
+        if (id.HasValue)
+            await playerData.DeleteAsync(id.Value).ConfigureAwait(false);
     }
 
     public Task<bool> ExistsAsync(string playerName)
@@ -38,11 +38,11 @@ internal class PlayerService(
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(playerName);
 
-        string? id = await playerData.IdentifyAsync(playerName).ConfigureAwait(false);
+        Ulid? id = await playerData.IdentifyAsync(playerName).ConfigureAwait(false);
 
-        return id is null
-            ? default
-            : await playerData.DetailAsync(id).ConfigureAwait(false);
+        return id.HasValue
+            ? await playerData.DetailAsync(id.Value).ConfigureAwait(false)
+            : default;
     }
 
     public async Task<Player> InsertAsync(Player player)
@@ -59,7 +59,7 @@ internal class PlayerService(
         player.Id = await personData.IdentifyAsync(player.Name).ConfigureAwait(false);
         if (player.Id is null)
         {
-            player.Id = Identifier.Generate();
+            player.Id = Ulid.NewUlid();
             await personData.InsertAsync(player).ConfigureAwait(false);
         }
 

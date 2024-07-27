@@ -7,14 +7,14 @@ internal class SyncService(
     ISyncData syncData
 ) : ISyncService
 {
-    public Task<Sync?> FindAsync(string id)
+    public Task<Sync?> FindAsync(Ulid id)
     {
         return syncData.DetailAsync(id);
     }
 
     public async Task<Sync> InsertAsync(Sync sync)
     {
-        sync.Id = Identifier.Generate();
+        sync.Id = Ulid.NewUlid();
         sync.StartTime = DateTime.UtcNow;
         await syncData.InsertAsync(sync).ConfigureAwait(false);
 

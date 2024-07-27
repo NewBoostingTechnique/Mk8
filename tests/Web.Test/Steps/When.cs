@@ -1,6 +1,5 @@
 using Microsoft.Playwright;
 using Mk8.Core.Players;
-using Mk8.Core.ProofTypes;
 using Mk8.Web.Test.Extensions;
 using Mk8.Web.Test.Mk8Instances;
 
@@ -19,8 +18,7 @@ public class When(Func<IPage> pageAccessor, IMk8Instance softwareUnderTest)
         Player player = new()
         {
             Name = Guid.NewGuid().ToString(),
-            CountryName = Guid.NewGuid().ToString(),
-            ProofTypeId = "1cafdd6d1ef34b35b41e9962051e4c55"
+            CountryName = Guid.NewGuid().ToString()
         };
 
         IAPIResponse response = await Page.APIRequest.PostAsync

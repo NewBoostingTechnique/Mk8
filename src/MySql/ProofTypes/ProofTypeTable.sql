@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS `prooftypes` (
-  `Id` VARCHAR(32) NOT NULL,
+  `Id` BINARY(16) NOT NULL,
   `Description` VARCHAR(255) NULL DEFAULT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE INDEX `Description_UNIQUE` (`Description` ASC) VISIBLE,

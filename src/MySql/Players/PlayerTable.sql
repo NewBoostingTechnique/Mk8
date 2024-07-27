@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS `players` (
-  `CountryId` VARCHAR(32) NOT NULL,
-  `Id` VARCHAR(32) NOT NULL,
-  `ProofTypeId` VARCHAR(32) NOT NULL,
-  `RegionId` VARCHAR(255) NOT NULL,
+  `CountryId` BINARY(16) NOT NULL,
+  `Id` BINARY(16) NOT NULL,
+  `ProofTypeId` BINARY(16) NOT NULL,
+  `RegionId` BINARY(16) NOT NULL,
   PRIMARY KEY (`Id`),
   CONSTRAINT `Player_Country`
     FOREIGN KEY (`CountryId`)

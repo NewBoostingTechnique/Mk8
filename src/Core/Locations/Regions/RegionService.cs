@@ -12,7 +12,7 @@ internal class RegionService(
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(countryName);
 
-        string countryId = await countryData.IdentifyRequiredAsync(countryName).ConfigureAwait(false);
+        Ulid countryId = await countryData.IdentifyRequiredAsync(countryName).ConfigureAwait(false);
 
         return await regionData.ListAsync(countryId).ConfigureAwait(false);
     }

@@ -1,7 +1,7 @@
 DROP procedure IF EXISTS `LoginExists`;
 
 CREATE PROCEDURE `LoginExists` (
-  IN LoginEmail VARCHAR(32)
+  IN LoginEmail BINARY(16)
 )
 BEGIN
   SELECT

@@ -42,7 +42,7 @@ internal class MySqlProofTypeData(IOptions<Mk8Settings> mk8Options) : IProofType
         return await command.ExecuteBoolAsync().ConfigureAwait(false);
     }
 
-    public async Task<string?> IdentifyAsync(string proofTypeDescription)
+    public async Task<Ulid?> IdentifyAsync(string proofTypeDescription)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
@@ -51,6 +51,6 @@ internal class MySqlProofTypeData(IOptions<Mk8Settings> mk8Options) : IProofType
         command.Parameters.AddWithValue("ProofTypeDescription", proofTypeDescription);
 
         await connection.OpenAsync().ConfigureAwait(false);
-        return await command.ExecuteScalarAsync().ConfigureAwait(false) as string;
+        return await command.ExecuteScalarAsync().ConfigureAwait(false) as Ulid?;
     }
 }

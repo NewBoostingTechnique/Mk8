@@ -24,7 +24,7 @@ internal sealed class MySqlNewData(IOptions<Mk8Settings> options) : INewData
 
     public async Task InsertAsync(New @new)
     {
-        ArgumentException.ThrowIfNullOrEmpty(@new.AuthorPersonId);
+        ArgumentNullException.ThrowIfNull(@new.AuthorPersonId);
 
         using MySqlConnection connection = new(options.Value.ConnectionString);
 

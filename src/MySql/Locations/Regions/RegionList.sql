@@ -1,7 +1,7 @@
 DROP procedure IF EXISTS `RegionList`;
 
 CREATE PROCEDURE `RegionList` (
-  IN CountryId VARCHAR(32)
+  IN CountryId BINARY(16)
 )
 BEGIN
   SELECT

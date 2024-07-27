@@ -1,7 +1,7 @@
 DROP procedure IF EXISTS `PlayerDetail`;
 
 CREATE PROCEDURE `PlayerDetail` (
-  IN Id VARCHAR(32)
+  IN Id BINARY(16)
 )
 BEGIN
   SELECT

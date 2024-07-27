@@ -26,14 +26,14 @@ internal class NewSync(
             {
                 Person authorPerson = new()
                 {
-                    Id = Identifier.Generate(),
+                    Id = Ulid.NewUlid(),
                     Name = @new.AuthorName
                 };
                 await personData.InsertAsync(authorPerson).ConfigureAwait(false);
                 @new.AuthorPersonId = authorPerson.Id;
             }
 
-            @new.Id = Identifier.Generate();
+            @new.Id = Ulid.NewUlid();
             await newData.InsertAsync(@new).ConfigureAwait(false);
         }
 

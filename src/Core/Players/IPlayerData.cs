@@ -4,13 +4,13 @@ namespace Mk8.Core.Players;
 
 public interface IPlayerData
 {
-    Task DeleteAsync(string id);
+    Task DeleteAsync(Ulid id);
 
-    Task<Player?> DetailAsync(string id);
+    Task<Player?> DetailAsync(Ulid id);
 
     Task<bool> ExistsAsync(string name);
 
-    Task<string?> IdentifyAsync(string name);
+    Task<Ulid?> IdentifyAsync(string name);
 
     Task InsertAsync(Player player);
 
