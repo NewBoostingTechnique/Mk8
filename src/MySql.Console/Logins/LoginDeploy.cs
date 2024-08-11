@@ -7,5 +7,6 @@ internal static class LoginDeploy
         System.Console.WriteLine("Deploying Logins...");
         await Script.ExecuteAsync(connection, "Logins/LoginTable.sql");
         await Script.ExecuteAsync(connection, "Logins/LoginExists.sql");
+        await Script.ExecuteAsync(connection, "Logins/LoginInsert.sql");
     }
 }

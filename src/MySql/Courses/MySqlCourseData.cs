@@ -16,7 +16,7 @@ internal class MySqlCourseData(IOptions<Mk8Settings> mk8Options) : ICourseData
 
         using MySqlCommand command = new("CourseExists", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.Add(new MySqlParameter("CourseName", courseName));
+        command.AddParameter("CourseName", courseName);
 
         await connection.OpenAsync().ConfigureAwait(false);
         return await command.ExecuteBoolAsync().ConfigureAwait(false);
@@ -28,10 +28,25 @@ internal class MySqlCourseData(IOptions<Mk8Settings> mk8Options) : ICourseData
 
         using MySqlCommand command = new("CourseIdentify", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.Add(new MySqlParameter("CourseName", courseName));
+        command.AddParameter("CourseName", courseName);
 
         await connection.OpenAsync().ConfigureAwait(false);
-        return await command.ExecuteScalarAsync().ConfigureAwait(false) as Ulid?;
+        return await command.ExecuteUlidAsync().ConfigureAwait(false);
+    }
+
+    public async Task InsertAsync(Course course)
+    {
+        ArgumentNullException.ThrowIfNull(course.Id);
+
+        using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
+
+        using MySqlCommand command = new("CourseInsert", connection);
+        command.CommandType = CommandType.StoredProcedure;
+        command.AddParameter("Id", course.Id);
+        command.AddParameter("Name", course.Name);
+
+        await connection.OpenAsync().ConfigureAwait(false);
+        await command.ExecuteNonQueryAsync().ConfigureAwait(false);
     }
 
     public async Task<IImmutableList<Course>> ListAsync()

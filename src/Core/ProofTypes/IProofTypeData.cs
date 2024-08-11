@@ -4,9 +4,11 @@ namespace Mk8.Core.ProofTypes;
 
 public interface IProofTypeData
 {
-    Task<bool> ExistsAsync(string proofTypeDescription);
+    Task<bool> ExistsAsync(string description);
 
-    Task<Ulid?> IdentifyAsync(string proofTypeDescription);
+    Task<Ulid?> IdentifyAsync(string description);
+
+    Task InsertAsync(ProofType proofType);
 
     Task<IImmutableList<ProofType>> ListAsync();
 }

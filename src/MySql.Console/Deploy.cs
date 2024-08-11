@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Options;
+using Mk8.Core;
 using Mk8.MySql.Console.Courses;
 using Mk8.MySql.Console.Locations;
 using Mk8.MySql.Console.Logins;
@@ -12,29 +14,26 @@ namespace Mk8.MySql.Console;
 
 // TODO: Use GitHub issues instead of 'TODO's.
 
-internal static partial class Program
+internal class DeployCommand(IOptions<Mk8Settings> options)
 {
-    private static async Task DeployAsync()
+    internal async Task ExecuteAsync()
     {
-        string user = GetUser();
-        string password = GetPassword();
-        string server = GetServer();
-        string mk8Database = GetMk8Database();
-        string mk8Password = GetMk8Password();
+        MySqlConnectionStringBuilder mk8ConnectionString = new(options.Value.ConnectionString);
 
-        using MySqlConnection rootConnection = new($"Server={server};Uid={user};Pwd={password}");
+        using MySqlConnection rootConnection = new(options.Value.RootConnectionString);
         await rootConnection.OpenAsync();
 
-        using MySqlCommand command = new($"CREATE DATABASE IF NOT EXISTS {mk8Database};", rootConnection);
+        using MySqlCommand command = new($"CREATE DATABASE IF NOT EXISTS {mk8ConnectionString.Database};", rootConnection);
         await command.ExecuteNonQueryAsync();
 
-        command.CommandText = $"CREATE USER IF NOT EXISTS 'mk8'@'%%' IDENTIFIED BY '{mk8Password}';";
+        command.CommandText = $"CREATE USER IF NOT EXISTS 'mk8'@'%%' IDENTIFIED BY '{mk8ConnectionString.Password}';";
         await command.ExecuteNonQueryAsync();
 
-        command.CommandText = $"USE {mk8Database}; GRANT EXECUTE ON * TO 'mk8'@'%%';";
+        command.CommandText = $"USE {mk8ConnectionString.Database}; GRANT EXECUTE ON * TO 'mk8'@'%%';";
         await command.ExecuteNonQueryAsync();
 
-        using MySqlConnection mk8Connection = await GetMk8ConnectionAsync(user, password, server, mk8Database);
+        using MySqlConnection mk8Connection = new(options.Value.ConnectionString);
+        await mk8Connection.OpenAsync();
 
         await CourseDeploy.ExecuteAsync(mk8Connection);
         await LocationDeploy.ExecuteAsync(mk8Connection);
@@ -46,6 +45,4 @@ internal static partial class Program
         await NewDeploy.ExecuteAsync(mk8Connection);
         await SyncDeploy.ExecuteAsync(mk8Connection);
     }
-
-    private static string GetMk8Password() => GetPassword("MK8_PASSWORD");
 }

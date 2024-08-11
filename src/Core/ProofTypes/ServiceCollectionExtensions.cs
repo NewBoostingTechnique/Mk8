@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using Mk8.Core.Extensions;
+using Mk8.Core.DependencyInjection;
 
 namespace Mk8.Core.ProofTypes;
 
@@ -16,13 +16,27 @@ internal static class ServiceCollectionExtensions
         services.AddMemoryCache();
 
         ServiceDescriptor? descriptor = services.GetServiceDescriptor<IProofTypeData>();
+
+        services.AddSingleton(sp => ActivatorUtilities.CreateInstance<EventingProofTypeData>
+        (
+            sp,
+            (IProofTypeData)descriptor.CreateInstance(sp)
+        ));
+
+        services.AddSingleton<IProofTypeDataEvents>(sp => sp.GetRequiredService<EventingProofTypeData>());
+
         services.AddSingleton<IProofTypeData>
         (
-            sp => ActivatorUtilities.CreateInstance<CachingProofTypeData>
-            (
-                sp,
-                (IProofTypeData)descriptor.CreateInstance(sp)
-            )
+            sp =>
+            {
+                EventingProofTypeData eventingProofTypeData = sp.GetRequiredService<EventingProofTypeData>();
+                return ActivatorUtilities.CreateInstance<CachingProofTypeData>
+                (
+                    sp,
+                    eventingProofTypeData,
+                    eventingProofTypeData
+                );
+            }
         );
     }
 }

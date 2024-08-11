@@ -8,6 +8,7 @@ internal static class CourseDeploy
         await Script.ExecuteAsync(connection, "Courses/CourseTable.sql");
         await Script.ExecuteAsync(connection, "Courses/CourseExists.sql");
         await Script.ExecuteAsync(connection, "Courses/CourseIdentify.sql");
+        await Script.ExecuteAsync(connection, "Courses/CourseInsert.sql");
         await Script.ExecuteAsync(connection, "Courses/CourseList.sql");
     }
 }

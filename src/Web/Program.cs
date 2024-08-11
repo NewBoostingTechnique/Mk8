@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.HttpOverrides;
+using Mk8.Core;
 using Mk8.Web.Authentication;
 using Mk8.Web.Authorization;
 using Mk8.Web.Text.Json.Serialization;
 using Mk8.MySql;
-using Mk8.Core.Extensions;
 
 // TODO: NuGet package caching in GitHub Actions.
 // TODO: Run CI tests in GitHub Actions.

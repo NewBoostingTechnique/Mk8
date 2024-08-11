@@ -14,6 +14,15 @@ internal static class MySqlCommandExtensions
         );
     }
 
+    internal static void AddParameter(this MySqlCommand command, string name, Ulid? value)
+    {
+        command.Parameters.AddWithValue
+        (
+            name,
+            value?.ToByteArray()
+        );
+    }
+
     internal static void AddParameter(this MySqlCommand command, string name, object? value)
     {
         command.Parameters.AddWithValue
@@ -27,5 +36,11 @@ internal static class MySqlCommandExtensions
     {
         object? scalarObject = await command.ExecuteScalarAsync().ConfigureAwait(false);
         return scalarObject is long scalarLong && scalarLong == 1;
+    }
+
+    internal static async Task<Ulid?> ExecuteUlidAsync(this MySqlCommand command)
+    {
+        object? scalarObject = await command.ExecuteScalarAsync().ConfigureAwait(false);
+        return scalarObject is byte[] scalarBytes ? new Ulid(scalarBytes) : null;
     }
 }

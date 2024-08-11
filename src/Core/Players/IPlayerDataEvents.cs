@@ -26,5 +26,3 @@ internal interface IPlayerDataEvents
     #endregion Inserted.
 
 }
-
-

@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using Mk8.Core.Extensions;
+using Mk8.Core.DependencyInjection;
 
 namespace Mk8.Core.Locations.Regions;
 
@@ -17,13 +17,26 @@ internal static class ServiceCollectionExtensions
 
         ServiceDescriptor? descriptor = services.GetServiceDescriptor<IRegionData>();
 
+        services.AddSingleton(sp => ActivatorUtilities.CreateInstance<EventingRegionData>
+        (
+            sp,
+            (IRegionData)descriptor.CreateInstance(sp)
+        ));
+
+        services.AddSingleton<IRegionDataEvents>(sp => sp.GetRequiredService<EventingRegionData>());
+
         services.AddSingleton<IRegionData>
         (
-            sp => ActivatorUtilities.CreateInstance<CachingRegionData>
-            (
-                sp,
-                (IRegionData)descriptor.CreateInstance(sp)
-            )
+            sp =>
+            {
+                EventingRegionData eventingRegionData = sp.GetRequiredService<EventingRegionData>();
+                return ActivatorUtilities.CreateInstance<CachingRegionData>
+                (
+                    sp,
+                    eventingRegionData,
+                    eventingRegionData
+                );
+            }
         );
     }
 }

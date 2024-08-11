@@ -34,6 +34,7 @@ export default function TimeCreate() {
 
   async function onSubmitAsync(e) {
     e.preventDefault();
+    // TODO: Currently possible to enter a value for seconds over 60. E.h. 1'89"999
     let time = Object.fromEntries(new FormData(e.currentTarget).entries());
     time.date = dayjs(time.date, loaderData.localeName).toISOString().split('T')[0];
     time.span = `00:${time.span.replace(/'/g, ':').replace(/"/g, '.')}`;

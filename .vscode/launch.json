@@ -27,6 +27,18 @@
       "stopAtEntry": false
     },
     {
+      "name": "MySql.Console seed",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "dotnet: build",
+      "program": "${workspaceFolder}/src/MySql.Console/bin/Debug/net8.0/Mk8.MySql.Console.dll",
+      "args": [
+        "seed"
+      ],
+      "cwd": "${workspaceFolder}/src/MySql.Console",
+      "stopAtEntry": false
+    },
+    {
       "name": ".NET Core Attach",
       "type": "coreclr",
       "request": "attach"

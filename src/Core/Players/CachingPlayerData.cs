@@ -357,9 +357,9 @@ internal class CachingPlayerData(
             "Player_List",
             async entry =>
             {
-                IImmutableList<Player> list = await innerData.ListAsync().ConfigureAwait(false);
+                IImmutableList<Player> players = await innerData.ListAsync().ConfigureAwait(false);
                 entry.AddExpirationToken(new ListChangeToken(playerEvents, timeEvents));
-                return list;
+                return players;
             }
         )!;
     }

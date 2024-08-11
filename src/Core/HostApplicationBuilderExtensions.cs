@@ -10,8 +10,9 @@ using Mk8.Core.Times;
 using Mk8.Core.Logins;
 using Mk8.Core.Syncs;
 using Mk8.Core.Persons;
+using Mk8.Core.Seeds;
 
-namespace Mk8.Core.Extensions;
+namespace Mk8.Core;
 
 public static class HostApplicationBuilderExtensions
 {
@@ -26,14 +27,9 @@ public static class HostApplicationBuilderExtensions
         services.AddPersons();
         services.AddPlayers();
         services.AddProofTypes();
+        services.AddSeeds();
         services.AddSyncs();
         services.AddTimes();
         services.AddLogins();
-    }
-
-    internal static ServiceDescriptor GetServiceDescriptor<TService>(this IServiceCollection services)
-    {
-        return services.LastOrDefault(x => x.ServiceType == typeof(TService))
-            ?? throw new InvalidOperationException($"'{typeof(TService).FullName}' not found.");
     }
 }

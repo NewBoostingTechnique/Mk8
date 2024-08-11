@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS `regions` (
   `Id` BINARY(16) NOT NULL,
-  `CountryId` BINARY(16) NOT NULL,
   `Name` VARCHAR(255) NOT NULL,
+  `CountryId` BINARY(16) NOT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE INDEX `Region_Duplicate` (`CountryId` ASC, `Name` ASC) VISIBLE,
   INDEX `Name_INDEX` (`Name` ASC) VISIBLE,

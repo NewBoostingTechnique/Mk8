@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using Mk8.Core.Extensions;
+using Mk8.Core.DependencyInjection;
 
 namespace Mk8.Core.Times;
 

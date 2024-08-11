@@ -11,8 +11,6 @@ internal class NewSync(
 {
     public async Task SyncNewsAsync()
     {
-        // TODO: There are some funky characters.
-
         List<New> news = newSource.GetNews().ToList();
 
         using TransactionScope transaction = new(TransactionScopeAsyncFlowOption.Enabled);

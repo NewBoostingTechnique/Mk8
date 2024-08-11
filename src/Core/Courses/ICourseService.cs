@@ -7,4 +7,6 @@ public interface ICourseService
     Task<bool> ExistsAsync(string courseName);
 
     Task<IImmutableList<Course>> ListAsync();
+
+    Task SeedAsync();
 }

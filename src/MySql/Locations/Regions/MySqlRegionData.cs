@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using System.Data;
 using System.Data.Common;
+using System.Transactions;
 using Microsoft.Extensions.Options;
 using Mk8.Core;
 using Mk8.Core.Locations.Regions;
@@ -10,16 +11,30 @@ namespace Mk8.MySql.Locations.Regions;
 
 internal class MySqlRegionData(IOptions<Mk8Settings> mk8Options) : IRegionData
 {
-    public async Task<Ulid?> IdentifyAsync(string regionName)
+    public async Task<Ulid?> IdentifyAsync(string name)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
         using MySqlCommand command = new("RegionIdentify", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.AddWithValue("RegionName", regionName);
+        command.AddParameter("RegionName", name);
 
         await connection.OpenAsync().ConfigureAwait(false);
-        return await command.ExecuteScalarAsync().ConfigureAwait(false) as Ulid?;
+        return await command.ExecuteUlidAsync().ConfigureAwait(false);
+    }
+
+    public async Task InsertAsync(Region region)
+    {
+        using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
+
+        using MySqlCommand command = new("RegionInsert", connection);
+        command.CommandType = CommandType.StoredProcedure;
+        command.AddParameter("Id", region.Id);
+        command.AddParameter("Name", region.Name);
+        command.AddParameter("CountryId", region.CountryId);
+
+        await connection.OpenAsync().ConfigureAwait(false);
+        await command.ExecuteNonQueryAsync().ConfigureAwait(false);
     }
 
     public async Task<IImmutableList<Region>> ListAsync(Ulid countryId)
@@ -28,7 +43,7 @@ internal class MySqlRegionData(IOptions<Mk8Settings> mk8Options) : IRegionData
 
         using MySqlCommand command = new("RegionList", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.AddWithValue("CountryId", countryId);
+        command.AddParameter("CountryId", countryId);
 
         await connection.OpenAsync().ConfigureAwait(false);
         using DbDataReader reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
@@ -37,6 +52,7 @@ internal class MySqlRegionData(IOptions<Mk8Settings> mk8Options) : IRegionData
         {
             builder.Add(new Region
             {
+                CountryId = countryId,
                 Name = reader.GetString(0)
             });
         }

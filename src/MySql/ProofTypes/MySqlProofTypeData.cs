@@ -30,27 +30,40 @@ internal class MySqlProofTypeData(IOptions<Mk8Settings> mk8Options) : IProofType
         return builder.ToImmutable();
     }
 
-    public async Task<bool> ExistsAsync(string proofTypeDescription)
+    public async Task<bool> ExistsAsync(string description)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
         using MySqlCommand command = new("ProofTypeExists", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.AddWithValue("ProofTypeDescription", proofTypeDescription);
+        command.AddParameter("ProofTypeDescription", description);
 
         await connection.OpenAsync().ConfigureAwait(false);
         return await command.ExecuteBoolAsync().ConfigureAwait(false);
     }
 
-    public async Task<Ulid?> IdentifyAsync(string proofTypeDescription)
+    public async Task<Ulid?> IdentifyAsync(string description)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
         using MySqlCommand command = new("ProofTypeIdentify", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.AddWithValue("ProofTypeDescription", proofTypeDescription);
+        command.AddParameter("ProofTypeDescription", description);
 
         await connection.OpenAsync().ConfigureAwait(false);
-        return await command.ExecuteScalarAsync().ConfigureAwait(false) as Ulid?;
+        return await command.ExecuteUlidAsync().ConfigureAwait(false);
+    }
+
+    public async Task InsertAsync(ProofType proofType)
+    {
+        using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
+
+        using MySqlCommand command = new("ProofTypeInsert", connection);
+        command.CommandType = CommandType.StoredProcedure;
+        command.AddParameter("Id", proofType.Id);
+        command.AddParameter("Description", proofType.Description);
+
+        await connection.OpenAsync().ConfigureAwait(false);
+        await command.ExecuteNonQueryAsync().ConfigureAwait(false);
     }
 }

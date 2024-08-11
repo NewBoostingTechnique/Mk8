@@ -16,7 +16,7 @@ internal class MySqlSyncData(IOptions<Mk8Settings> mk8Options) : ISyncData
 
         using MySqlCommand command = new("SyncDetail", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.Add(new MySqlParameter("Id", id));
+        command.AddParameter("Id", id);
 
         await connection.OpenAsync().ConfigureAwait(false);
         using DbDataReader reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
@@ -38,8 +38,8 @@ internal class MySqlSyncData(IOptions<Mk8Settings> mk8Options) : ISyncData
 
         using MySqlCommand command = new("SyncInsert", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.Add(new MySqlParameter("Id", sync.Id));
-        command.Parameters.Add(new MySqlParameter("StartTime", sync.StartTime));
+        command.AddParameter("Id", sync.Id);
+        command.AddParameter("StartTime", sync.StartTime);
 
         await connection.OpenAsync().ConfigureAwait(false);
         await command.ExecuteNonQueryAsync().ConfigureAwait(false);
@@ -51,8 +51,8 @@ internal class MySqlSyncData(IOptions<Mk8Settings> mk8Options) : ISyncData
 
         using MySqlCommand command = new("SyncUpdate", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.Add(new MySqlParameter("EndTime", sync.EndTime));
-        command.Parameters.Add(new MySqlParameter("Id", sync.Id));
+        command.AddParameter("EndTime", sync.EndTime);
+        command.AddParameter("Id", sync.Id);
 
         await connection.OpenAsync().ConfigureAwait(false);
         await command.ExecuteNonQueryAsync().ConfigureAwait(false);

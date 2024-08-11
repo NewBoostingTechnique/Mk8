@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using Mk8.Core.Extensions;
+using Mk8.Core.DependencyInjection;
 
 namespace Mk8.Core.Persons;
 
@@ -8,6 +8,7 @@ internal static class ServiceCollectionExtensions
     internal static void AddPersons(this IServiceCollection services)
     {
         services.AddPersonCaching();
+        services.AddSingleton<IPersonService, PersonService>();
     }
 
     private static void AddPersonCaching(this IServiceCollection services)

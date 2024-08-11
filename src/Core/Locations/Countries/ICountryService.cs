@@ -5,4 +5,6 @@ namespace Mk8.Core.Locations.Countries;
 public interface ICountryService
 {
     Task<IImmutableList<Country>> ListAsync();
+
+    Task SeedAsync();
 }

@@ -7,6 +7,7 @@ internal static class CountryDeploy
         System.Console.WriteLine("Deploying Countries...");
         await Script.ExecuteAsync(connection, "Locations/Countries/CountryTable.sql");
         await Script.ExecuteAsync(connection, "Locations/Countries/CountryIdentify.sql");
+        await Script.ExecuteAsync(connection, "Locations/Countries/CountryInsert.sql");
         await Script.ExecuteAsync(connection, "Locations/Countries/CountryList.sql");
     }
 }

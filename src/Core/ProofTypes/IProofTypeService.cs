@@ -7,4 +7,6 @@ public interface IProofTypeService
     Task<bool> ExistsAsync(string proofTypeDescription);
 
     Task<IImmutableList<ProofType>> ListAsync();
+
+    Task SeedAsync();
 }

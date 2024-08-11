@@ -8,6 +8,7 @@ internal static class ProofTypeDeploy
         await Script.ExecuteAsync(connection, "ProofTypes/ProofTypeTable.sql");
         await Script.ExecuteAsync(connection, "ProofTypes/ProofTypeExists.sql");
         await Script.ExecuteAsync(connection, "ProofTypes/ProofTypeIdentify.sql");
+        await Script.ExecuteAsync(connection, "ProofTypes/ProofTypeInsert.sql");
         await Script.ExecuteAsync(connection, "ProofTypes/ProofTypeList.sql");
     }
 }

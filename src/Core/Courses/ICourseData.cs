@@ -8,5 +8,7 @@ public interface ICourseData
 
     Task<Ulid?> IdentifyAsync(string courseName);
 
+    Task InsertAsync(Course course);
+
     Task<IImmutableList<Course>> ListAsync();
 }

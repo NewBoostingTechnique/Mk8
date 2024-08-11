@@ -17,7 +17,7 @@ internal class MySqlPersonData(IOptions<Mk8Settings> mk8Options) : IPersonData
         command.AddParameter("PersonName", personName);
 
         await connection.OpenAsync().ConfigureAwait(false);
-        return await command.ExecuteScalarAsync().ConfigureAwait(false) as Ulid?;
+        return await command.ExecuteUlidAsync().ConfigureAwait(false);
     }
 
     public async Task InsertAsync(Person person)

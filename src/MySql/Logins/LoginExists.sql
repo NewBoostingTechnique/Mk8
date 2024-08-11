@@ -1,7 +1,7 @@
 DROP procedure IF EXISTS `LoginExists`;
 
 CREATE PROCEDURE `LoginExists` (
-  IN LoginEmail BINARY(16)
+  IN Email VARCHAR(255)
 )
 BEGIN
   SELECT
@@ -9,5 +9,5 @@ BEGIN
   FROM
     logins
   WHERE
-    logins.Email = LoginEmail;
+    logins.Email = Email;
 END;

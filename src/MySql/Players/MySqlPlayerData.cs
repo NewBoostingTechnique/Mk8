@@ -18,7 +18,7 @@ internal class MySqlPlayerData(IOptions<Mk8Settings> mk8Options) : IPlayerData
 
         using MySqlCommand command = new("PlayerDelete", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.Add(new MySqlParameter("Id", id));
+        command.AddParameter("Id", id);
 
         await connection.OpenAsync().ConfigureAwait(false);
         await command.ExecuteNonQueryAsync().ConfigureAwait(false);
@@ -30,7 +30,7 @@ internal class MySqlPlayerData(IOptions<Mk8Settings> mk8Options) : IPlayerData
 
         using var command = new MySqlCommand("PlayerDetail", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.Add(new MySqlParameter("Id", id));
+        command.AddParameter("Id", id);
 
         await connection.OpenAsync().ConfigureAwait(false);
         using DbDataReader reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
@@ -72,7 +72,7 @@ internal class MySqlPlayerData(IOptions<Mk8Settings> mk8Options) : IPlayerData
 
         using MySqlCommand command = new("PlayerExists", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.Add(new MySqlParameter("Name", name));
+        command.AddParameter("Name", name);
 
         await connection.OpenAsync().ConfigureAwait(false);
         return await command.ExecuteBoolAsync().ConfigureAwait(false);
@@ -84,10 +84,10 @@ internal class MySqlPlayerData(IOptions<Mk8Settings> mk8Options) : IPlayerData
 
         using MySqlCommand command = new("PlayerIdentify", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.Add(new MySqlParameter("Name", name));
+        command.AddParameter("Name", name);
 
         await connection.OpenAsync().ConfigureAwait(false);
-        return await command.ExecuteScalarAsync().ConfigureAwait(false) as Ulid?;
+        return await command.ExecuteUlidAsync().ConfigureAwait(false);
     }
 
     public async Task InsertAsync(Player player)
@@ -96,10 +96,10 @@ internal class MySqlPlayerData(IOptions<Mk8Settings> mk8Options) : IPlayerData
 
         using MySqlCommand command = new("PlayerInsert", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.Add(new MySqlParameter("CountryId", player.CountryId));
-        command.Parameters.Add(new MySqlParameter("Id", player.Id));
-        command.Parameters.Add(new MySqlParameter("ProofTypeId", player.ProofTypeId));
-        command.Parameters.Add(new MySqlParameter("RegionId", player.RegionId));
+        command.AddParameter("CountryId", player.CountryId);
+        command.AddParameter("Id", player.Id);
+        command.AddParameter("ProofTypeId", player.ProofTypeId);
+        command.AddParameter("RegionId", player.RegionId);
 
         await connection.OpenAsync().ConfigureAwait(false);
         await command.ExecuteNonQueryAsync().ConfigureAwait(false);
