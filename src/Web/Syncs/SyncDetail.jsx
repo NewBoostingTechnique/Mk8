@@ -10,8 +10,8 @@ export default function PlayerDetail() {
   const loaderData = useLoaderData();
 
   return (
-    <Stack sx={{ gap: 3 }}>
-      <Typography variant='h3'>Sync Detail</Typography>
+    <Stack sx={{ gap: { xs: 2, md: 3 } }}>
+      <Typography variant='h2'>Sync Detail</Typography>
       <List>
         <ListItem>
           <ListItemText>Started</ListItemText>

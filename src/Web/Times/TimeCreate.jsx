@@ -39,12 +39,12 @@ export default function TimeCreate() {
     time.date = dayjs(time.date, loaderData.localeName).toISOString().split('T')[0];
     time.span = `00:${time.span.replace(/'/g, ':').replace(/"/g, '.')}`;
     await timeClient.insertAsync(time);
-    navigate(`/player/detail/${playerName}`);
+    navigate(`/players/detail/${playerName}`);
   }
 
   return (
-    <Stack component="form" onSubmit={onSubmitAsync} sx={{ gap: 3, m: "auto", width: "75%" }}>
-      <Typography variant='h3'>Create Time</Typography>
+    <Stack component="form" onSubmit={onSubmitAsync} sx={{ gap: { xs: 2, md: 3 } }}>
+      <Typography variant='h2'>Create Time</Typography>
       <TextField autoFocus name="playerName" label="Player" onChange={onPlayerChange} required select value={playerName}>
         {loaderData.players.map(player =>
           <MenuItem key={player.name} value={player.name}>{player.name}</MenuItem>

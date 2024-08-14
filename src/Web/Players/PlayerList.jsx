@@ -68,11 +68,11 @@ export default function PlayerList() {
   }
 
   return (
-    <Stack sx={{ gap: 3 }}>
-      <Typography variant='h3'>Players</Typography>
+    <Stack sx={{ gap: { xs: 2, md: 3 } }}>
+      <Typography variant='h2'>Players</Typography>
       {
         loaderData.authorization === true
-          ? <Button component={Link} to={'/player/create/'} role='button' variant="contained">Create</Button>
+          ? <Button component={Link} to={'/players/create/'} role='button' variant="contained">Create</Button>
           : null
       }
       <TableContainer component={Paper}>
@@ -87,7 +87,7 @@ export default function PlayerList() {
           </TableHead>
           <TableBody>
             {loaderData.players.map(player => (
-              <TableRow key={player.name} onClick={() => navigate(`/player/detail/${player.name}`)}>
+              <TableRow key={player.name} onClick={() => navigate(`/players/detail/${player.name}`)}>
                 <TableCell>{player.name}</TableCell>
                 <TableCell>{getLocation(player)}</TableCell>
                 <TableCell>{getProof(player)}</TableCell>

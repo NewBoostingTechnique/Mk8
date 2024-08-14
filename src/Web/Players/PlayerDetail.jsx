@@ -57,13 +57,13 @@ function TimeRow({ authorization, player, time }) {
   if (authorization) {
     if (time.span) {
       return (
-        <TableRow onClick={() => navigate(`/time/edit/${player.name}/${time.courseName}/`)}>
+        <TableRow onClick={() => navigate(`/times/edit/${player.name}/${time.courseName}/`)}>
           <TimeCells time={time} />
         </TableRow>
       );
     } else {
       return (
-        <TableRow onClick={() => navigate(`/time/create/${player.name}/${time.courseName}/`)}>
+        <TableRow onClick={() => navigate(`/times/create/${player.name}/${time.courseName}/`)}>
           <TimeCells time={time} />
         </TableRow>
       );
@@ -92,7 +92,7 @@ export default function PlayerDetail() {
 
   async function deletePlayerAsync(name) {
     await playerClient.deleteAsync(name);
-    navigate('/player/');
+    navigate('/players/');
   }
 
   function closeDialog() {
@@ -110,7 +110,7 @@ export default function PlayerDetail() {
   }
 
   return (
-    <Stack sx={{ gap: 3 }}>
+    <Stack sx={{ gap: { xs: 2, md: 3 } }}>
       <Typography variant='h2'>{loaderData.player.name}</Typography>
       {
         loaderData.authorization === true

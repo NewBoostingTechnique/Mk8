@@ -33,7 +33,7 @@ export default function PlayerCreate() {
     const formData = new FormData(e.currentTarget);
     let player = Object.fromEntries(formData.entries());
     player = await playerClient.insertAsync(player);
-    navigate(`/player/detail/${player.name}`);
+    navigate(`/players/detail/${player.name}`);
   }
 
   // TODO: Factor styles into a new form component
@@ -43,8 +43,8 @@ export default function PlayerCreate() {
   // TODO: Alignment of MenuItems on narrower screens -> Due to the banner style / size of parent container?
 
   return (
-    <Stack component="form" onSubmit={onSubmitAsync} sx={{ gap: 3 }}>
-      <Typography variant='h3'>Create Player</Typography>
+    <Stack component="form" onSubmit={onSubmitAsync} sx={{ gap: { xs: 2, md: 3 } }}>
+      <Typography variant='h2'>Create Player</Typography>
       <TextField autoFocus name="name" label="Name" required />
       <TextField name="countryName" label="Country" onChange={onCountryChange} required select value={country}>
         {loaderData.countries.map(country =>

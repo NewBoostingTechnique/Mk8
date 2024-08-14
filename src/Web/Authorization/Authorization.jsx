@@ -18,6 +18,6 @@ export default function Authorization() {
   });
 
   return (
-    <Typography variant='h3'>Authorizing...</Typography>
+    <Typography variant='h2'>Authorizing...</Typography>
   );
 }

@@ -9,7 +9,7 @@ import useProofTypeClient from '../ProofTypes/ProofTypeClient.js';
 import useSyncClient from '../Syncs/SyncClient.js';
 import App from './App.jsx'
 import getLocaleNameAsync from './Locale.jsx';
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 
@@ -17,6 +17,7 @@ const NewList = lazy(() => import('../News/NewList.jsx'));
 const PlayerCreate = lazy(() => import('../Players/PlayerCreate.jsx'));
 const PlayerDetail = lazy(() => import('../Players/PlayerDetail.jsx'));
 const PlayerList = lazy(() => import('../Players/PlayerList.jsx'));
+const RuleList = lazy(() => import('../Rules/RuleList.jsx'));
 const SyncCreate = lazy(() => import('../Syncs/SyncCreate.jsx'));
 const SyncDetail = lazy(() => import('../Syncs/SyncDetail.jsx'));
 const TimeCreate = lazy(() => import('../Times/TimeCreate.jsx'));
@@ -50,7 +51,7 @@ const router = createBrowserRouter([
         loader: newClient.listAsync
       },
       {
-        path: '/player/',
+        path: '/players/',
         element: <PlayerList />,
         loader: async () => {
           const [authorization, players] = await Promise.all([
@@ -64,7 +65,7 @@ const router = createBrowserRouter([
         }
       },
       {
-        path: '/player/create/',
+        path: '/players/create/',
         element: <PlayerCreate />,
         loader: async () => {
           const [countries, proofTypes] = await Promise.all([
@@ -78,7 +79,7 @@ const router = createBrowserRouter([
         }
       },
       {
-        path: '/player/detail/:playerName/',
+        path: '/players/detail/:playerName/',
         element: <PlayerDetail />,
         loader: async ({ params }) => {
           const [authorization, player] = await Promise.all([
@@ -92,8 +93,16 @@ const router = createBrowserRouter([
         }
       },
       {
+        path: '/rules/',
+        element: <Suspense>
+          <RuleList />
+        </Suspense>
+      },
+      {
         path: '/syncs/create/',
-        element: <SyncCreate />
+        element: <Suspense>
+          <SyncCreate />
+        </Suspense>
       },
       {
         path: '/syncs/detail/:syncId/',
@@ -107,7 +116,7 @@ const router = createBrowserRouter([
       // TODO: Modularise these routes.
       // E.g. /Players/Routes.js
       {
-        path: '/time/create/:playerName/:courseName/',
+        path: '/times/create/:playerName/:courseName/',
         element: <TimeCreate />,
         loader: async ({ params }) => {
           const [players, localeName, courses] = await Promise.all([

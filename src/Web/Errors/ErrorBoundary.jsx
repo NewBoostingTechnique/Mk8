@@ -30,12 +30,12 @@ export default function ErrorBoundary({ children }) {
       {
         error instanceof ApiError
           ? <>
-            <Typography variant='h3'>{error.message}</Typography>
-            <Typography variant='h5'>Trace Identifier</Typography>
+            <Typography variant='h2'>{error.message}</Typography>
+            <Typography variant='h3'>Trace Identifier</Typography>
             <Typography variant='body'>{error.traceId}</Typography>
           </>
           : <>
-            <Typography variant='h3'>An error occurred</Typography>
+            <Typography variant='h2'>An error occurred</Typography>
           </>
       }
     </Layout>

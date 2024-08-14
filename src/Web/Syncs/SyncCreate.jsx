@@ -14,8 +14,8 @@ export default function SyncCreate() {
   }
 
   return (
-    <Stack component="form" onSubmit={onSubmitAsync} sx={{ gap: 3, m: "auto", width: "75%" }}>
-      <Typography variant='h3'>Create Sync</Typography>
+    <Stack component="form" onSubmit={onSubmitAsync} sx={{ gap: { xs: 2, md: 3 } }} >
+      <Typography variant='h2'>Create Sync</Typography>
       <Button type="submit" variant="contained">Submit</Button>
     </Stack>
   );
