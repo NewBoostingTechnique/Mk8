@@ -8,7 +8,6 @@ internal static class ServiceCollectionExtensions
     internal static void AddNews(this IServiceCollection services)
     {
         services.AddSingleton<INewSource, Mk8NewsScraper>();
-        services.AddSingleton<INewSync, NewSync>();
         services.AddNewsCaching();
         services.AddSingleton<INewService, NewService>();
     }

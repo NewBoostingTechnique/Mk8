@@ -5,4 +5,6 @@ namespace Mk8.Core.News;
 public interface INewService
 {
     Task<IImmutableList<New>> ListAsync();
+
+    Task ImportAsync();
 }

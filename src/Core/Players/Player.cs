@@ -29,13 +29,5 @@ public class Player : Person
 
     #endregion Location.
 
-    #region ProofType.
-
-    public Ulid? ProofTypeId { get; set; }
-
-    public string? ProofTypeDescription { get; set; }
-
-    #endregion ProofType.
-
     public ImmutableList<Time> Times { get; set; } = [];
 }

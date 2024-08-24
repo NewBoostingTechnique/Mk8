@@ -12,7 +12,7 @@ internal partial class Mk8NewsScraper(IOptionsMonitor<Mk8Settings> settings) : I
     {
         HtmlWeb web = new();
 
-        IEnumerable<HtmlNode> nodes = web.Load(settings.CurrentValue.ScrapeUrl)
+        IEnumerable<HtmlNode> nodes = web.Load(settings.CurrentValue.ImportFromBaseUrl)
             .DocumentNode
             .SelectNodes("//div[@id='body_panel']/div[@class='info_box grey']")
             .Skip(1);

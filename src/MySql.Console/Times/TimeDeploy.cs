@@ -1,6 +1,6 @@
 namespace Mk8.MySql.Console.Times;
 
-internal static class TimeDeploy
+internal static class DeployTimes
 {
     internal static async Task ExecuteAsync(MySqlConnection connection)
     {

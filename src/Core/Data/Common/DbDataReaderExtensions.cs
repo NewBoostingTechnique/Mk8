@@ -23,6 +23,13 @@ public static class DbDataReaderExtensions
             : reader.GetDateTime(ordinal);
     }
 
+    public static string? GetStringNullable(this DbDataReader reader, int ordinal)
+    {
+        return reader.IsDBNull(ordinal)
+            ? null
+            : reader.GetString(ordinal);
+    }
+
     public static TimeSpan? GetTimeSpanNullable(this DbDataReader reader, int ordinal)
     {
         return reader.IsDBNull(ordinal)

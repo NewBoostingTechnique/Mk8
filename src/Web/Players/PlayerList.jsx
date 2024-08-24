@@ -1,4 +1,4 @@
-import ProofType from '../ProofTypes/ProofType.js';
+import usePlayerClient from './PlayerClient.js';
 import CheckIcon from '@mui/icons-material/Check';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import {
@@ -12,6 +12,7 @@ import dayjs from 'dayjs';
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
 
 export default function PlayerList() {
+  const playerClient = usePlayerClient();
   const loaderData = useLoaderData();
   const navigate = useNavigate();
 
@@ -52,19 +53,15 @@ export default function PlayerList() {
     return location;
   }
 
-  function getProof(player) {
-    switch (player.proofTypeDescription) {
-      case ProofType.NoProof.description:
-        return <></>;
-      case ProofType.Screenshot.description:
-      case ProofType.TimeScroll.description:
-        return <CheckIcon style={{ color: 'yellow' }} />;
-      case ProofType.Video.description:
-      case ProofType.Ghost.description:
-        return <CheckIcon style={{ color: 'green' }} />;
-      default:
-        return <QuestionMarkIcon />;
-    }
+  // TODO: Sync players
+  // TODO: Player rank.
+  // TODO: Player search.
+  // TODO: Are the above player grid sort and filter?
+
+  async function syncAsync() {
+    // TODO: Show progress.
+    await playerClient.syncAsync();
+    navigate('/players/'); // Refresh
   }
 
   return (
@@ -72,7 +69,10 @@ export default function PlayerList() {
       <Typography variant='h2'>Players</Typography>
       {
         loaderData.authorization === true
-          ? <Button component={Link} to={'/players/create/'} role='button' variant="contained">Create</Button>
+          ? <>
+            <Button component={Link} to={'/players/create/'} role='button' variant="contained">Create</Button>
+            <Button role='button' variant="contained" onClick={syncAsync}>Sync</Button>
+          </>
           : null
       }
       <TableContainer component={Paper}>
@@ -81,7 +81,6 @@ export default function PlayerList() {
             <TableRow>
               <TableCell>Name</TableCell>
               <TableCell>Location</TableCell>
-              <TableCell>Proof</TableCell>
               <TableCell>Active</TableCell>
             </TableRow>
           </TableHead>
@@ -90,7 +89,6 @@ export default function PlayerList() {
               <TableRow key={player.name} onClick={() => navigate(`/players/detail/${player.name}`)}>
                 <TableCell>{player.name}</TableCell>
                 <TableCell>{getLocation(player)}</TableCell>
-                <TableCell>{getProof(player)}</TableCell>
                 <TableCell>{getActive(player)}</TableCell>
               </TableRow>
             ))}

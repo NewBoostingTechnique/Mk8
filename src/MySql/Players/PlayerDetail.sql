@@ -8,7 +8,6 @@ BEGIN
     MAX(times.Date) AS 'Active',
     countries.Name AS 'CountryName',
     persons.Name,
-    prooftypes.Description AS 'ProofTypeDescription',
     regions.Name AS 'RegionName'
   FROM
     players
@@ -16,8 +15,6 @@ BEGIN
       countries ON players.CountryId = countries.Id
     JOIN
       persons ON players.Id = persons.Id
-    JOIN
-      prooftypes ON players.ProofTypeId = prooftypes.Id
     JOIN
       regions ON players.RegionId = regions.Id
     LEFT OUTER JOIN

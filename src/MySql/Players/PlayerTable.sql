@@ -1,8 +1,7 @@
 CREATE TABLE IF NOT EXISTS `players` (
   `CountryId` BINARY(16) NOT NULL,
   `Id` BINARY(16) NOT NULL,
-  `ProofTypeId` BINARY(16) NOT NULL,
-  `RegionId` BINARY(16) NOT NULL,
+  `RegionId` BINARY(16) NULL,
   PRIMARY KEY (`Id`),
   CONSTRAINT `Player_Country`
     FOREIGN KEY (`CountryId`)
@@ -10,9 +9,6 @@ CREATE TABLE IF NOT EXISTS `players` (
   CONSTRAINT `Player_Person`
     FOREIGN KEY (`Id`)
     REFERENCES `persons` (`Id`),
-  CONSTRAINT `Player_ProofType`
-    FOREIGN KEY (`ProofTypeId`)
-    REFERENCES `prooftypes` (`Id`),
   CONSTRAINT `Player_Region`
     FOREIGN KEY (`RegionId`)
     REFERENCES `regions` (`Id`)

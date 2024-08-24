@@ -5,8 +5,7 @@ import useCourseClient from '../Courses/CourseClient.js';
 import useCountryClient from '../Locations/Countries/CountryClient.js';
 import useNewClient from '../News/NewClient.js';
 import usePlayerClient from '../Players/PlayerClient.js';
-import useProofTypeClient from '../ProofTypes/ProofTypeClient.js';
-import useSyncClient from '../Syncs/SyncClient.js';
+import useImportClient from '../Imports/ImportClient.js';
 import App from './App.jsx'
 import getLocaleNameAsync from './Locale.jsx';
 import { lazy, Suspense } from 'react';
@@ -15,11 +14,11 @@ import ReactDOM from 'react-dom/client';
 
 const NewList = lazy(() => import('../News/NewList.jsx'));
 const PlayerCreate = lazy(() => import('../Players/PlayerCreate.jsx'));
-const PlayerDetail = lazy(() => import('../Players/PlayerDetail.jsx'));
+const DetailPlayer = lazy(() => import('../Players/DetailPlayer.jsx'));
 const PlayerList = lazy(() => import('../Players/PlayerList.jsx'));
 const RuleList = lazy(() => import('../Rules/RuleList.jsx'));
-const SyncCreate = lazy(() => import('../Syncs/SyncCreate.jsx'));
-const SyncDetail = lazy(() => import('../Syncs/SyncDetail.jsx'));
+const CreateImport = lazy(() => import('../Imports/CreateImport.jsx'));
+const DetailImport = lazy(() => import('../Imports/DetailImport.jsx'));
 const TimeCreate = lazy(() => import('../Times/TimeCreate.jsx'));
 
 const authorizationPromise = useAuthorizationClient().getAsync();
@@ -27,8 +26,7 @@ const courseClient = useCourseClient();
 const countryClient = useCountryClient();
 const newClient = useNewClient();
 const playerClient = usePlayerClient();
-const proofClient = useProofTypeClient();
-const syncClient = useSyncClient();
+const importClient = useImportClient();
 
 const router = createBrowserRouter([
   {
@@ -68,23 +66,21 @@ const router = createBrowserRouter([
         path: '/players/create/',
         element: <PlayerCreate />,
         loader: async () => {
-          const [countries, proofTypes] = await Promise.all([
-            countryClient.listAsync(),
-            proofClient.listAsync()
+          const [countries] = await Promise.all([
+            countryClient.listAsync()
           ]);
           return ({
-            countries: countries,
-            proofTypes: proofTypes
+            countries: countries
           });
         }
       },
       {
-        path: '/players/detail/:playerName/',
-        element: <PlayerDetail />,
+        path: '/players/detail/:name/',
+        element: <DetailPlayer />,
         loader: async ({ params }) => {
           const [authorization, player] = await Promise.all([
             authorizationPromise,
-            playerClient.detailAsync(params.playerName)
+            playerClient.detailAsync(params.name)
           ]);
           return ({
             authorization: authorization,
@@ -99,17 +95,17 @@ const router = createBrowserRouter([
         </Suspense>
       },
       {
-        path: '/syncs/create/',
+        path: '/imports/create/',
         element: <Suspense>
-          <SyncCreate />
+          <CreateImport />
         </Suspense>
       },
       {
-        path: '/syncs/detail/:syncId/',
-        element: <SyncDetail />,
+        path: '/imports/detail/:id/',
+        element: <DetailImport />,
         loader: async ({ params }) => {
           return ({
-            sync: await syncClient.detailAsync(params.syncId)
+            import: await importClient.detailAsync(params.id)
           });
         }
       },

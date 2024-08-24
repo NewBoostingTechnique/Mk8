@@ -2,20 +2,21 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mk8.Web.App;
 using Mk8.Core.Players;
-using Mk8.Core.ProofTypes;
 using System.Collections.Immutable;
 
 namespace Mk8.Web.Players;
 
 [Route("api/player")]
 public class PlayerApi(
-    IPlayerService playerService,
-    IProofTypeService proofService
+    IPlayerService playerService
 ) : Api
 {
     [HttpDelete("{name}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] string name)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         if (string.IsNullOrWhiteSpace(name))
             return BadRequestNameRequired();
 
@@ -30,8 +31,11 @@ public class PlayerApi(
     [AllowAnonymous, HttpGet("{playerName}")]
     public async Task<IActionResult> DetailAsync([FromRoute] string playerName)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         if (string.IsNullOrWhiteSpace(playerName))
-            return BadRequestNameRequired(); // TODO: Use Problem.
+            return BadRequestNameRequired();
 
         Player? player = await playerService.FindAsync(playerName);
 
@@ -41,6 +45,9 @@ public class PlayerApi(
     [HttpPost("")]
     public async Task<IActionResult> InsertAsync([FromBody] Player player)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         if (string.IsNullOrWhiteSpace(player?.CountryName))
             return BadRequestPropertyRequired(nameof(Player.CountryName));
 
@@ -50,12 +57,6 @@ public class PlayerApi(
         if (await playerService.ExistsAsync(player.Name))
             return Conflict();
 
-        if (string.IsNullOrWhiteSpace(player.ProofTypeDescription))
-            return BadRequestPropertyRequired(nameof(Player.ProofTypeDescription));
-
-        if (!await proofService.ExistsAsync(player.ProofTypeDescription))
-            return NotFound(player.ProofTypeDescription);
-
         return Ok(await playerService.InsertAsync(player));
     }
 
@@ -64,6 +65,13 @@ public class PlayerApi(
     {
         IImmutableList<Player> players = await playerService.ListAsync();
         return Ok(players);
+    }
+
+    [HttpPost("sync")]
+    public async Task<IActionResult> SyncAsync()
+    {
+        await playerService.ImportAsync();
+        return Ok();
     }
 
     private BadRequestObjectResult BadRequestNameRequired()

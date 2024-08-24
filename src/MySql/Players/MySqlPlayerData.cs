@@ -44,8 +44,7 @@ internal class MySqlPlayerData(IOptions<Mk8Settings> mk8Options) : IPlayerData
             Id = id,
             CountryName = reader.GetString(1),
             Name = reader.GetString(2),
-            ProofTypeDescription = reader.GetString(3),
-            RegionName = reader.GetString(4),
+            RegionName = reader.GetString(3),
         };
 
         if (!await reader.NextResultAsync().ConfigureAwait(false))
@@ -98,7 +97,6 @@ internal class MySqlPlayerData(IOptions<Mk8Settings> mk8Options) : IPlayerData
         command.CommandType = CommandType.StoredProcedure;
         command.AddParameter("CountryId", player.CountryId);
         command.AddParameter("Id", player.Id);
-        command.AddParameter("ProofTypeId", player.ProofTypeId);
         command.AddParameter("RegionId", player.RegionId);
 
         await connection.OpenAsync().ConfigureAwait(false);
@@ -123,8 +121,7 @@ internal class MySqlPlayerData(IOptions<Mk8Settings> mk8Options) : IPlayerData
                 Active = reader.GetDateOnlyNullable(0),
                 CountryName = reader.GetString(1),
                 Name = reader.GetString(2),
-                ProofTypeDescription = reader.GetString(3),
-                RegionName = reader.GetString(4),
+                RegionName = reader.GetString(3)
             });
         }
 

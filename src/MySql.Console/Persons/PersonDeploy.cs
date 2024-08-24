@@ -1,6 +1,6 @@
 namespace Mk8.MySql.Console.Persons;
 
-internal static class PersonDeploy
+internal static class DeployPersons
 {
     internal static async Task ExecuteAsync(MySqlConnection connection)
     {

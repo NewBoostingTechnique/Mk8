@@ -12,5 +12,7 @@ public interface IPlayerService
 
     Task<Player> InsertAsync(Player player);
 
+    Task ImportAsync(CancellationToken cancellationToken = default);
+
     Task<IImmutableList<Player>> ListAsync();
 }

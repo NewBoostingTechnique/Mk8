@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS `times` (
     REFERENCES `courses` (`Id`),
   CONSTRAINT `Time_Player`
     FOREIGN KEY (`PlayerId`)
-    REFERENCES `players` (`Id`),
+    REFERENCES `players` (`Id`)
+    ON DELETE CASCADE,
   CONSTRAINT `Time_Duplicate`
     UNIQUE (`PlayerId`, `CourseId`)
 )

@@ -39,6 +39,15 @@ class PlayerClient extends ApiClient {
     const response = await super.fetchAsync(PlayerClient.baseUri);
     return await response.json();
   }
+
+  async syncAsync() {
+    return super.fetchAsync(
+      `${PlayerClient.baseUri}sync/`,
+      {
+        method: "POST"
+      }
+    );
+  }
 }
 
 const playerClient = new PlayerClient();

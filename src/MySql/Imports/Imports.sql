@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS `imports` (
+  `Id` BINARY(16) NOT NULL,
+  `EndTime` DATETIME NULL,
+  `Error` TEXT NULL,
+  `StartTime` DATETIME NOT NULL,
+  PRIMARY KEY (`Id`)
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;

@@ -2,7 +2,7 @@ using Mk8.MySql.Console.Locations.Countries;
 
 namespace Mk8.MySql.Console.Locations;
 
-internal static class LocationDeploy
+internal static class DeployLocations
 {
     internal static async Task ExecuteAsync(MySqlConnection connection)
     {

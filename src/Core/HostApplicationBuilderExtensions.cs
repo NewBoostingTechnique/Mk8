@@ -5,10 +5,9 @@ using Mk8.Core.Courses;
 using Mk8.Core.Locations;
 using Mk8.Core.News;
 using Mk8.Core.Players;
-using Mk8.Core.ProofTypes;
 using Mk8.Core.Times;
 using Mk8.Core.Logins;
-using Mk8.Core.Syncs;
+using Mk8.Core.Imports;
 using Mk8.Core.Persons;
 using Mk8.Core.Seeds;
 
@@ -26,9 +25,8 @@ public static class HostApplicationBuilderExtensions
         services.AddNews();
         services.AddPersons();
         services.AddPlayers();
-        services.AddProofTypes();
         services.AddSeeds();
-        services.AddSyncs();
+        services.AddImports();
         services.AddTimes();
         services.AddLogins();
     }

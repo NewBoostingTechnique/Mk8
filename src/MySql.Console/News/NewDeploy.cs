@@ -1,6 +1,6 @@
 namespace Mk8.MySql.Console.News;
 
-internal static class NewDeploy
+internal static class DeployNews
 {
     internal static async Task ExecuteAsync(MySqlConnection connection)
     {

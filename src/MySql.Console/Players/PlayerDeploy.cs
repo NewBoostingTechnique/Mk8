@@ -1,6 +1,6 @@
 namespace Mk8.MySql.Console.Players;
 
-internal static class PlayerDeploy
+internal static class DeployPlayers
 {
     internal static async Task ExecuteAsync(MySqlConnection connection)
     {

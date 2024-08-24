@@ -1,6 +1,6 @@
 namespace Mk8.MySql.Console.Logins;
 
-internal static class LoginDeploy
+internal static class DeployLogins
 {
     internal static async Task ExecuteAsync(MySqlConnection connection)
     {
