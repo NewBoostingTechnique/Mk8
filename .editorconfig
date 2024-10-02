@@ -5,3 +5,9 @@ indent_size = 2
 
 [*.cs]
 indent_size = 4
+
+# CA2016: Forward the 'CancellationToken' parameter to methods
+dotnet_diagnostic.CA2016.severity = warning
+
+# CS8619: Nullability of reference types in value doesn't match target type.
+dotnet_diagnostic.CS8619.severity = error

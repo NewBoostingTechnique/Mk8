@@ -6,7 +6,7 @@ namespace Mk8.Core.Logins;
 internal class LoginService(
     ILogger<LoginService> logger,
     ILoginData loginData,
-    IPersonData personData
+    IPersonStore personData
 ) : ILoginService
 {
     public Task<bool> ExistsAsync(string email)
@@ -20,7 +20,7 @@ internal class LoginService(
     {
         logger.LogInformation("Seeding logins...");
 
-        await loginData.InsertAsync(new Login
+        await loginData.CreateAsync(new Login
         {
             Id = Ulid.NewUlid(),
             Email = "russell.horwood@gmail.com",

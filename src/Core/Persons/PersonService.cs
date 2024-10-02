@@ -1,10 +1,10 @@
 namespace Mk8.Core.Persons;
 
-internal sealed class PersonService(IPersonData personData) : IPersonService
+internal sealed class PersonService(IPersonStore personData) : IPersonService
 {
     public Task SeedAsync()
     {
-        return personData.InsertAsync
+        return personData.CreateAsync
         (
             new Person
             {

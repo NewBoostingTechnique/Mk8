@@ -5,21 +5,21 @@ namespace Mk8.Core.Persons;
 
 internal class CachingPersonData(
     IMemoryCache cache,
-    IPersonData innerData,
+    IPersonStore innerData,
     IPersonDataEvents personEvents
-) : IPersonData
+) : IPersonStore
 {
 
     #region IdentifyAsync.
 
-    public Task<Ulid?> IdentifyAsync(string personName)
+    public Task<Ulid?> IdentifyAsync(string personName, CancellationToken cancellationToken = default)
     {
         return cache.GetOrCreateAsync
         (
             $"Person_Identify_{personName}",
             async entry =>
             {
-                Ulid? id = await innerData.IdentifyAsync(personName).ConfigureAwait(false);
+                Ulid? id = await innerData.IdentifyAsync(personName, cancellationToken).ConfigureAwait(false);
                 entry.AddExpirationToken(new IdentifyChangeToken(personEvents, personName));
                 return id;
             }
@@ -103,8 +103,8 @@ internal class CachingPersonData(
 
     #endregion IdentifyAsync.
 
-    public Task InsertAsync(Person person)
+    public Task CreateAsync(Person person, CancellationToken cancellationToken = default)
     {
-        return innerData.InsertAsync(person);
+        return innerData.CreateAsync(person, cancellationToken);
     }
 }

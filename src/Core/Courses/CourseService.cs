@@ -16,7 +16,7 @@ internal class CourseService(
 
     public Task<IImmutableList<Course>> ListAsync()
     {
-        return courseData.ListAsync();
+        return courseData.IndexAsync();
     }
 
     public async Task SeedAsync()
@@ -32,7 +32,7 @@ internal class CourseService(
 
         Task insertAsync(string name)
         {
-            return courseData.InsertAsync
+            return courseData.CreateAsync
             (
                 new Course
                 {

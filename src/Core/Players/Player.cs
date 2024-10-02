@@ -4,7 +4,7 @@ using Mk8.Core.Times;
 
 namespace Mk8.Core.Players;
 
-public class Player : Person
+public record Player : Person
 {
 
     public DateOnly? Active { get; init; }
@@ -13,21 +13,21 @@ public class Player : Person
 
     #region Country.
 
-    public Ulid? CountryId { get; internal set; }
+    public Ulid? CountryId { get; internal init; }
 
-    public string? CountryName { get; set; }
+    public string? CountryName { get; init; }
 
     #endregion Country.
 
     #region Region.
 
-    public Ulid? RegionId { get; internal set; }
+    public Ulid? RegionId { get; internal init; }
 
-    public string? RegionName { get; set; }
+    public string? RegionName { get; init; }
 
     #endregion Region.
 
     #endregion Location.
 
-    public ImmutableList<Time> Times { get; set; } = [];
+    public ImmutableList<Time> Times { get; init; } = [];
 }

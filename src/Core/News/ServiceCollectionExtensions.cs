@@ -7,7 +7,6 @@ internal static class ServiceCollectionExtensions
 {
     internal static void AddNews(this IServiceCollection services)
     {
-        services.AddSingleton<INewSource, Mk8NewsScraper>();
         services.AddNewsCaching();
         services.AddSingleton<INewService, NewService>();
     }
@@ -16,22 +15,22 @@ internal static class ServiceCollectionExtensions
     {
         services.AddMemoryCache();
 
-        ServiceDescriptor? descriptor = services.GetServiceDescriptor<INewData>();
+        ServiceDescriptor? descriptor = services.GetServiceDescriptor<INewStore>();
 
         services.AddSingleton(sp => ActivatorUtilities.CreateInstance<EventingNewData>
         (
             sp,
-            (INewData)descriptor.CreateInstance(sp))
+            (INewStore)descriptor.CreateInstance(sp))
         );
 
-        services.AddSingleton<INewDataEvents>(sp => sp.GetRequiredService<EventingNewData>());
+        services.AddSingleton<INewStoreEvents>(sp => sp.GetRequiredService<EventingNewData>());
 
-        services.AddSingleton<INewData>
+        services.AddSingleton<INewStore>
         (
             sp =>
             {
                 EventingNewData eventingNewData = sp.GetRequiredService<EventingNewData>();
-                return ActivatorUtilities.CreateInstance<CachingNewData>
+                return ActivatorUtilities.CreateInstance<CachingNewStore>
                 (
                     sp,
                     eventingNewData,

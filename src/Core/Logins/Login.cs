@@ -1,6 +1,6 @@
 namespace Mk8.Core.Logins;
 
-public class Login
+public record Login
 {
     public Ulid? Id { get; init; }
 

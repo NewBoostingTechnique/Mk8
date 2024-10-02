@@ -10,13 +10,28 @@ namespace Mk8.MySql.Courses;
 
 internal class MySqlCourseData(IOptions<Mk8Settings> mk8Options) : ICourseData
 {
+    public async Task CreateAsync(Course course)
+    {
+        ArgumentNullException.ThrowIfNull(course.Id);
+
+        using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
+
+        using MySqlCommand command = new("course_create", connection);
+        command.CommandType = CommandType.StoredProcedure;
+        command.AddParameter("Id", course.Id);
+        command.AddParameter("Name", course.Name);
+
+        await connection.OpenAsync().ConfigureAwait(false);
+        await command.ExecuteNonQueryAsync().ConfigureAwait(false);
+    }
+
     public async Task<bool> ExistsAsync(string courseName)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
-        using MySqlCommand command = new("CourseExists", connection);
+        using MySqlCommand command = new("course_exists", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.AddParameter("CourseName", courseName);
+        command.AddParameter("Name", courseName);
 
         await connection.OpenAsync().ConfigureAwait(false);
         return await command.ExecuteBoolAsync().ConfigureAwait(false);
@@ -26,34 +41,19 @@ internal class MySqlCourseData(IOptions<Mk8Settings> mk8Options) : ICourseData
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
-        using MySqlCommand command = new("CourseIdentify", connection);
+        using MySqlCommand command = new("course_identify", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.AddParameter("CourseName", courseName);
+        command.AddParameter("Name", courseName);
 
         await connection.OpenAsync().ConfigureAwait(false);
         return await command.ExecuteUlidAsync().ConfigureAwait(false);
     }
 
-    public async Task InsertAsync(Course course)
-    {
-        ArgumentNullException.ThrowIfNull(course.Id);
-
-        using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
-
-        using MySqlCommand command = new("CourseInsert", connection);
-        command.CommandType = CommandType.StoredProcedure;
-        command.AddParameter("Id", course.Id);
-        command.AddParameter("Name", course.Name);
-
-        await connection.OpenAsync().ConfigureAwait(false);
-        await command.ExecuteNonQueryAsync().ConfigureAwait(false);
-    }
-
-    public async Task<IImmutableList<Course>> ListAsync()
+    public async Task<IImmutableList<Course>> IndexAsync()
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
-        using MySqlCommand command = new("CourseList", connection);
+        using MySqlCommand command = new("course_index", connection);
         command.CommandType = CommandType.StoredProcedure;
 
         ImmutableList<Course>.Builder builder = ImmutableList.CreateBuilder<Course>();

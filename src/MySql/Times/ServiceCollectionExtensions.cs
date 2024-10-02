@@ -7,6 +7,6 @@ internal static class ServiceCollectionExtensions
 {
     internal static void AddTimes(this IServiceCollection services)
     {
-        services.AddSingleton<ITimeData, MySqlTimeData>();
+        services.AddSingleton<ITimeStore, MySqlTimeStore>();
     }
 }

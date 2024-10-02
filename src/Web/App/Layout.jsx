@@ -1,5 +1,4 @@
 import BannerUrl from '../wwwroot/banner.jpg';
-import Menu from '../Menu/Menu.jsx';
 import CancelIcon from '@mui/icons-material/Cancel';
 import MenuIcon from '@mui/icons-material/Menu';
 import Image from 'mui-image'
@@ -17,15 +16,18 @@ import {
 } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom'
+
+// Get is authorized, and show Migrations in menu if authorized..
+const Menu = lazy(() => import('../Menu/Menu.jsx'));
 
 const drawerWidth = 200;
 let progressTimeout;
 
 import PropTypes from 'prop-types';
 
-export default function Layout({ children }) {
+export default function Layout({ authorization, children }) {
   Layout.propTypes = {
     children: PropTypes.node.isRequired
   };
@@ -85,13 +87,13 @@ export default function Layout({ children }) {
               </IconButton>
             </Toolbar>
             <Divider />
-            <Menu showProgress={showProgress} />
+            <Menu authorization={authorization} showProgress={showProgress} />
           </Drawer>
           <Drawer variant="permanent" open
             sx={{ display: { xs: 'none', md: 'block' }, '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth } }}>
             <Toolbar />
             <Divider />
-            <Menu showProgress={showProgress} />
+            <Menu authorization={authorization} showProgress={showProgress} />
           </Drawer>
         </Box>
         <Box margin="auto" sx={{ width: { md: `calc(100% - ${drawerWidth}px)` } }}>

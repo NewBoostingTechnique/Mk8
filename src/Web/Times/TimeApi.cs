@@ -14,7 +14,7 @@ public class TimeApi(
 ) : Api
 {
     [HttpPost("")]
-    public async Task<IActionResult> InsertAsync([FromBody] Time time)
+    public async Task<IActionResult> CreateAsync([FromBody] Time time)
     {
         if (string.IsNullOrWhiteSpace(time?.CourseName))
             return BadRequestPropertyRequired(nameof(Time.CourseName));

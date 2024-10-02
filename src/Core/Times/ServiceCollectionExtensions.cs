@@ -15,22 +15,22 @@ internal static class ServiceCollectionExtensions
     {
         services.AddMemoryCache();
 
-        ServiceDescriptor? descriptor = services.GetServiceDescriptor<ITimeData>();
+        ServiceDescriptor? descriptor = services.GetServiceDescriptor<ITimeStore>();
 
-        services.AddSingleton(sp => ActivatorUtilities.CreateInstance<EventingTimeData>
+        services.AddSingleton(sp => ActivatorUtilities.CreateInstance<EventingTimeStore>
         (
             sp,
-            (ITimeData)descriptor.CreateInstance(sp)
+            (ITimeStore)descriptor.CreateInstance(sp)
         ));
 
-        services.AddSingleton<ITimeDataEvents>(sp => sp.GetRequiredService<EventingTimeData>());
+        services.AddSingleton<ITimeStoreEvents>(sp => sp.GetRequiredService<EventingTimeStore>());
 
-        return services.AddSingleton<ITimeData>
+        return services.AddSingleton<ITimeStore>
         (
             sp =>
             {
-                EventingTimeData eventingTimeData = sp.GetRequiredService<EventingTimeData>();
-                return ActivatorUtilities.CreateInstance<CachingTimeData>
+                EventingTimeStore eventingTimeData = sp.GetRequiredService<EventingTimeStore>();
+                return ActivatorUtilities.CreateInstance<CachingTimeStore>
                 (
                     sp,
                     eventingTimeData,

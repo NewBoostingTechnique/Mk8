@@ -42,5 +42,5 @@ export default function ErrorBoundary({ children }) {
   );
 }
 ErrorBoundary.propTypes = {
-  children: PropTypes.string.isRequired
+  children: PropTypes.string
 };

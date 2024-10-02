@@ -1,18 +1,18 @@
-import ErrorBoundary from '../Errors/ErrorBoundary.jsx';
 import Layout from './Layout.jsx';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { lazy } from 'react';
+import { Outlet, useLoaderData } from 'react-router-dom';
 
-import { Outlet, useLoaderData } from 'react-router-dom'
+const ErrorBoundary = lazy(() => import('../Errors/ErrorBoundary.jsx'));
 
 export default function App() {
-
-  const localeName = useLoaderData();
+  const loaderData = useLoaderData();
 
   return (
     <ErrorBoundary>
-      <LocalizationProvider adapterLocale={localeName} dateAdapter={AdapterDayjs}>
-        <Layout>
+      <LocalizationProvider adapterLocale={loaderData.localeName} dateAdapter={AdapterDayjs}>
+        <Layout authorization={loaderData.authorization}>
           <Outlet />
         </Layout>
       </LocalizationProvider>

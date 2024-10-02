@@ -7,6 +7,6 @@ internal static class ServiceCollectionExtensions
 {
     internal static void AddPlayers(this IServiceCollection services)
     {
-        services.AddSingleton<IPlayerData, MySqlPlayerData>();
+        services.AddSingleton<IPlayerStore, MySqlPlayerStore>();
     }
 }

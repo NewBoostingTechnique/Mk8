@@ -198,21 +198,21 @@ internal class CachingCourseData(
 
     #endregion IdentifyAsync.
 
-    public Task InsertAsync(Course course)
+    public Task CreateAsync(Course course)
     {
-        return innerData.InsertAsync(course);
+        return innerData.CreateAsync(course);
     }
 
     #region ListAsync.
 
-    public Task<IImmutableList<Course>> ListAsync()
+    public Task<IImmutableList<Course>> IndexAsync()
     {
         return cache.GetOrCreateAsync
         (
             "Course_List",
             async entry =>
             {
-                IImmutableList<Course> list = await innerData.ListAsync().ConfigureAwait(false);
+                IImmutableList<Course> list = await innerData.IndexAsync().ConfigureAwait(false);
                 entry.AddExpirationToken(new ListChangeToken(courseEvents));
                 return list;
             }

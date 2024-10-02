@@ -21,16 +21,16 @@ internal class EventingCourseData(ICourseData innerData)
 
     public event EventHandler<InsertedEventArgs>? Inserted;
 
-    public async Task InsertAsync(Course course)
+    public async Task CreateAsync(Course course)
     {
-        await innerData.InsertAsync(course).ConfigureAwait(false);
+        await innerData.CreateAsync(course).ConfigureAwait(false);
         Inserted?.Invoke(this, new InsertedEventArgs(course));
     }
 
     #endregion Insert.
 
-    public Task<IImmutableList<Course>> ListAsync()
+    public Task<IImmutableList<Course>> IndexAsync()
     {
-        return innerData.ListAsync();
+        return innerData.IndexAsync();
     }
 }

@@ -1,18 +1,18 @@
 using System.Transactions;
+using Mk8.Core.Countries;
 using Mk8.Core.Courses;
-using Mk8.Core.Locations.Countries;
-using Mk8.Core.Locations.Regions;
 using Mk8.Core.Logins;
 using Mk8.Core.Persons;
+using Mk8.Core.Regions;
 
 namespace Mk8.Core.Seeds;
 
 internal sealed class SeedService(
-    ICourseService courseService,
     ICountryService countryService,
-    IRegionService regionService,
+    ICourseService courseService,
+    ILoginService loginService,
     IPersonService personService,
-    ILoginService loginService
+    IRegionService regionService
 ) : ISeedService
 {
     public async Task InsertAsync()

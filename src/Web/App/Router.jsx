@@ -1,60 +1,117 @@
-import Authorization from '../Authorization/Authorization.jsx';
-import ErrorBoundary from '../Errors/ErrorBoundary.jsx';
-import useAuthorizationClient from '../Authorization/AuthorizationClient.js';
-import useCourseClient from '../Courses/CourseClient.js';
-import useCountryClient from '../Locations/Countries/CountryClient.js';
-import useNewClient from '../News/NewClient.js';
-import usePlayerClient from '../Players/PlayerClient.js';
-import useImportClient from '../Imports/ImportClient.js';
-import App from './App.jsx'
-import getLocaleNameAsync from './Locale.jsx';
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 
-const NewList = lazy(() => import('../News/NewList.jsx'));
-const PlayerCreate = lazy(() => import('../Players/PlayerCreate.jsx'));
-const DetailPlayer = lazy(() => import('../Players/DetailPlayer.jsx'));
-const PlayerList = lazy(() => import('../Players/PlayerList.jsx'));
+import useAuthorizationClient from '../Authorization/AuthorizationClient.js';
+import useCountryClient from '../Countries/CountryClient.js';
+import useCourseClient from '../Courses/CourseClient.js';
+import useMigrationClient from '../Migrations/MigrationClient.js';
+import useNewClient from '../News/NewClient.js';
+import usePlayerClient from '../Players/PlayerClient.js';
+
+import getLocaleNameAsync from './Locale.jsx';
+const localeNamePromise = getLocaleNameAsync();
+
+const App = lazy(() => import('./App.jsx'));
+
+const Authorization = lazy(() => import('../Authorization/Authorization.jsx'));
+const authorizationPromise = useAuthorizationClient().getAsync();
+
+const ErrorBoundary = lazy(() => import('../Errors/ErrorBoundary.jsx'));
+
+const migrationClient = useMigrationClient();
+const migrationUiImport = import('../Migrations/MigrationUi.jsx');
+const MigrationUi = {
+  Create: lazy(() => migrationUiImport.then(module => ({ default: module.Create }))),
+  Detail: lazy(() => migrationUiImport.then(module => ({ default: module.Detail }))),
+  Index: lazy(() => migrationUiImport.then(module => ({ default: module.Index })))
+};
+
+const newClient = useNewClient();
+const newUiImport = import('../News/NewUi.jsx');
+const NewUi = {
+  Index: lazy(() => newUiImport.then(module => ({ default: module.Index })))
+};
+async function newIndexLoader() {
+  const [authorization, news] = await Promise.all([
+    authorizationPromise,
+    newClient.indexAsync()
+  ]);
+  return ({
+    authorization: authorization,
+    news: news
+  });
+};
+
+const playerClient = usePlayerClient();
+const playerUiImport = import('../Players/PlayerUi.jsx');
+const PlayerUi = {
+  Index: lazy(() => playerUiImport.then(module => ({ default: module.Index }))),
+  Create: lazy(() => playerUiImport.then(module => ({ default: module.Create }))),
+  Detail: lazy(() => playerUiImport.then(module => ({ default: module.Detail })))
+};
 const RuleList = lazy(() => import('../Rules/RuleList.jsx'));
-const CreateImport = lazy(() => import('../Imports/CreateImport.jsx'));
-const DetailImport = lazy(() => import('../Imports/DetailImport.jsx'));
 const TimeCreate = lazy(() => import('../Times/TimeCreate.jsx'));
 
-const authorizationPromise = useAuthorizationClient().getAsync();
 const courseClient = useCourseClient();
 const countryClient = useCountryClient();
-const newClient = useNewClient();
-const playerClient = usePlayerClient();
-const importClient = useImportClient();
 
 const router = createBrowserRouter([
   {
     element: <App />,
     errorElement: <ErrorBoundary />,
-    loader: getLocaleNameAsync,
+    loader: async () => {
+      const [authorization, localeName] = await Promise.all([
+        authorizationPromise,
+        localeNamePromise
+      ]);
+      return {
+        authorization: authorization,
+        localeName: localeName
+      }
+    },
     children: [
       {
         path: '/',
-        element: <NewList />,
-        loader: newClient.listAsync
+        element: <NewUi.Index />,
+        loader: newIndexLoader
       },
       {
         path: '/authorization/',
         element: <Authorization />
       },
       {
+        path: '/migrations/',
+        element: <MigrationUi.Index />,
+        loader: async () => ({
+          migrations: await migrationClient.indexAsync()
+        })
+      },
+      {
+        path: '/migrations/create/',
+        element: <Suspense>
+          <MigrationUi.Create />
+        </Suspense>
+      },
+      {
+        path: '/migrations/detail/:id/',
+        element: <MigrationUi.Detail />,
+        loader: async ({ params }) => ({
+          migration: await migrationClient.detailAsync(params.id)
+        })
+      },
+      {
         path: '/news/',
-        element: <NewList />,
-        loader: newClient.listAsync
+        element: <NewUi.Index />,
+        loader: newIndexLoader
       },
       {
         path: '/players/',
-        element: <PlayerList />,
+        element: <PlayerUi.Index />,
         loader: async () => {
           const [authorization, players] = await Promise.all([
             authorizationPromise,
-            playerClient.listAsync()
+            playerClient.indexAsync()
           ]);
           return ({
             authorization: authorization,
@@ -64,10 +121,10 @@ const router = createBrowserRouter([
       },
       {
         path: '/players/create/',
-        element: <PlayerCreate />,
+        element: <PlayerUi.Create />,
         loader: async () => {
           const [countries] = await Promise.all([
-            countryClient.listAsync()
+            countryClient.indexAsync()
           ]);
           return ({
             countries: countries
@@ -76,7 +133,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/players/detail/:name/',
-        element: <DetailPlayer />,
+        element: <PlayerUi.Detail />,
         loader: async ({ params }) => {
           const [authorization, player] = await Promise.all([
             authorizationPromise,
@@ -94,36 +151,20 @@ const router = createBrowserRouter([
           <RuleList />
         </Suspense>
       },
-      {
-        path: '/imports/create/',
-        element: <Suspense>
-          <CreateImport />
-        </Suspense>
-      },
-      {
-        path: '/imports/detail/:id/',
-        element: <DetailImport />,
-        loader: async ({ params }) => {
-          return ({
-            import: await importClient.detailAsync(params.id)
-          });
-        }
-      },
       // TODO: Modularise these routes.
       // E.g. /Players/Routes.js
       {
         path: '/times/create/:playerName/:courseName/',
         element: <TimeCreate />,
         loader: async ({ params }) => {
-          const [players, localeName, courses] = await Promise.all([
+          const [players, courses] = await Promise.all([
             playerClient.listAsync(),
-            getLocaleNameAsync(),
             courseClient.listAsync()
           ]);
           return ({
             courseName: params.courseName,
             courses: courses,
-            localeName: localeName,
+            localeName: await localeNamePromise,
             playerName: params.playerName,
             players: players
           });

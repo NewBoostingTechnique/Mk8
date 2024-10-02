@@ -6,13 +6,17 @@ using Mk8.Web.App;
 namespace Mk8.Web.News;
 
 [Route("api/news")]
-public class NewsApi(INewService newsService) : Api
+public class NewsApi(INewService newService) : Api
 {
     [AllowAnonymous, HttpGet("")]
-    public async Task<IActionResult> ListAsync()
+    public async Task<IActionResult> IndexAsync()
     {
-        return Ok(await newsService.ListAsync());
+        return Ok(await newService.IndexAsync());
     }
 
-    // TODO: insert a sync record in the database.
+    [HttpPost("migrate")]
+    public async Task<IActionResult> MigrateAsync()
+    {
+        return Ok(await newService.MigrateAsync());
+    }
 }

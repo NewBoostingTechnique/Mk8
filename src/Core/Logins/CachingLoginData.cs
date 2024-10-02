@@ -103,8 +103,8 @@ internal class CachingLoginData(
 
     #endregion Exists.
 
-    public Task InsertAsync(Login login)
+    public Task CreateAsync(Login login)
     {
-        return innerData.InsertAsync(login);
+        return innerData.CreateAsync(login);
     }
 }

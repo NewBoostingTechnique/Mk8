@@ -1,8 +1,8 @@
 namespace Mk8.Core.Persons;
 
-public class Person
+public record Person
 {
-    public Ulid? Id { get; set; }
+    public Ulid? Id { get; init; }
 
     public required string Name { get; init; }
 }

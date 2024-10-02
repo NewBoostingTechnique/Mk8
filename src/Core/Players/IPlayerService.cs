@@ -1,18 +1,19 @@
 using System.Collections.Immutable;
+using Mk8.Core.Migrations;
 
 namespace Mk8.Core.Players;
 
 public interface IPlayerService
 {
-    Task DeleteAsync(string playerName);
+    Task<Player> CreateAsync(Player player, CancellationToken cancellationToken = default);
 
-    Task<bool> ExistsAsync(string playerName);
+    Task DeleteAsync(string playerName, CancellationToken cancellationToken = default);
 
-    Task<Player?> FindAsync(string playerName);
+    Task<bool> ExistsAsync(string playerName, CancellationToken cancellationToken = default);
 
-    Task<Player> InsertAsync(Player player);
+    Task<Player?> FindAsync(string playerName, CancellationToken cancellationToken = default);
 
-    Task ImportAsync(CancellationToken cancellationToken = default);
+    Task<IImmutableList<Player>> IndexAsync(CancellationToken cancellationToken = default);
 
-    Task<IImmutableList<Player>> ListAsync();
+    Task<Migration> MigrateAsync(CancellationToken cancellationToken = default);
 }

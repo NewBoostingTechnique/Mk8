@@ -4,8 +4,13 @@ class NewClient extends ApiClient {
 
   static baseUri = '/api/news/';
 
-  async listAsync() {
+  async indexAsync() {
     const response = await super.fetchAsync(NewClient.baseUri);
+    return await response.json();
+  }
+
+  async migrateAsync() {
+    const response = await super.fetchAsync(`${NewClient.baseUri}migrate/`, { method: 'POST' });
     return await response.json();
   }
 }

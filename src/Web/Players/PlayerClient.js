@@ -2,7 +2,22 @@ import ApiClient from '../App/ApiClient';
 
 class PlayerClient extends ApiClient {
 
-  static baseUri = '/api/player/';
+  static baseUri = '/api/players/';
+
+  async createAsync(player) {
+    const response = await super.fetchAsync(
+      PlayerClient.baseUri,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify(player),
+      }
+    );
+    return await response.json();
+  }
 
   deleteAsync(playerName) {
     return super.fetchAsync(
@@ -20,33 +35,14 @@ class PlayerClient extends ApiClient {
       : null;
   }
 
-  async insertAsync(player) {
-    const response = await super.fetchAsync(
-      PlayerClient.baseUri,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-        },
-        body: JSON.stringify(player),
-      }
-    );
-    return await response.json();
-  }
-
-  async listAsync() {
+  async indexAsync() {
     const response = await super.fetchAsync(PlayerClient.baseUri);
     return await response.json();
   }
 
-  async syncAsync() {
-    return super.fetchAsync(
-      `${PlayerClient.baseUri}sync/`,
-      {
-        method: "POST"
-      }
-    );
+  async migrateAsync() {
+    const response = await super.fetchAsync(`${PlayerClient.baseUri}migrate/`, { method: "POST" });
+    return await response.json();
   }
 }
 

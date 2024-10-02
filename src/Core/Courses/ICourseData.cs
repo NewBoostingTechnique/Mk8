@@ -4,11 +4,11 @@ namespace Mk8.Core.Courses;
 
 public interface ICourseData
 {
+    Task CreateAsync(Course course);
+
     Task<bool> ExistsAsync(string courseName);
 
     Task<Ulid?> IdentifyAsync(string courseName);
 
-    Task InsertAsync(Course course);
-
-    Task<IImmutableList<Course>> ListAsync();
+    Task<IImmutableList<Course>> IndexAsync();
 }

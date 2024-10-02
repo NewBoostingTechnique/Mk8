@@ -32,15 +32,15 @@ internal static class MySqlCommandExtensions
         );
     }
 
-    internal static async Task<bool> ExecuteBoolAsync(this MySqlCommand command)
+    internal static async Task<bool> ExecuteBoolAsync(this MySqlCommand command, CancellationToken cancellationToken = default)
     {
-        object? scalarObject = await command.ExecuteScalarAsync().ConfigureAwait(false);
+        object? scalarObject = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
         return scalarObject is long scalarLong && scalarLong == 1;
     }
 
-    internal static async Task<Ulid?> ExecuteUlidAsync(this MySqlCommand command)
+    internal static async Task<Ulid?> ExecuteUlidAsync(this MySqlCommand command, CancellationToken cancellationToken = default)
     {
-        object? scalarObject = await command.ExecuteScalarAsync().ConfigureAwait(false);
+        object? scalarObject = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
         return scalarObject is byte[] scalarBytes ? new Ulid(scalarBytes) : null;
     }
 }

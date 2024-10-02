@@ -16,9 +16,9 @@ internal class EventingLoginData(
 
     public event EventHandler<InsertedEventArgs>? Inserted;
 
-    public async Task InsertAsync(Login login)
+    public async Task CreateAsync(Login login)
     {
-        await innerData.InsertAsync(login).ConfigureAwait(false);
+        await innerData.CreateAsync(login).ConfigureAwait(false);
         Inserted?.Invoke(this, new InsertedEventArgs(login));
     }
 

@@ -16,22 +16,22 @@ internal static class ServiceCollectionExtensions
     {
         services.AddMemoryCache();
 
-        ServiceDescriptor? descriptor = services.GetServiceDescriptor<IPlayerData>();
+        ServiceDescriptor? descriptor = services.GetServiceDescriptor<IPlayerStore>();
 
-        services.AddSingleton(sp => ActivatorUtilities.CreateInstance<EventingPlayerData>
+        services.AddSingleton(sp => ActivatorUtilities.CreateInstance<EventingPlayerStore>
         (
             sp,
-            (IPlayerData)descriptor.CreateInstance(sp)
+            (IPlayerStore)descriptor.CreateInstance(sp)
         ));
 
-        services.AddSingleton<IPlayerDataEvents>(sp => sp.GetRequiredService<EventingPlayerData>());
+        services.AddSingleton<IPlayerStoreEvents>(sp => sp.GetRequiredService<EventingPlayerStore>());
 
-        services.AddSingleton<IPlayerData>
+        services.AddSingleton<IPlayerStore>
         (
             sp =>
             {
-                EventingPlayerData eventingPlayerData = sp.GetRequiredService<EventingPlayerData>();
-                return ActivatorUtilities.CreateInstance<CachingPlayerData>
+                EventingPlayerStore eventingPlayerData = sp.GetRequiredService<EventingPlayerStore>();
+                return ActivatorUtilities.CreateInstance<CachingPlayerStore>
                 (
                     sp,
                     eventingPlayerData,

@@ -2,106 +2,213 @@ using System.Collections.Immutable;
 using System.Net.Http.Json;
 using HtmlAgilityPack;
 using Microsoft.Extensions.Options;
-using Mk8.Core.Locations.Countries;
-using Mk8.Core.Locations.Regions;
+using Mk8.Core.Countries;
+using Mk8.Core.Migrations;
 using Mk8.Core.Persons;
+using Mk8.Core.Regions;
 
 namespace Mk8.Core.Players;
 
 internal class PlayerService(
     ICountryData countryData,
     IHttpClientFactory httpClientFactory,
+    IMigrationStore migrationData,
     IOptionsMonitor<Mk8Settings> options,
-    IPersonData personData,
-    IPlayerData playerData,
+    IPersonStore personData,
+    IPlayerStore playerStore,
     IRegionData regionData
 ) : IPlayerService
 {
+    public async Task<Player> CreateAsync(Player player, CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(player.Name);
 
-    #region IPlayerService.
+        if (await ExistsAsync(player.Name, cancellationToken).ConfigureAwait(false))
+            throw new InvalidOperationException($"Player with name '{player.Name}' already exists.");
 
-    public async Task DeleteAsync(string playerName)
+        ArgumentException.ThrowIfNullOrWhiteSpace(player.CountryName);
+        Ulid? countryId = await countryData.IdentifyAsync(player.CountryName, cancellationToken).ConfigureAwait(false);
+        if (countryId is null)
+        {
+            Country country = new()
+            {
+                Id = Ulid.NewUlid(),
+                Name = player.CountryName
+            };
+            await countryData.CreateAsync(country, cancellationToken).ConfigureAwait(false);
+            countryId = country.Id;
+        }
+
+        Ulid? regionId = null;
+        if (!string.IsNullOrWhiteSpace(player.RegionName))
+        {
+            regionId = await regionData.IdentifyAsync(player.RegionName, cancellationToken).ConfigureAwait(false);
+            if (regionId is null)
+            {
+                Region region = new()
+                {
+                    CountryId = countryId.Value,
+                    Id = Ulid.NewUlid(),
+                    Name = player.RegionName
+                };
+                await regionData.CreateAsync(region, cancellationToken).ConfigureAwait(false);
+                regionId = region.Id;
+            }
+        }
+
+        Ulid? personId = await personData.IdentifyAsync(player.Name, cancellationToken).ConfigureAwait(false);
+        if (personId is null)
+        {
+            personId = Ulid.NewUlid();
+            player = getPlayer();
+            await personData.CreateAsync(player, cancellationToken).ConfigureAwait(false);
+        }
+        else
+        {
+            player = getPlayer();
+        }
+
+        await playerStore.CreateAsync(player, cancellationToken).ConfigureAwait(false);
+
+        Player getPlayer() => player with
+        {
+            Id = personId,
+            CountryId = countryId,
+            RegionId = regionId
+        };
+
+        return player;
+    }
+
+    public async Task DeleteAsync(string playerName, CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(playerName);
 
-        Ulid? id = await playerData.IdentifyAsync(playerName).ConfigureAwait(false);
+        Ulid? id = await playerStore.IdentifyAsync(playerName, cancellationToken).ConfigureAwait(false);
 
         if (id.HasValue)
-            await playerData.DeleteAsync(id.Value).ConfigureAwait(false);
+            await playerStore.DeleteAsync(id.Value, cancellationToken).ConfigureAwait(false);
     }
 
-    public Task<bool> ExistsAsync(string playerName)
+    public Task<bool> ExistsAsync(string playerName, CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(playerName);
 
-        return playerData.ExistsAsync(playerName);
+        return playerStore.ExistsAsync(playerName, cancellationToken);
     }
 
-    public async Task<Player?> FindAsync(string playerName)
+    public async Task<Player?> FindAsync(string playerName, CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(playerName);
 
-        Ulid? id = await playerData.IdentifyAsync(playerName).ConfigureAwait(false);
+        Ulid? id = await playerStore.IdentifyAsync(playerName, cancellationToken).ConfigureAwait(false);
 
         return id.HasValue
-            ? await playerData.DetailAsync(id.Value).ConfigureAwait(false)
+            ? await playerStore.FindAsync(id.Value, cancellationToken).ConfigureAwait(false)
             : default;
     }
 
-    #region Import.
+    #region Migrate.
 
-    public async Task ImportAsync(CancellationToken cancellationToken = default)
+    public async Task<Migration> MigrateAsync(CancellationToken cancellationToken = default)
     {
-        using var client = httpClientFactory.CreateClient();
+        Migration migration = await migrationData.StartAsync("Players Migration", cancellationToken).ConfigureAwait(false);
 
-        HtmlWeb htmlWeb = new();
-        client.BaseAddress = new Uri($"{options.CurrentValue.ImportFromBaseUrl}api/users");
-
-        int page = 1;
-
-        while (true)
-        {
-            GetUsersResponse? response = await client.GetFromJsonAsync<GetUsersResponse>
-            (
-                $"?page={page}",
-                cancellationToken
-            )
-            .ConfigureAwait(false);
-
-            if (response?.Data is null || response.Data.Count == 0)
-                return;
-
-            foreach (GetUserResponseItem data in response.Data)
+        _ = Task.Run
+        (
+            async () =>
             {
-                if (await playerData.ExistsAsync(data.UserName).ConfigureAwait(false))
-                    continue;
+                string? error = null;
 
-                HtmlDocument document = await htmlWeb.LoadFromWebAsync($"{options.CurrentValue.ImportFromBaseUrl}users/{data.Url_Name}", cancellationToken).ConfigureAwait(false);
+                try
+                {
+                    await playerStore.DeleteAsync(cancellationToken).ConfigureAwait(false);
 
-                await InsertAsync
-                (
-                    new()
+                    using var client = httpClientFactory.CreateClient();
+
+                    HtmlWeb htmlWeb = new();
+                    client.BaseAddress = new Uri($"{options.CurrentValue.ImportFromBaseUrl}api/users");
+
+                    int page = 1;
+                    double processed = 0;
+
+                    while (true)
                     {
-                        Name = data.UserName,
-                        CountryName = data.Country_Name,
-                        RegionName = string.Join
+                        GetUsersResponse? response = await client.GetFromJsonAsync<GetUsersResponse>
                         (
-                            ",",
-                            document.DocumentNode.SelectSingleNode("(//div[@class='info_box user_info'])[1]/table/tr[3]/td[2]").InnerText.Split(",")[..^1]
+                            $"?page={page}",
+                            cancellationToken
                         )
-                        .Trim()
+                        .ConfigureAwait(false);
+
+                        if (response?.Data is null || response.Data.Count == 0)
+                            return;
+
+                        foreach (GetUserResponseItem data in response.Data)
+                        {
+                            if (!await playerStore.ExistsAsync(data.UserName, cancellationToken).ConfigureAwait(false))
+                            {
+                                HtmlDocument document = await htmlWeb.LoadFromWebAsync($"{options.CurrentValue.ImportFromBaseUrl}users/{data.Url_Name}", cancellationToken).ConfigureAwait(false);
+
+                                await CreateAsync
+                                (
+                                    new()
+                                    {
+                                        Name = data.UserName,
+                                        CountryName = data.Country_Name,
+                                        RegionName = string.Join
+                                        (
+                                            ",",
+                                            document.DocumentNode.SelectSingleNode("(//div[@class='info_box user_info'])[1]/table/tr[3]/td[2]").InnerText.Split(",")[..^1]
+                                        )
+                                        .Trim()
+                                    },
+                                    cancellationToken
+                                )
+                                .ConfigureAwait(false);
+                            }
+
+                            byte progress = (byte)Math.Floor(Math.Min(++processed, response.Total) * 100 / response.Total);
+                            if (progress > migration.Progress)
+                            {
+                                migration = migration with
+                                {
+                                    Progress = progress
+                                };
+                                await migrationData.UpdateAsync(migration, CancellationToken.None).ConfigureAwait(false);
+                            }
+                        }
+
+                        page++;
                     }
+                }
+                catch (Exception ex)
+                {
+                    error = ex.ToString();
+                }
+
+                await migrationData.UpdateAsync
+                (
+                    migration with
+                    {
+                        EndTime = DateTime.UtcNow,
+                        Error = error
+                    },
+                    CancellationToken.None
                 )
                 .ConfigureAwait(false);
-            }
+            },
+            cancellationToken
+        );
 
-            page++;
-        }
+        return migration;
     }
 
     private sealed class GetUsersResponse
     {
         public required List<GetUserResponseItem> Data { get; init; } = [];
+
+        public required int Total { get; init; }
     }
 
     internal sealed class GetUserResponseItem
@@ -115,59 +222,8 @@ internal class PlayerService(
 
     #endregion Import.
 
-    public async Task<Player> InsertAsync(Player player)
+    public Task<IImmutableList<Player>> IndexAsync(CancellationToken cancellationToken = default)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(player.Name);
-
-        if (await ExistsAsync(player.Name).ConfigureAwait(false))
-            throw new InvalidOperationException($"Player with name '{player.Name}' already exists.");
-
-        ArgumentException.ThrowIfNullOrWhiteSpace(player.CountryName);
-        player.CountryId = await countryData.IdentifyAsync(player.CountryName).ConfigureAwait(false);
-        if (player.CountryId is null)
-        {
-            Country country = new()
-            {
-                Id = Ulid.NewUlid(),
-                Name = player.CountryName
-            };
-            await countryData.InsertAsync(country).ConfigureAwait(false);
-            player.CountryId = country.Id;
-        }
-
-        if (!string.IsNullOrWhiteSpace(player.RegionName))
-        {
-            player.RegionId = await regionData.IdentifyAsync(player.RegionName).ConfigureAwait(false);
-            if (player.RegionId is null)
-            {
-                Region region = new()
-                {
-                    CountryId = player.CountryId.Value,
-                    Id = Ulid.NewUlid(),
-                    Name = player.RegionName
-                };
-                await regionData.InsertAsync(region).ConfigureAwait(false);
-                player.RegionId = region.Id;
-            }
-        }
-
-        player.Id = await personData.IdentifyAsync(player.Name).ConfigureAwait(false);
-        if (player.Id is null)
-        {
-            player.Id = Ulid.NewUlid();
-            await personData.InsertAsync(player).ConfigureAwait(false);
-        }
-
-        await playerData.InsertAsync(player).ConfigureAwait(false);
-
-        return player;
+        return playerStore.IndexAsync(cancellationToken);
     }
-
-    public Task<IImmutableList<Player>> ListAsync()
-    {
-        return playerData.ListAsync();
-    }
-
-    #endregion IPlayerService.
-
 }

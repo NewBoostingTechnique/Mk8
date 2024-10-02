@@ -1,16 +1,19 @@
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+
+import ImportContactsIcon from '@mui/icons-material/ImportContacts';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
 import PeopleIcon from '@mui/icons-material/People';
 import PublishIcon from '@mui/icons-material/Publish';
 import RuleIcon from '@mui/icons-material/Rule';
 
-export default function Menu({ showProgress }) {
+export default function Menu({ authorization, showProgress }) {
   return (
     <List className='menu' onClick={showProgress}>
       <ListItem key='News' disablePadding>
@@ -49,10 +52,24 @@ export default function Menu({ showProgress }) {
           <ListItemText primary='Players' />
         </ListItemButton>
       </ListItem>
+      {
+        authorization
+          ?
+          <ListItem key='Migrations' disablePadding>
+            <ListItemButton component={Link} to='/migrations/'>
+              <ListItemIcon>
+                <ImportContactsIcon />
+              </ListItemIcon>
+              <ListItemText primary='Migrations' />
+            </ListItemButton>
+          </ListItem>
+          : null
+      }
     </List>
   );
 }
 
 Menu.propTypes = {
+  authorization: PropTypes.bool.isRequired,
   showProgress: PropTypes.func.isRequired,
 };

@@ -4,9 +4,9 @@ using Mk8.Core.Players;
 namespace Mk8.Core.Times;
 
 internal class TimeService(
-    ICourseData courseData,
-    IPlayerData playerData,
-    ITimeData timeData
+    ICourseData courseStore,
+    IPlayerStore playerStore,
+    ITimeStore timeStore
 ) : ITimeService
 {
     public async Task<bool> ExistsAsync(string courseName, string playerName)
@@ -14,15 +14,15 @@ internal class TimeService(
         ArgumentException.ThrowIfNullOrWhiteSpace(courseName);
         ArgumentException.ThrowIfNullOrWhiteSpace(playerName);
 
-        Ulid? courseId = await courseData.IdentifyAsync(courseName).ConfigureAwait(false);
+        Ulid? courseId = await courseStore.IdentifyAsync(courseName).ConfigureAwait(false);
         if (!courseId.HasValue)
             return false;
 
-        Ulid? playerId = await playerData.IdentifyAsync(playerName).ConfigureAwait(false);
+        Ulid? playerId = await playerStore.IdentifyAsync(playerName).ConfigureAwait(false);
         if (!playerId.HasValue)
             return false;
 
-        return await timeData.ExistsAsync(courseId.Value, playerId.Value).ConfigureAwait(false);
+        return await timeStore.ExistsAsync(courseId.Value, playerId.Value).ConfigureAwait(false);
     }
 
     public async Task<Time> InsertAsync(Time time)
@@ -31,11 +31,16 @@ internal class TimeService(
         ArgumentException.ThrowIfNullOrEmpty(time.CourseName);
         ArgumentException.ThrowIfNullOrEmpty(time.PlayerName);
 
-        time.Id = Ulid.NewUlid();
-        time.CourseId = await courseData.IdentifyRequiredAsync(time.CourseName).ConfigureAwait(false);
-        time.PlayerId = await playerData.IdentifyRequiredAsync(time.PlayerName).ConfigureAwait(false);
-
-        await timeData.InsertAsync(time).ConfigureAwait(false);
+        await timeStore.CreateAsync
+        (
+            time with
+            {
+                Id = Ulid.NewUlid(),
+                CourseId = await courseStore.IdentifyRequiredAsync(time.CourseName).ConfigureAwait(false),
+                PlayerId = await playerStore.IdentifyRequiredAsync(time.PlayerName).ConfigureAwait(false)
+            }
+        )
+        .ConfigureAwait(false);
 
         return time;
     }
