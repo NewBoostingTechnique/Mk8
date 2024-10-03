@@ -51,7 +51,7 @@ CREATE PROCEDURE `player_detail` (
 BEGIN
   SELECT
     person.Name,
-    MAX(times.Date) AS 'Active',
+    MAX(time.Date) AS 'Active',
     country.Name AS 'CountryName',
     region.Name AS 'RegionName'
   FROM
@@ -71,7 +71,7 @@ BEGIN
 
   SELECT
     course.Name AS 'CourseName',
-    time.TimeSpan
+    time.Span
   FROM
     course
     LEFT OUTER JOIN

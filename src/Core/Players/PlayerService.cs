@@ -7,6 +7,9 @@ using Mk8.Core.Migrations;
 using Mk8.Core.Persons;
 using Mk8.Core.Regions;
 
+// TOOD: Players imported! But error when I click on one.
+// THen we need to import their times too.
+
 namespace Mk8.Core.Players;
 
 internal class PlayerService(
@@ -90,22 +93,22 @@ internal class PlayerService(
             await playerStore.DeleteAsync(id.Value, cancellationToken).ConfigureAwait(false);
     }
 
-    public Task<bool> ExistsAsync(string playerName, CancellationToken cancellationToken = default)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(playerName);
-
-        return playerStore.ExistsAsync(playerName, cancellationToken);
-    }
-
-    public async Task<Player?> FindAsync(string playerName, CancellationToken cancellationToken = default)
+    public async Task<Player?> DetailAsync(string playerName, CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(playerName);
 
         Ulid? id = await playerStore.IdentifyAsync(playerName, cancellationToken).ConfigureAwait(false);
 
         return id.HasValue
-            ? await playerStore.FindAsync(id.Value, cancellationToken).ConfigureAwait(false)
+            ? await playerStore.DetailAsync(id.Value, cancellationToken).ConfigureAwait(false)
             : default;
+    }
+
+    public Task<bool> ExistsAsync(string playerName, CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(playerName);
+
+        return playerStore.ExistsAsync(playerName, cancellationToken);
     }
 
     #region Migrate.

@@ -54,7 +54,7 @@ internal class MySqlPlayerStore(IOptions<Mk8Settings> mk8Options) : IPlayerStore
 
     #endregion Delete.
 
-    public async Task<Player?> FindAsync(Ulid id, CancellationToken cancellationToken = default)
+    public async Task<Player?> DetailAsync(Ulid id, CancellationToken cancellationToken = default)
     {
         using var connection = new MySqlConnection(mk8Options.Value.ConnectionString);
 
@@ -67,6 +67,15 @@ internal class MySqlPlayerStore(IOptions<Mk8Settings> mk8Options) : IPlayerStore
 
         if (!await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
             throw new KeyNotFoundException();
+
+        Player player = new()
+        {
+            Id = id,
+            Name = reader.GetString(nameof(Player.Name)),
+            Active = reader.GetDateOnlyNullable(nameof(Player.Active)),
+            CountryName = reader.GetString(nameof(Player.CountryName)),
+            RegionName = reader.GetString(nameof(Player.RegionName))
+        };
 
         ImmutableList<Time>.Builder builder = ImmutableList.CreateBuilder<Time>();
         if (await reader.NextResultAsync(cancellationToken).ConfigureAwait(false))
@@ -82,14 +91,9 @@ internal class MySqlPlayerStore(IOptions<Mk8Settings> mk8Options) : IPlayerStore
             }
         }
 
-        return new()
+        return player with
         {
-            Id = id,
-            Name = reader.GetString(nameof(Player.Name)),
-            Active = reader.GetDateOnlyNullable(nameof(Player.Active)),
-            CountryName = reader.GetString(nameof(Player.CountryName)),
-            RegionName = reader.GetString(nameof(Player.RegionName)),
-            Times = builder.ToImmutableList()
+            Times = builder.ToImmutable()
         };
     }
 

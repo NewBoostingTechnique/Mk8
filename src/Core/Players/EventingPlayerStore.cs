@@ -42,9 +42,9 @@ internal class EventingPlayerStore(IPlayerStore innerData)
         return innerData.ExistsAsync(name, cancellationToken);
     }
 
-    public Task<Player?> FindAsync(Ulid id, CancellationToken cancellationToken = default)
+    public Task<Player?> DetailAsync(Ulid id, CancellationToken cancellationToken = default)
     {
-        return innerData.FindAsync(id, cancellationToken);
+        return innerData.DetailAsync(id, cancellationToken);
     }
 
     public Task<Ulid?> IdentifyAsync(string name, CancellationToken cancellationToken = default)

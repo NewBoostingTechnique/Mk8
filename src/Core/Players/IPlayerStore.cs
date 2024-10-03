@@ -10,9 +10,9 @@ public interface IPlayerStore
 
     Task DeleteAsync(Ulid id, CancellationToken cancellationToken = default);
 
-    Task<bool> ExistsAsync(string name, CancellationToken cancellationToken = default);
+    Task<Player?> DetailAsync(Ulid id, CancellationToken cancellationToken = default);
 
-    Task<Player?> FindAsync(Ulid id, CancellationToken cancellationToken = default);
+    Task<bool> ExistsAsync(string name, CancellationToken cancellationToken = default);
 
     Task<Ulid?> IdentifyAsync(string name, CancellationToken cancellationToken = default);
 

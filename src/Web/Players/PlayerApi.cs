@@ -55,7 +55,7 @@ public class PlayerApi(
         if (string.IsNullOrWhiteSpace(playerName))
             return BadRequestNameRequired();
 
-        Player? player = await playerService.FindAsync(playerName);
+        Player? player = await playerService.DetailAsync(playerName);
 
         return player is null ? NotFound(playerName) : Ok(player);
     }

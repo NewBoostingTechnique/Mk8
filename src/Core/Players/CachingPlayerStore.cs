@@ -34,14 +34,14 @@ internal class CachingPlayerStore(
 
     #region DetailAsync.
 
-    public Task<Player?> FindAsync(Ulid id, CancellationToken cancellationToken = default)
+    public Task<Player?> DetailAsync(Ulid id, CancellationToken cancellationToken = default)
     {
         return cache.GetOrCreateAsync
         (
             $"Player_Detail:{id}",
             async entry =>
             {
-                Player? player = await innerStore.FindAsync(id, cancellationToken).ConfigureAwait(false);
+                Player? player = await innerStore.DetailAsync(id, cancellationToken).ConfigureAwait(false);
                 entry.AddExpirationToken(new DetailChangeToken(playerEvents, player, id, timeEvents));
                 return player;
             }

@@ -9,9 +9,9 @@ public interface IPlayerService
 
     Task DeleteAsync(string playerName, CancellationToken cancellationToken = default);
 
-    Task<bool> ExistsAsync(string playerName, CancellationToken cancellationToken = default);
+    Task<Player?> DetailAsync(string playerName, CancellationToken cancellationToken = default);
 
-    Task<Player?> FindAsync(string playerName, CancellationToken cancellationToken = default);
+    Task<bool> ExistsAsync(string playerName, CancellationToken cancellationToken = default);
 
     Task<IImmutableList<Player>> IndexAsync(CancellationToken cancellationToken = default);
 
