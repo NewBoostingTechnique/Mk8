@@ -59,9 +59,9 @@ internal class MigrationService(
         return migration;
     }
 
-    public Task<Migration?> FindAsync(Ulid id, CancellationToken cancellationToken = default)
+    public Task<Migration?> DetailAsync(Ulid id, CancellationToken cancellationToken = default)
     {
-        return migrationStore.FindAsync(id, cancellationToken);
+        return migrationStore.DetailAsync(id, cancellationToken);
     }
 
     public Task<IImmutableList<Migration>> IndexAsync(CancellationToken cancellationToken = default)

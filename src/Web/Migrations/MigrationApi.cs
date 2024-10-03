@@ -25,7 +25,7 @@ public class MigrationApi(IMigrationService migrationService) : Api
         if (!id.HasValue)
             return BadRequestPropertyRequired(nameof(id));
 
-        Migration? migration = await migrationService.FindAsync(id.Value);
+        Migration? migration = await migrationService.DetailAsync(id.Value);
 
         return migration is null ? NotFound(id) : Ok(migration);
     }

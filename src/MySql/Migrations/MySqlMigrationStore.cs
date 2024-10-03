@@ -26,7 +26,7 @@ internal class MySqlMigrationStore(IOptions<Mk8Settings> mk8Options) : IMigratio
         await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task<Migration?> FindAsync(Ulid id, CancellationToken cancellationToken = default)
+    public async Task<Migration?> DetailAsync(Ulid id, CancellationToken cancellationToken = default)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
