@@ -64,7 +64,10 @@ END;
 
 DROP PROCEDURE IF EXISTS `migration_index`;
 
-CREATE PROCEDURE `migration_index` ()
+CREATE PROCEDURE `migration_index` (
+  IN AfterId BINARY(16),
+  IN AfterStartTime DATETIME
+)
 BEGIN
   SELECT
     Id,
@@ -75,8 +78,17 @@ BEGIN
     EndTime
   FROM
     migration
+  WHERE
+    AfterStartTime IS NULL 
+    OR AfterId IS NULL
+    OR
+    (
+      StartTime <= AfterStartTime
+      AND ( StartTime < AfterStartTime OR Id > AfterId )
+    )
   ORDER BY
-    StartTime DESC;
+    StartTime DESC, Id
+  LIMIT 20;
 END;
 
 -- #endregion Index.

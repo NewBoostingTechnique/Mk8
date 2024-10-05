@@ -9,7 +9,7 @@ using MySql.Data.MySqlClient;
 
 namespace Mk8.MySql.Migrations;
 
-internal class MySqlMigrationStore(IOptions<Mk8Settings> mk8Options) : IMigrationStore
+sealed internal class MySqlMigrationStore(IOptions<Mk8Settings> mk8Options) : IMigrationStore
 {
     public async Task CreateAsync(Migration migration, CancellationToken cancellationToken = default)
     {
@@ -51,12 +51,14 @@ internal class MySqlMigrationStore(IOptions<Mk8Settings> mk8Options) : IMigratio
         };
     }
 
-    public async Task<IImmutableList<Migration>> IndexAsync(CancellationToken cancellationToken = default)
+    public async Task<ImmutableList<Migration>> IndexAsync(Migration? after, CancellationToken cancellationToken = default)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
         using MySqlCommand command = new("migration_index", connection);
         command.CommandType = CommandType.StoredProcedure;
+        command.AddParameter("AfterId", after?.Id);
+        command.AddParameter("AfterStartTime", after?.StartTime);
 
         await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
         using DbDataReader reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);

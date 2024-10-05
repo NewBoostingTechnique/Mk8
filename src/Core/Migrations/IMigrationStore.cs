@@ -8,7 +8,7 @@ public interface IMigrationStore
 
     Task<Migration?> DetailAsync(Ulid id, CancellationToken cancellationToken = default);
 
-    Task<IImmutableList<Migration>> IndexAsync(CancellationToken cancellationToken = default);
+    Task<ImmutableList<Migration>> IndexAsync(Migration? after, CancellationToken cancellationToken = default);
 
     Task UpdateAsync(Migration migration, CancellationToken cancellationToken = default);
 }

@@ -46,8 +46,6 @@ export function Detail() {
     return () => clearInterval(interval);
   }, []);
 
-  // TODO: Add a Migration Index page so you can see the previous (failed) migrations.
-  // TODO: Then fix migrations.
 
   return (
     <Stack sx={{ gap: { xs: 2, md: 3 } }}>
@@ -72,7 +70,18 @@ export function Detail() {
 
 export function Index() {
   const loaderData = useLoaderData();
+  const migrationClient = useMigrationClient();
   const navigate = useNavigate();
+
+  const [migrations, setMigrations] = useState(loaderData.migrations);
+
+  async function loadMore() {
+    const last = migrations[migrations.length - 1];
+    setMigrations(migrations.concat(await migrationClient.indexAsync({
+      Id: last.id,
+      StartTime: last.startTime,
+    })));
+  }
 
   return (
     <Stack sx={{ gap: { xs: 2, md: 3 } }}>
@@ -87,7 +96,7 @@ export function Index() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {loaderData.migrations.map(migration => (
+            {migrations.map(migration => (
               <TableRow key={migration.id} onClick={() => navigate(`/migrations/detail/${migration.id}`)}>
                 <TableCell>{migration.startTime}</TableCell>
                 <TableCell>{migration.description}</TableCell>
@@ -97,6 +106,7 @@ export function Index() {
           </TableBody>
         </Table>
       </TableContainer>
+      <Button onClick={loadMore} variant="contained">Load More</Button>
     </Stack>
   );
 }

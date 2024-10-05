@@ -8,6 +8,5 @@ public interface IMigrationService
 
     Task<Migration?> DetailAsync(Ulid id, CancellationToken cancellationToken = default);
 
-    // TODO: Pagination.
-    Task<IImmutableList<Migration>> IndexAsync(CancellationToken cancellationToken = default);
+    Task<ImmutableList<Migration>> IndexAsync(Migration? after, CancellationToken cancellationToken = default);
 }

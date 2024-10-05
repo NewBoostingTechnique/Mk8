@@ -25,8 +25,11 @@ class MigrationClient extends ApiClient {
       : null;
   }
 
-  async indexAsync(id) {
-    const response = await super.fetchAsync(MigrationClient.baseUri);
+  async indexAsync(after) {
+    let url = MigrationClient.baseUri;
+    if (after)
+      url += `?after=${JSON.stringify(after)}`;
+    const response = await super.fetchAsync(url);
     return await response.json();
   }
 }

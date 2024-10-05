@@ -1,6 +1,6 @@
+using System.Collections.Immutable;
 using Mk8.Core.News;
 using Mk8.Core.Players;
-using System.Collections.Immutable;
 
 namespace Mk8.Core.Migrations;
 
@@ -64,8 +64,8 @@ internal class MigrationService(
         return migrationStore.DetailAsync(id, cancellationToken);
     }
 
-    public Task<IImmutableList<Migration>> IndexAsync(CancellationToken cancellationToken = default)
+    public Task<ImmutableList<Migration>> IndexAsync(Migration? after, CancellationToken cancellationToken = default)
     {
-        return migrationStore.IndexAsync(cancellationToken);
+        return migrationStore.IndexAsync(after, cancellationToken);
     }
 }
