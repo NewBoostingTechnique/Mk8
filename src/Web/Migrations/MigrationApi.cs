@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Mk8.Core.Migrations;
 using Mk8.Web.App;
@@ -34,9 +33,11 @@ public class MigrationApi(IMigrationService migrationService) : Api
     // TODO: Add a migration cache layer.
 
     [HttpGet("")]
-    public async Task<IActionResult> IndexAsync([FromQuery] string? after, CancellationToken cancellationToken)
+    public async Task<IActionResult> IndexAsync([FromQuery] Migration? after, CancellationToken cancellationToken)
     {
-        Migration? afterMigration = after is null ? null : JsonSerializer.Deserialize<Migration>(after);
-        return Ok(await migrationService.IndexAsync(afterMigration, cancellationToken));
+        return Ok
+        (
+            await migrationService.IndexAsync(after, cancellationToken)
+        );
     }
 }

@@ -26,9 +26,8 @@ class MigrationClient extends ApiClient {
   }
 
   async indexAsync(after) {
-    let url = MigrationClient.baseUri;
-    if (after)
-      url += `?after=${JSON.stringify(after)}`;
+    let url = new URL(MigrationClient.baseUri, window.location.origin);
+    Object.keys(after ?? {}).forEach(key => url.searchParams.append(`after.${key}`, after[key]));
     const response = await super.fetchAsync(url);
     return await response.json();
   }
