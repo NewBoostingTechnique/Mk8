@@ -18,8 +18,6 @@ internal class MySqlPlayerStore(IOptions<Mk8Settings> mk8Options) : IPlayerStore
 
         using MySqlCommand command = new("player_create", connection);
         command.CommandType = CommandType.StoredProcedure;
-        // TODO: Consider inferring the argument name inside the the AddParameter method
-        // a la Argument.ThrowIfNull et al.
         command.AddParameter("Id", player.Id);
         command.AddParameter("CountryId", player.CountryId);
         command.AddParameter("RegionId", player.RegionId);
@@ -71,10 +69,10 @@ internal class MySqlPlayerStore(IOptions<Mk8Settings> mk8Options) : IPlayerStore
         Player player = new()
         {
             Id = id,
-            Name = reader.GetString(nameof(Player.Name)),
-            Active = reader.GetDateOnlyNullable(nameof(Player.Active)),
-            CountryName = reader.GetString(nameof(Player.CountryName)),
-            RegionName = reader.GetString(nameof(Player.RegionName))
+            Name = reader.GetString("Name"),
+            Active = reader.GetDateOnlyNullable("Active"),
+            CountryName = reader.GetString("CountryName"),
+            RegionName = reader.GetString("RegionName")
         };
 
         ImmutableList<Time>.Builder builder = ImmutableList.CreateBuilder<Time>();
@@ -84,8 +82,8 @@ internal class MySqlPlayerStore(IOptions<Mk8Settings> mk8Options) : IPlayerStore
             {
                 Time time = new()
                 {
-                    CourseName = reader.GetString(nameof(Time.CourseName)),
-                    Span = reader.GetTimeSpanNullable(nameof(Time.Span))
+                    CourseName = reader.GetString("CourseName"),
+                    Span = reader.GetTimeSpanNullable("Span")
                 };
                 builder.Add(time);
             }
@@ -136,10 +134,10 @@ internal class MySqlPlayerStore(IOptions<Mk8Settings> mk8Options) : IPlayerStore
         {
             builder.Add(new Player
             {
-                Active = reader.GetDateOnlyNullable(nameof(Player.Active)),
-                CountryName = reader.GetString(nameof(Player.CountryName)),
-                Name = reader.GetString(nameof(Player.Name)),
-                RegionName = reader.GetString(nameof(Player.RegionName))
+                Active = reader.GetDateOnlyNullable("Active"),
+                CountryName = reader.GetString("CountryName"),
+                Name = reader.GetString("Name"),
+                RegionName = reader.GetString("RegionName")
             });
         }
 

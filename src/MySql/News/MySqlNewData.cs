@@ -19,11 +19,11 @@ internal sealed class MySqlNewData(IOptions<Mk8Settings> options) : INewStore
 
         using MySqlCommand insertCommand = new("new_create", connection);
         insertCommand.CommandType = CommandType.StoredProcedure;
-        insertCommand.AddParameter(nameof(@new.Id), @new.Id);
-        insertCommand.AddParameter(nameof(@new.Title), @new.Title);
-        insertCommand.AddParameter(nameof(@new.Date), @new.Date);
-        insertCommand.AddParameter(nameof(@new.Body), @new.Body);
-        insertCommand.AddParameter(nameof(@new.AuthorPersonId), @new.AuthorPersonId);
+        insertCommand.AddParameter("Id", @new.Id);
+        insertCommand.AddParameter("Title", @new.Title);
+        insertCommand.AddParameter("Date", @new.Date);
+        insertCommand.AddParameter("Body", @new.Body);
+        insertCommand.AddParameter("AuthorPersonId", @new.AuthorPersonId);
 
         await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
         await insertCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
@@ -55,10 +55,10 @@ internal sealed class MySqlNewData(IOptions<Mk8Settings> options) : INewStore
         {
             builder.Add(new New
             {
-                AuthorName = reader.GetString(nameof(New.AuthorName)),
-                Body = reader.GetString(nameof(New.Body)),
-                Date = reader.GetDateOnly(nameof(New.Date)),
-                Title = reader.GetString(nameof(New.Title)),
+                AuthorName = reader.GetString("AuthorName"),
+                Body = reader.GetString("Body"),
+                Date = reader.GetDateOnly("Date"),
+                Title = reader.GetString("Title"),
             });
         }
         return builder.ToImmutable();

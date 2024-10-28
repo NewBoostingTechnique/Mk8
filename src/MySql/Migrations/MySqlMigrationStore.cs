@@ -32,7 +32,7 @@ sealed internal class MySqlMigrationStore(IOptions<Mk8Settings> mk8Options) : IM
 
         using MySqlCommand command = new("migration_detail", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.AddParameter(nameof(Migration.Id), id);
+        command.AddParameter("Id", id);
 
         await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
         using DbDataReader reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
@@ -43,11 +43,11 @@ sealed internal class MySqlMigrationStore(IOptions<Mk8Settings> mk8Options) : IM
         return new()
         {
             Id = id,
-            Description = reader.GetString(nameof(Migration.Description)),
-            Progress = reader.GetByte(nameof(Migration.Progress)),
-            Error = reader.GetStringNullable(nameof(Migration.Error)),
-            StartTime = reader.GetDateTime(nameof(Migration.StartTime)),
-            EndTime = reader.GetDateTimeNullable(nameof(Migration.EndTime))
+            Description = reader.GetString("Description"),
+            Progress = reader.GetByte("Progress"),
+            Error = reader.GetStringNullable("Error"),
+            StartTime = reader.GetDateTime("StartTime"),
+            EndTime = reader.GetDateTimeNullable("EndTime")
         };
     }
 
@@ -68,12 +68,12 @@ sealed internal class MySqlMigrationStore(IOptions<Mk8Settings> mk8Options) : IM
         {
             builder.Add(new()
             {
-                Id = reader.GetUlid(nameof(Migration.Id)),
-                Description = reader.GetString(nameof(Migration.Description)),
-                Progress = reader.GetByte(nameof(Migration.Progress)),
-                Error = reader.GetStringNullable(nameof(Migration.Error)),
-                StartTime = reader.GetDateTime(nameof(Migration.StartTime)),
-                EndTime = reader.GetDateTimeNullable(nameof(Migration.EndTime))
+                Id = reader.GetUlid("Id"),
+                Description = reader.GetString("Description"),
+                Progress = reader.GetByte("Progress"),
+                Error = reader.GetStringNullable("Error"),
+                StartTime = reader.GetDateTime("StartTime"),
+                EndTime = reader.GetDateTimeNullable("EndTime")
             });
         }
 
@@ -86,10 +86,10 @@ sealed internal class MySqlMigrationStore(IOptions<Mk8Settings> mk8Options) : IM
 
         using MySqlCommand command = new("migration_update", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.AddParameter(nameof(Migration.Id), migration.Id);
-        command.AddParameter(nameof(Migration.Progress), migration.Progress);
-        command.AddParameter(nameof(Migration.Error), migration.Error);
-        command.AddParameter(nameof(Migration.EndTime), migration.EndTime);
+        command.AddParameter("Id", migration.Id);
+        command.AddParameter("Progress", migration.Progress);
+        command.AddParameter("Error", migration.Error);
+        command.AddParameter("EndTime", migration.EndTime);
 
         await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
         await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
