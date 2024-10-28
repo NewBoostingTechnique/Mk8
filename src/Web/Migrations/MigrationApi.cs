@@ -30,8 +30,6 @@ public class MigrationApi(IMigrationService migrationService) : Api
         return migration is null ? NotFound(id) : Ok(migration);
     }
 
-    // TODO: Add a migration cache layer.
-
     [HttpGet("")]
     public async Task<IActionResult> IndexAsync([FromQuery] Migration? after, CancellationToken cancellationToken)
     {

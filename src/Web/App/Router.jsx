@@ -151,8 +151,6 @@ const router = createBrowserRouter([
           <RuleList />
         </Suspense>
       },
-      // TODO: Modularise these routes.
-      // E.g. /Players/Routes.js
       {
         path: '/times/create/:playerName/:courseName/',
         element: <TimeCreate />,

@@ -49,12 +49,6 @@ export function Create() {
     navigate(`/players/detail/${player.name}`);
   }
 
-  // TODO: Factor styles into a new form component
-
-  // TODO: Factory page title into Layout component.
-
-  // TODO: Alignment of MenuItems on narrower screens -> Due to the banner style / size of parent container?
-
   return (
     <Stack component="form" onSubmit={onSubmitAsync} sx={{ gap: { xs: 2, md: 3 } }}>
       <Typography variant='h2'>Create Player</Typography>
@@ -80,9 +74,6 @@ export function Create() {
 }
 
 //#region Detail
-
-//TODO: Abstract utility functions.
-// E.g. Time, Date, TimeSpan, etc.
 
 export function Detail() {
   const [isDialogOpen, setDialogOpen] = React.useState(false);
@@ -196,7 +187,6 @@ TimeCells.propTypes = {
 
 
 function TimeRow({ authorization, player, time }) {
-  // TODO Change cursor when clickable
   const navigate = useNavigate();
   if (authorization) {
     if (time.span) {
@@ -236,9 +226,6 @@ export function Index() {
   const loaderData = useLoaderData();
   const navigate = useNavigate();
 
-  // TODO: Move 'create' button to app bar.
-  // TODO: Sorting.
-
   function getActive(player) {
     if (!player.active)
       return 'Never';
@@ -273,19 +260,10 @@ export function Index() {
     return location;
   }
 
-  // TODO: Player rank.
-  // TODO: Player search.
-  // TODO: Are the above player grid sort and filter?
-
   async function migrateAsync() {
     const migration = await playerClient.migrateAsync();
     navigate(`/migrations/detail/${migration.id}`);
   }
-
-  // TODO: Country instead of location.
-  // TODO: Filter by country.
-  // TODO: Player search.
-  // TODO: Pagination.
 
   return (
     <Stack sx={{ gap: { xs: 2, md: 3 } }}>

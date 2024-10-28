@@ -24,10 +24,6 @@ export default function Menu({ authorization, showProgress }) {
           <ListItemText primary='News' />
         </ListItemButton>
       </ListItem>
-      {/* TODO: How's this going to work?
-            MK Forum?
-            Discord?
-            Authenticate Players? */}
       <ListItem key='Submit' disablePadding>
         <ListItemButton>
           <ListItemIcon>

@@ -5,8 +5,6 @@ using Mk8.Core;
 
 namespace Mk8.MySql.Console;
 
-// TODO: Use GitHub issues instead of 'TODO's.
-
 internal class DeployCommand(
     ILogger<DeployCommand> logger,
     IOptions<Mk8Settings> options
