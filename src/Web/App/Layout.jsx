@@ -1,4 +1,3 @@
-import BannerUrl from '../wwwroot/banner.jpg';
 import CancelIcon from '@mui/icons-material/Cancel';
 import MenuIcon from '@mui/icons-material/Menu';
 import Image from 'mui-image'
@@ -29,6 +28,7 @@ import PropTypes from 'prop-types';
 
 export default function Layout({ authorization, children }) {
   Layout.propTypes = {
+    authorization: PropTypes.object.isRequired,
     children: PropTypes.node.isRequired
   };
   // Progress indicator state (open/close).
@@ -99,7 +99,7 @@ export default function Layout({ authorization, children }) {
         <Box margin="auto" sx={{ width: { md: `calc(100% - ${drawerWidth}px)` } }}>
           <Toolbar />
           <Box margin="auto" mb="1em" width={{ xs: '%100', sm: 583, md: 683, lg: 983 }} >
-            <Image alt="Banner" src={BannerUrl} shift="right" sx={{ mb: '1em' }} />
+            <Image alt="Banner" src="banner.jpg" shift="right" sx={{ mb: '1em' }} />
             {children}
           </Box>
         </Box>
