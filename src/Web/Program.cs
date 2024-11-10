@@ -5,26 +5,36 @@ using Mk8.Web.Authorization;
 using Mk8.Web.Text.Json.Serialization;
 using Mk8.MySql;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-builder.AddAuthentication();
-builder.AddAuthorization();
-builder.Services.AddMySql();
-builder.AddMk8();
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new TimeSpanJsonConverter()));
+namespace Mk8.Web;
 
-WebApplication app = builder.Build();
-app.UseForwardedHeaders(new ForwardedHeadersOptions
+public class Program
 {
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-});
-if (app.Environment.IsDevelopment())
-    app.UseDeveloperExceptionPage();
-else
-    app.UseExceptionHandler("/Api/Error");
-app.UseStaticFiles();
-app.UseAuthorization();
-app.MapControllers().RequireAuthorization();
+    protected Program() { }
 
-app.MapFallbackToFile("App/Index.html");
-await app.RunAsync();
+    private static async Task Main(string[] args)
+    {
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+        builder.AddAuthentication();
+        builder.AddAuthorization();
+        builder.Services.AddMySql();
+        builder.AddMk8();
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new TimeSpanJsonConverter()));
+
+        WebApplication app = builder.Build();
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        });
+        if (app.Environment.IsDevelopment())
+            app.UseDeveloperExceptionPage();
+        else
+            app.UseExceptionHandler("/Api/Error");
+        app.UseStaticFiles();
+        app.UseAuthorization();
+        app.MapControllers().RequireAuthorization();
+
+        app.MapFallbackToFile("App/Index.html");
+        await app.RunAsync();
+    }
+}
