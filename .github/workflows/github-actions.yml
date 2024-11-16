@@ -30,8 +30,23 @@ jobs:
       - name: Compile Code
         run: dotnet publish -r linux-x64
 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Web.Test
+          path: artifacts/publish/Web.Test/release_linux-x64
+  
+  Test:
+    runs-on: ubuntu-24.04
+    needs: Build
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: Web.Test
+
       - name: Run Tests
-        run: dotnet test --no-build
+        run: dotnet vstest Web.Test.dll
 
         # Then add more tests.
         # Then migrate to Clean Architecture
