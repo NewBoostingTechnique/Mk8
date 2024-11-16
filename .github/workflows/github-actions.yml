@@ -30,3 +30,8 @@ jobs:
       - name: Compile Code
         run: dotnet publish -r linux-x64
 
+      - name: Run Tests
+        run: dotnet test --no-build
+
+        # Then add more tests.
+        # Then migrate to Clean Architecture
