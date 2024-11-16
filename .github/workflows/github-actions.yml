@@ -48,7 +48,7 @@ jobs:
       - name: Run Tests
         run: >-
           dotnet vstest Mk8.Web.Test.dll
-          --Collect:"Code Coverage"
+          --Collect:"XPlat Code Coverage"
           -e:Authentication__Google__ClientId=MyClientId
           -e:Authentication__Google__ClientSecret=MyClientSecret
 
@@ -57,17 +57,17 @@ jobs:
 
       - name: Generate Coverage Report
         run: |
-          REPORT_PATH=$(find TestResults -name '*.coverage')
+          REPORT_PATH=$(find TestResults -name 'coverage.cobertura.xml')
           reportgenerator \
             -reports:${REPORT_PATH} \
-            -targetdir:coverage \
+            -targetdir:TestCoverage \
             -reporttypes:Html
 
       - name: Upload Artifact 'Coverage'
         uses: actions/upload-artifact@v3
         with:
-          name: Coverage
-          path: coverage
+          name: Web.Test Coverage
+          path: TestCoverage
 
         # Then add more tests.
         # Then migrate to Clean Architecture
