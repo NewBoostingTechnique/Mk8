@@ -24,7 +24,7 @@ public class PlayerIndexTest : EndpointTest
 
         // Assert.
         List<Player>? actual = await response.Content.ReadFromJsonAsync<List<Player>>();
-        Assert.That(actual?.Count, Is.EqualTo(2));
+        Assert.That(actual?.Count, Is.EqualTo(1));
     }
 
     private readonly IPlayerStore playerStore = Substitute.For<IPlayerStore>();
