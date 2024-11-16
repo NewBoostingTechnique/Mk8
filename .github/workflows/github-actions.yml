@@ -46,7 +46,28 @@ jobs:
           name: Web.Test
 
       - name: Run Tests
-        run: dotnet vstest Mk8.Web.Test.dll
+        run: >-
+          dotnet vstest Mk8.Web.Test.dll
+          --Collect:"Code Coverage"
+          -e:Authentication__Google__ClientId=MyClientId
+          -e:Authentication__Google__ClientSecret=MyClientSecret
+
+      - name: Install ReportGenerator
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
+      - name: Generate Coverage Report
+        run: |
+          REPORT_PATH=$(find TestResults -name '*.coverage')
+          reportgenerator \
+            -reports:${REPORT_PATH} \
+            -targetdir:coverage \
+            -reporttypes:Html
+
+      - name: Upload Artifact 'Coverage'
+        uses: actions/upload-artifact@v3
+        with:
+          name: Coverage
+          path: coverage
 
         # Then add more tests.
         # Then migrate to Clean Architecture
