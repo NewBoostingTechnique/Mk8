@@ -46,7 +46,7 @@ jobs:
           name: Web.Test
 
       - name: Run Tests
-        run: dotnet vstest Web.Test.dll
+        run: dotnet vstest Mk8.Web.Test.dll
 
         # Then add more tests.
         # Then migrate to Clean Architecture
