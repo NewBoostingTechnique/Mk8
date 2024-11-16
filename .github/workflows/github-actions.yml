@@ -51,6 +51,7 @@ jobs:
           --Collect:"XPlat Code Coverage"
           -e:Authentication__Google__ClientId=MyClientId
           -e:Authentication__Google__ClientSecret=MyClientSecret
+          -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Include="[Mk8*]*"
 
       - name: Install ReportGenerator
         run: dotnet tool install -g dotnet-reportgenerator-globaltool
@@ -64,7 +65,7 @@ jobs:
             -reporttypes:Html
 
       - name: Upload Artifact 'Coverage'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Web.Test Coverage
           path: TestCoverage
