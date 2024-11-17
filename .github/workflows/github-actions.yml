@@ -48,27 +48,5 @@ jobs:
       - name: Run Tests
         run: >-
           dotnet vstest Mk8.Web.Test.dll
-          --Collect:"XPlat Code Coverage"
           -e:Authentication__Google__ClientId=MyClientId
           -e:Authentication__Google__ClientSecret=MyClientSecret
-          -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Include="[Mk8*]*"
-
-      - name: Install ReportGenerator
-        run: dotnet tool install -g dotnet-reportgenerator-globaltool
-
-      - name: Generate Coverage Report
-        run: |
-          REPORT_PATH=$(find TestResults -name 'coverage.cobertura.xml')
-          reportgenerator \
-            -reports:${REPORT_PATH} \
-            -targetdir:TestCoverage \
-            -reporttypes:Html
-
-      - name: Upload Artifact 'Coverage'
-        uses: actions/upload-artifact@v4
-        with:
-          name: Web.Test Coverage
-          path: TestCoverage
-
-        # Then add more tests.
-        # Then migrate to Clean Architecture
