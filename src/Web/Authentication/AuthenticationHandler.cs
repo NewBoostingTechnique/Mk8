@@ -9,7 +9,7 @@ public class AuthenticationHandler(
     IOptionsMonitor<GoogleOptions> options,
     ILoggerFactory logger,
     UrlEncoder encoder
-) : GoogleHandler(options, logger, encoder, default!)
+) : GoogleHandler(options, logger, encoder)
 {
     protected override string BuildChallengeUrl(AuthenticationProperties properties, string redirectUri)
     {

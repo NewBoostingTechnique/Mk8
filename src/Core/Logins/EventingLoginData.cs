@@ -4,8 +4,8 @@ using static Mk8.Core.Logins.ILoginDataEvents;
 namespace Mk8.Core.Logins;
 
 internal class EventingLoginData(
-    ILoginData innerData
-) : ILoginData, ILoginDataEvents
+    ILoginStore innerData
+) : ILoginStore, ILoginDataEvents
 {
     public Task<bool> ExistsAsync(string email)
     {

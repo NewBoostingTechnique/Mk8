@@ -1,6 +1,6 @@
 namespace Mk8.Core.Logins;
 
-public interface ILoginData
+public interface ILoginStore
 {
     Task CreateAsync(Login login);
 

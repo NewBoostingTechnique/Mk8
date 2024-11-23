@@ -7,6 +7,6 @@ internal static class ServiceCollectionExtensions
 {
     internal static void AddLogins(this IServiceCollection services)
     {
-        services.AddSingleton<ILoginData, MySqlLoginData>();
+        services.AddSingleton<ILoginStore, MySqlLoginData>();
     }
 }

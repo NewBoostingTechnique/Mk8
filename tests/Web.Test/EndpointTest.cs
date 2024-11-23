@@ -1,7 +1,12 @@
+using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Mk8.Core.Logins;
+using NSubstitute;
+using NSubstitute.ClearExtensions;
 
 namespace Mk8.Web.Test;
 
@@ -11,7 +16,18 @@ public class EndpointTest
 
     #region HttpClient.
 
-    protected HttpClient HttpClient => httpClientField ??= WebApplicationFactory.CreateClient();
+    protected HttpClient HttpClient
+    {
+        get
+        {
+            if (httpClientField is null)
+            {
+                httpClientField = WebApplicationFactory.CreateClient();
+                httpClientField.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authSchemeName);
+            }
+            return httpClientField;
+        }
+    }
     private HttpClient? httpClientField;
 
     [OneTimeTearDown]
@@ -33,7 +49,30 @@ public class EndpointTest
         }
     }
 
-    protected virtual void ConfigureTestServices(IServiceCollection services) { }
+    private ILoginStore loginStore => loginStoreField ??= Substitute.For<ILoginStore>();
+    private ILoginStore? loginStoreField;
+
+    [SetUp]
+    public void SetUpLoginStore()
+    {
+        loginStoreField?.ClearSubstitute();
+    }
+
+    private const string authSchemeName = "Fake";
+
+    protected virtual void ConfigureTestServices(IServiceCollection services)
+    {
+        AuthenticationBuilder authenticationBuilder = services.AddAuthentication(defaultScheme: authSchemeName);
+        authenticationBuilder.AddScheme<AuthenticationSchemeOptions, FakeAuthenticationHandler>(authSchemeName, _ => { });
+
+        services.AddSingleton(loginStore);
+    }
+
+    protected void WhenAuthenticated()
+    {
+        // TODO: We only need this. The auth provider doesn't matter!
+        loginStore.ExistsAsync(Arg.Any<string>()).Returns(true);
+    }
 
     [OneTimeTearDown]
     public void TimeTearDownWebApplicationFactory()

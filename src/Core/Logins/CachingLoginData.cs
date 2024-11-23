@@ -5,9 +5,9 @@ namespace Mk8.Core.Logins;
 
 internal class CachingLoginData(
     IMemoryCache cache,
-    ILoginData innerData,
+    ILoginStore innerData,
     ILoginDataEvents events
-) : ILoginData
+) : ILoginStore
 {
 
     #region Exists.

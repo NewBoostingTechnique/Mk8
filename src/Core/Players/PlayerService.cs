@@ -7,7 +7,7 @@ using Mk8.Core.Migrations;
 using Mk8.Core.Persons;
 using Mk8.Core.Regions;
 
-// TOOD: Players imported! But error when I click on one.
+// TODO: Players imported! But error when I click on one.
 // THen we need to import their times too.
 
 namespace Mk8.Core.Players;

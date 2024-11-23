@@ -6,7 +6,7 @@ using System.Data;
 
 namespace Mk8.MySql.Logins;
 
-internal class MySqlLoginData(IOptions<Mk8Settings> mk8Options) : ILoginData
+internal class MySqlLoginData(IOptions<Mk8Settings> mk8Options) : ILoginStore
 {
     public async Task CreateAsync(Login login)
     {

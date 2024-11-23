@@ -15,17 +15,17 @@ internal static class ServiceCollectionExtensions
     {
         services.AddMemoryCache();
 
-        ServiceDescriptor? descriptor = services.GetServiceDescriptor<ILoginData>();
+        ServiceDescriptor? descriptor = services.GetServiceDescriptor<ILoginStore>();
 
         services.AddSingleton(sp => ActivatorUtilities.CreateInstance<EventingLoginData>
         (
             sp,
-            (ILoginData)descriptor.CreateInstance(sp)
+            (ILoginStore)descriptor.CreateInstance(sp)
         ));
 
         services.AddSingleton<ILoginDataEvents>(sp => sp.GetRequiredService<EventingLoginData>());
 
-        services.AddSingleton<ILoginData>
+        services.AddSingleton<ILoginStore>
         (
             sp =>
             {
