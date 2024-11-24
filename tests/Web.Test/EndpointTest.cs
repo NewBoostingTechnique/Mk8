@@ -68,10 +68,14 @@ public class EndpointTest
         services.AddSingleton(loginStore);
     }
 
-    protected void WhenAuthenticated()
+    protected void GivenImAuthorized()
     {
-        // TODO: We only need this. The auth provider doesn't matter!
         loginStore.ExistsAsync(Arg.Any<string>()).Returns(true);
+    }
+
+    protected void GivenImNotAuthorized()
+    {
+        loginStore.ExistsAsync(Arg.Any<string>()).Returns(false);
     }
 
     [OneTimeTearDown]

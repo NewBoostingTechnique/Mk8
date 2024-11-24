@@ -11,7 +11,43 @@ public class PlayerCreateTest : PlayerApiEndpointTest
     public async Task GivenImAuthorized_WhenIPostANewPlayerToApiPlayer_ThenIReceive200Ok_AndThePlayerIsCreated()
     {
         // Arrange.
-        WhenAuthenticated();
+        GivenImAuthorized();
+
+        // Act.
+        WhenIPostANewPlayerToApiPlayerResult result = await whenIPostANewPlayerToApiPlayerAsync();
+
+        // Assert.
+        Assert.Multiple(async () =>
+        {
+            Assert.That(result.Response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            await PlayerStore.Received().CreateAsync
+            (
+                Arg.Is<Player>
+                (
+                    p => p.Id != Ulid.Empty
+                        && p.Name == result.Player.Name
+                        && p.CountryName == result.Player.CountryName
+                )
+            );
+        });
+    }
+
+    [Test]
+    public async Task GivenImNotAuthorized_WhenIPostToApiPlayer_ThenIReceive403Forbidden()
+    {
+        // Arrange.
+        GivenImNotAuthorized();
+
+        // Act.
+        WhenIPostANewPlayerToApiPlayerResult result = await whenIPostANewPlayerToApiPlayerAsync();
+
+        // Assert.
+        Assert.That(result.Response.StatusCode, Is.EqualTo(HttpStatusCode.Forbidden));
+    }
+
+    private async Task<WhenIPostANewPlayerToApiPlayerResult> whenIPostANewPlayerToApiPlayerAsync()
+    {
+        // Arrange.
         Player player = new()
         {
             Name = "John Doe",
@@ -22,38 +58,19 @@ public class PlayerCreateTest : PlayerApiEndpointTest
             Content = JsonContent.Create(player)
         };
 
-        // Act.
-        HttpResponseMessage response = await HttpClient.SendAsync(request);
-
-        // Assert.
-        Assert.Multiple(async () =>
+        return new WhenIPostANewPlayerToApiPlayerResult
         {
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            await PlayerStore.Received().CreateAsync
-            (
-                Arg.Is<Player>
-                (
-                    p => p.Id != Ulid.Empty
-                        && p.Name == player.Name
-                        && p.CountryName == player.CountryName
-                )
-            );
-        });
+            Player = player,
+            Response = await HttpClient.SendAsync(request)
+        };
+    }
+
+    private sealed record WhenIPostANewPlayerToApiPlayerResult
+    {
+        internal required Player Player { get; init; }
+        internal required HttpResponseMessage Response { get; init; }
     }
 }
-
-//     [Test]
-//     public async Task GivenImAuthenticatedAsAnUnauthorizedUser_WhenIPostToApiPlayer_ThenIReceive403Forbidden()
-//     {
-//         // Given I'm authenticated as an unauthorized user.
-//         await Given.ImAuthenticatedAsAnUnauthorizedUserAsync();
-
-//         // When I POST to '/api/player/'.
-//         PostPlayerResult result = await When.IPostANewPlayerToAsync("/api/player/");
-
-//         // Then I receive a '403 Forbidden' response.
-//         Then.TheResponseHasStatus(result, HttpStatusCode.Forbidden);
-//     }
 
 //     [Test]
 //     public async Task GivenImAuthenticatedAsAnUnauthorizedUser_WhenINavigateToPlayer_ThenThePlayerListPageIsShown_AndTheCreateButtonIsNotShown()
