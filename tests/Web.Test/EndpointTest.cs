@@ -1,10 +1,12 @@
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Mk8.Core.Logins;
+using Mk8.Web.Test.Authentication;
 using NSubstitute;
 using NSubstitute.ClearExtensions;
 
@@ -58,25 +60,64 @@ public class EndpointTest
         loginStoreField?.ClearSubstitute();
     }
 
-    private const string authSchemeName = "Fake";
-
     protected virtual void ConfigureTestServices(IServiceCollection services)
     {
-        AuthenticationBuilder authenticationBuilder = services.AddAuthentication(defaultScheme: authSchemeName);
-        authenticationBuilder.AddScheme<AuthenticationSchemeOptions, FakeAuthenticationHandler>(authSchemeName, _ => { });
-
+        configureAuthenticationServices(services);
         services.AddSingleton(loginStore);
     }
 
-    protected void GivenImAuthorized()
+    #region Authentication.
+
+    private void configureAuthenticationServices(IServiceCollection services)
     {
-        loginStore.ExistsAsync(Arg.Any<string>()).Returns(true);
+        AuthenticationBuilder authenticationBuilder = services.AddAuthentication(defaultScheme: authSchemeName);
+        authenticationBuilder.AddScheme<AuthenticationSchemeOptions, FakeAuthenticationHandler>(authSchemeName, _ => { });
+        services.AddSingleton(authenticator);
     }
 
-    protected void GivenImNotAuthorized()
+    private const string authSchemeName = "Fake";
+
+    private IAuthenticator? authenticatorField;
+
+    private IAuthenticator authenticator => authenticatorField ??= Substitute.For<IAuthenticator>();
+
+    [SetUp]
+    public void SetUpAuthenticator()
     {
-        loginStore.ExistsAsync(Arg.Any<string>()).Returns(false);
+        authenticatorField?.ClearSubstitute();
     }
+
+    protected void GivenImAuthenticated()
+    {
+        Claim[] claims = [new Claim(ClaimTypes.Email, "email@adress.domain")];
+        ClaimsIdentity identity = new(claims, authSchemeName);
+        ClaimsPrincipal principal = new(identity);
+        AuthenticationTicket ticket = new(principal, authSchemeName);
+        AuthenticateResult result = AuthenticateResult.Success(ticket);
+        authenticator.AuthenticateAsync().Returns(result);
+    }
+
+    protected void GivenImNotAuthenticated()
+    {
+        AuthenticateResult result = AuthenticateResult.Fail("My Failure Message");
+        authenticator.AuthenticateAsync().Returns(result);
+    }
+
+    #endregion Authentication.
+
+    #region Authorization.
+
+    protected void GivenImAuthorized(bool authorized)
+    {
+        GivenImAuthenticated();
+        loginStore.ExistsAsync(Arg.Any<string>()).Returns(authorized);
+    }
+
+    protected void GivenImAuthorized() => GivenImAuthorized(true);
+
+    protected void GivenImNotAuthorized() => GivenImAuthorized(false);
+
+    #endregion Authorization.
 
     [OneTimeTearDown]
     public void TimeTearDownWebApplicationFactory()
