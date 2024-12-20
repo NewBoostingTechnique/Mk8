@@ -7,25 +7,25 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" />
   </ItemGroup>
   <PropertyGroup>
+    <FrontEndOutDir>wwwroot</FrontEndOutDir>
     <UserSecretsId>4cfe11b2-1d73-47d9-86bb-695aea43903c</UserSecretsId>
   </PropertyGroup>
-  <Target Name="AssignFrontEndTargetPaths">
-    <PropertyGroup>
-      <FrontEndOutDir>$(OutDir)wwwroot</FrontEndOutDir>
-    </PropertyGroup>
-  </Target>
-  <Target Name="CleanFrontEnd" BeforeTargets="Clean" DependsOnTargets="AssignFrontEndTargetPaths" >
+  <Target Name="CleanFrontEnd" BeforeTargets="Clean">
     <Exec Command="npx rimraf $(FrontEndOutDir)" LogStandardErrorAsError="true" />
   </Target>
-  <Target Name="BuildFrontEnd" BeforeTargets="BeforeBuild" DependsOnTargets="AssignFrontEndTargetPaths">
-  <PropertyGroup>
-    <Mode Condition="'$(Configuration)'=='Debug'">development</Mode>
-    <Mode Condition="'$(Configuration)'=='Release'">production</Mode>
-  </PropertyGroup>
+  <Target Name="BuildFrontEnd" BeforeTargets="BeforeBuild">
+    <PropertyGroup>
+      <Mode Condition="'$(Configuration)'=='Debug'">development</Mode>
+      <Mode Condition="'$(Configuration)'=='Release'">production</Mode>
+    </PropertyGroup>
+    <!-- TODO: Speed up repeat builds? -->
+    <ItemGroup>
+      <Content Remove="$(FrontEndOutDir)/**/*" />
+    </ItemGroup>
     <Exec Command="npx vite build --mode $(Mode) --outDir $(FrontEndOutDir)" LogStandardErrorAsError="true" />
-  </Target>
-    <Target Name="PublishFrontEnd" AfterTargets="Publish">
-    <Copy SourceFiles="@(FrontEndFiles)" DestinationFolder="$(PublishDir)\%(RecursiveDir)" />
+    <ItemGroup>
+      <Content Include="$(FrontEndOutDir)/**/*" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
   </Target>
   <Target Name="RestoreFrontEnd" BeforeTargets="_GenerateRestoreProjectSpec" Inputs="package.json" Outputs="node_modules/.install-stamp">
     <Exec Command="pnpm i" LogStandardErrorAsError="true" />
