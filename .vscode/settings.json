@@ -7,6 +7,9 @@
         "IAPI",
         "Inno",
         "onwarn",
-        "prooftypes"
+        "prooftypes",
+        "rimraf",
+        "vite",
+        "wwwroot"
     ]
 }

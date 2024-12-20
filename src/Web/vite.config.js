@@ -5,7 +5,6 @@ import dynamicImport from 'vite-plugin-dynamic-import'
 export default defineConfig({
   build: {
     emptyOutDir: true,
-    outDir: 'wwwroot',
     rollupOptions: {
       input: {
         app: './App/Index.html'

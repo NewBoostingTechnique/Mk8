@@ -3,11 +3,6 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
-    "build:Debug": "vite build --mode development",
-    "build:Release": "vite build",
-    "clean": "rimraf wwwroot"
-  },
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
