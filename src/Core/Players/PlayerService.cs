@@ -7,17 +7,22 @@ using Mk8.Core.Migrations;
 using Mk8.Core.Persons;
 using Mk8.Core.Regions;
 
+// Close the testing work item.
+// Protect main from push.
+// Open one for this:
+
 // TODO: Players imported! But error when I click on one.
 // THen we need to import their times too.
+
 
 namespace Mk8.Core.Players;
 
 internal class PlayerService(
-    ICountryData countryData,
+    ICountryStore countryStore,
     IHttpClientFactory httpClientFactory,
-    IMigrationStore migrationData,
+    IMigrationStore migrationStore,
     IOptionsMonitor<Mk8Settings> options,
-    IPersonStore personData,
+    IPersonStore personStore,
     IPlayerStore playerStore,
     IRegionData regionData
 ) : IPlayerService
@@ -30,7 +35,7 @@ internal class PlayerService(
             throw new InvalidOperationException($"Player with name '{player.Name}' already exists.");
 
         ArgumentException.ThrowIfNullOrWhiteSpace(player.CountryName);
-        Ulid? countryId = await countryData.IdentifyAsync(player.CountryName, cancellationToken).ConfigureAwait(false);
+        Ulid? countryId = await countryStore.IdentifyAsync(player.CountryName, cancellationToken).ConfigureAwait(false);
         if (countryId is null)
         {
             Country country = new()
@@ -38,7 +43,7 @@ internal class PlayerService(
                 Id = Ulid.NewUlid(),
                 Name = player.CountryName
             };
-            await countryData.CreateAsync(country, cancellationToken).ConfigureAwait(false);
+            await countryStore.CreateAsync(country, cancellationToken).ConfigureAwait(false);
             countryId = country.Id;
         }
 
@@ -59,12 +64,12 @@ internal class PlayerService(
             }
         }
 
-        Ulid? personId = await personData.IdentifyAsync(player.Name, cancellationToken).ConfigureAwait(false);
+        Ulid? personId = await personStore.IdentifyAsync(player.Name, cancellationToken).ConfigureAwait(false);
         if (personId is null)
         {
             personId = Ulid.NewUlid();
             player = getPlayer();
-            await personData.CreateAsync(player, cancellationToken).ConfigureAwait(false);
+            await personStore.CreateAsync(player, cancellationToken).ConfigureAwait(false);
         }
         else
         {
@@ -115,7 +120,7 @@ internal class PlayerService(
 
     public async Task<Migration> MigrateAsync(CancellationToken cancellationToken = default)
     {
-        Migration migration = await migrationData.StartAsync("Players Migration", cancellationToken).ConfigureAwait(false);
+        Migration migration = await migrationStore.StartAsync("Players Migration", cancellationToken).ConfigureAwait(false);
 
         _ = Task.Run
         (
@@ -178,7 +183,7 @@ internal class PlayerService(
                                 {
                                     Progress = progress
                                 };
-                                await migrationData.UpdateAsync(migration, CancellationToken.None).ConfigureAwait(false);
+                                await migrationStore.UpdateAsync(migration, CancellationToken.None).ConfigureAwait(false);
                             }
                         }
 
@@ -190,7 +195,7 @@ internal class PlayerService(
                     error = ex.ToString();
                 }
 
-                await migrationData.UpdateAsync
+                await migrationStore.UpdateAsync
                 (
                     migration with
                     {

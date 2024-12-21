@@ -7,6 +7,6 @@ internal static class ServiceCollectionExtensions
 {
     internal static void AddCountries(this IServiceCollection services)
     {
-        services.AddSingleton<ICountryData, MySqlCountryData>();
+        services.AddSingleton<ICountryStore, MySqlCountryStore>();
     }
 }

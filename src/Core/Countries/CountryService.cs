@@ -5,13 +5,13 @@ using Microsoft.Extensions.Logging;
 namespace Mk8.Core.Countries;
 
 internal class CountryService(
-    ICountryData countryData,
+    ICountryStore countryStore,
     ILogger<CountryService> logger
 ) : ICountryService
 {
     public Task<IImmutableList<Country>> IndexAsync()
     {
-        return countryData.IndexAsync();
+        return countryStore.IndexAsync();
     }
 
     public async Task SeedAsync()
@@ -27,7 +27,7 @@ internal class CountryService(
 
         Task insertAsync(string name)
         {
-            return countryData.CreateAsync
+            return countryStore.CreateAsync
             (
                 new Country
                 {

@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Mk8.Core.Countries;
 using Mk8.Core.Logins;
+using Mk8.Core.Players;
 using Mk8.Web.Test.Authentication;
 using NSubstitute;
 using NSubstitute.ClearExtensions;
@@ -64,6 +66,8 @@ public class EndpointTest
     {
         configureAuthenticationServices(services);
         services.AddSingleton(loginStore);
+        services.AddSingleton(CountryStore);
+        services.AddSingleton(PlayerStore);
     }
 
     #region Authentication.
@@ -128,5 +132,33 @@ public class EndpointTest
     #endregion webApplicationFactory.
 
     #endregion HttpClient.
+
+    #region CountryStore.
+
+    protected ICountryStore CountryStore => _countryStore ??= Substitute.For<ICountryStore>();
+
+    private ICountryStore? _countryStore;
+
+    [SetUp]
+    public void SetUpCountryStore()
+    {
+        _countryStore?.ClearSubstitute();
+    }
+
+    #endregion CountryStore.
+
+    #region PlayerStore.
+
+    protected IPlayerStore PlayerStore => _playerStore ??= Substitute.For<IPlayerStore>();
+
+    private IPlayerStore? _playerStore;
+
+    [SetUp]
+    public void SetUpPlayerStore()
+    {
+        _playerStore?.ClearSubstitute();
+    }
+
+    #endregion PlayerStore.
 
 }

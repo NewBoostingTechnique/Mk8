@@ -1,6 +1,6 @@
 namespace Mk8.Core.Countries;
 
-internal interface ICountryDataEvents
+internal interface ICountryStoreEvents
 {
 
     #region Inserted.

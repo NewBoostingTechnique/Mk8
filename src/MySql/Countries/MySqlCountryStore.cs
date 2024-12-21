@@ -8,7 +8,7 @@ using MySql.Data.MySqlClient;
 
 namespace Mk8.MySql.Countries;
 
-internal class MySqlCountryData(IOptions<Mk8Settings> mk8Options) : ICountryData
+internal class MySqlCountryStore(IOptions<Mk8Settings> mk8Options) : ICountryStore
 {
     public async Task CreateAsync(Country country, CancellationToken cancellationToken = default)
     {

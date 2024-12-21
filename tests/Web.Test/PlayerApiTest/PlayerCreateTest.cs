@@ -5,7 +5,7 @@ using NSubstitute;
 
 namespace Mk8.Web.Test.PlayerApiTest;
 
-public class PlayerCreateTest : PlayerApiEndpointTest
+public class PlayerCreateTest : EndpointTest
 {
     [Test]
     public async Task GivenImAuthorized_WhenIPostANewPlayer_ThenIReceive200Ok_AndThePlayerIsCreated()

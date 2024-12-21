@@ -2,7 +2,7 @@ using System.Collections.Immutable;
 
 namespace Mk8.Core.Countries;
 
-public interface ICountryData
+public interface ICountryStore
 {
     Task CreateAsync(Country country, CancellationToken cancellationToken = default);
 

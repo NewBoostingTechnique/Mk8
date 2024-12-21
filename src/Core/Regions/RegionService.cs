@@ -5,7 +5,7 @@ using Mk8.Core.Countries;
 namespace Mk8.Core.Regions;
 
 internal class RegionService(
-    ICountryData countryData,
+    ICountryStore countryStore,
     ILogger<RegionService> logger,
     IRegionData regionData
 ) : IRegionService
@@ -14,7 +14,7 @@ internal class RegionService(
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(countryName);
 
-        Ulid countryId = await countryData.IdentifyRequiredAsync(countryName).ConfigureAwait(false);
+        Ulid countryId = await countryStore.IdentifyRequiredAsync(countryName).ConfigureAwait(false);
 
         return await regionData.IndexAsync(countryId).ConfigureAwait(false);
     }
@@ -29,7 +29,7 @@ internal class RegionService(
             {
                 Id = Ulid.NewUlid(),
                 Name = "Guildford",
-                CountryId = await countryData.IdentifyRequiredAsync("United Kingdom").ConfigureAwait(false)
+                CountryId = await countryStore.IdentifyRequiredAsync("United Kingdom").ConfigureAwait(false)
             }
         )
         .ConfigureAwait(false);

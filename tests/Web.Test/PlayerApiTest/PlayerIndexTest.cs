@@ -5,7 +5,7 @@ using NSubstitute;
 
 namespace Mk8.Web.Test.PlayerApiTest;
 
-public class PlayerIndexTest : PlayerApiEndpointTest
+public class PlayerIndexTest : EndpointTest
 {
     [Test]
     public async Task ShouldReturnPlayers_WhenPlayersExist([Values] bool authorized)

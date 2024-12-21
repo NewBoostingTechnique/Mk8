@@ -15,26 +15,26 @@ internal static class ServiceCollectionExtensions
     {
         services.AddMemoryCache();
 
-        ServiceDescriptor? descriptor = services.GetServiceDescriptor<ICountryData>();
+        ServiceDescriptor? descriptor = services.GetServiceDescriptor<ICountryStore>();
 
-        services.AddSingleton(sp => ActivatorUtilities.CreateInstance<EventingCountryData>
+        services.AddSingleton(sp => ActivatorUtilities.CreateInstance<EventingCountryStore>
         (
             sp,
-            (ICountryData)descriptor.CreateInstance(sp)
+            (ICountryStore)descriptor.CreateInstance(sp)
         ));
 
-        services.AddSingleton<ICountryDataEvents>(sp => sp.GetRequiredService<EventingCountryData>());
+        services.AddSingleton<ICountryStoreEvents>(sp => sp.GetRequiredService<EventingCountryStore>());
 
-        services.AddSingleton<ICountryData>
+        services.AddSingleton<ICountryStore>
         (
             sp =>
             {
-                EventingCountryData eventingRegionData = sp.GetRequiredService<EventingCountryData>();
-                return ActivatorUtilities.CreateInstance<CachingCountryData>
+                EventingCountryStore eventingCountryStore = sp.GetRequiredService<EventingCountryStore>();
+                return ActivatorUtilities.CreateInstance<CachingCountryStore>
                 (
                     sp,
-                    eventingRegionData,
-                    eventingRegionData
+                    eventingCountryStore,
+                    eventingCountryStore
                 );
             }
         );

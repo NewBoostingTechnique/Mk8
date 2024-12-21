@@ -4,11 +4,11 @@ using Microsoft.Extensions.Primitives;
 
 namespace Mk8.Core.Countries;
 
-internal class CachingCountryData(
+internal class CachingCountryStore(
     IMemoryCache cache,
-    ICountryData innerData,
-    ICountryDataEvents events
-) : ICountryData
+    ICountryStore innerStore,
+    ICountryStoreEvents events
+) : ICountryStore
 {
 
     #region Identify.
@@ -20,7 +20,7 @@ internal class CachingCountryData(
             $"Country_Identify:{name}",
             async entry =>
             {
-                Ulid? id = await innerData.IdentifyAsync(name, cancellationToken).ConfigureAwait(false);
+                Ulid? id = await innerStore.IdentifyAsync(name, cancellationToken).ConfigureAwait(false);
                 entry.AddExpirationToken(new IdentifyChangeToken(events, name));
                 return id;
             }
@@ -28,7 +28,7 @@ internal class CachingCountryData(
     }
 
     private sealed class IdentifyChangeToken(
-        ICountryDataEvents events,
+        ICountryStoreEvents events,
         string name
     ) : IChangeToken
     {
@@ -56,13 +56,13 @@ internal class CachingCountryData(
         private sealed class IdentifyChangeTokenRegistration : IDisposable
         {
             private readonly Action<object?> _callback;
-            private readonly ICountryDataEvents _events;
+            private readonly ICountryStoreEvents _events;
             private readonly string _name;
             private readonly object? _state;
 
             internal IdentifyChangeTokenRegistration(
                 Action<object?> callback,
-                ICountryDataEvents events,
+                ICountryStoreEvents events,
                 string name,
                 object? state
             )
@@ -75,7 +75,7 @@ internal class CachingCountryData(
                 _events.Inserted += OnInserted;
             }
 
-            private void OnInserted(object? sender, ICountryDataEvents.InsertedEventArgs e)
+            private void OnInserted(object? sender, ICountryStoreEvents.InsertedEventArgs e)
             {
                 if (e.Country.Name == _name)
                     _callback(_state);
@@ -106,7 +106,7 @@ internal class CachingCountryData(
 
     public Task CreateAsync(Country country, CancellationToken cancellationToken = default)
     {
-        return innerData.CreateAsync(country, cancellationToken);
+        return innerStore.CreateAsync(country, cancellationToken);
     }
 
     #region List.
@@ -118,7 +118,7 @@ internal class CachingCountryData(
             "Country_List",
             async entry =>
             {
-                IImmutableList<Country> list = await innerData.IndexAsync(cancellationToken).ConfigureAwait(false);
+                IImmutableList<Country> list = await innerStore.IndexAsync(cancellationToken).ConfigureAwait(false);
                 entry.AddExpirationToken(new ListChangeToken(events));
                 return list;
             }
@@ -126,7 +126,7 @@ internal class CachingCountryData(
     }
 
     private sealed class ListChangeToken(
-        ICountryDataEvents events
+        ICountryStoreEvents events
     ) : IChangeToken
     {
         public bool ActiveChangeCallbacks => true;
@@ -150,12 +150,12 @@ internal class CachingCountryData(
         private sealed class ListChangeTokenRegistration : IDisposable
         {
             private readonly Action<object?> _callback;
-            private readonly ICountryDataEvents _events;
+            private readonly ICountryStoreEvents _events;
             private readonly object? _state;
 
             internal ListChangeTokenRegistration(
                 Action<object?> callback,
-                ICountryDataEvents events,
+                ICountryStoreEvents events,
                 object? state
             )
             {
@@ -166,7 +166,7 @@ internal class CachingCountryData(
                 _events.Inserted += OnCountryInserted;
             }
 
-            private void OnCountryInserted(object? sender, ICountryDataEvents.InsertedEventArgs e)
+            private void OnCountryInserted(object? sender, ICountryStoreEvents.InsertedEventArgs e)
             {
                 _callback.Invoke(_state);
             }
