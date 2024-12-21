@@ -7,14 +7,6 @@ using Mk8.Core.Migrations;
 using Mk8.Core.Persons;
 using Mk8.Core.Regions;
 
-// Close the testing work item.
-// Protect main from push.
-// Open one for this:
-
-// TODO: Players imported! But error when I click on one.
-// THen we need to import their times too.
-
-
 namespace Mk8.Core.Players;
 
 internal class PlayerService(

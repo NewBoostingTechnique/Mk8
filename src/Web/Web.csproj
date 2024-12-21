@@ -18,7 +18,6 @@
       <Mode Condition="'$(Configuration)'=='Debug'">development</Mode>
       <Mode Condition="'$(Configuration)'=='Release'">production</Mode>
     </PropertyGroup>
-    <!-- TODO: Speed up repeat builds? -->
     <ItemGroup>
       <Content Remove="$(FrontEndOutDir)/**/*" />
     </ItemGroup>
