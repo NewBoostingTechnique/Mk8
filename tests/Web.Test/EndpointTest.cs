@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Mk8.Core.Countries;
 using Mk8.Core.Logins;
+using Mk8.Core.Persons;
 using Mk8.Core.Players;
 using Mk8.Web.Test.Authentication;
 using NSubstitute;
@@ -67,6 +68,7 @@ public class EndpointTest
         configureAuthenticationServices(services);
         services.AddSingleton(loginStore);
         services.AddSingleton(CountryStore);
+        services.AddSingleton(PersonStore);
         services.AddSingleton(PlayerStore);
     }
 
@@ -146,6 +148,20 @@ public class EndpointTest
     }
 
     #endregion CountryStore.
+
+    #region PersonStore.
+
+    protected IPersonStore PersonStore => _personStore ??= Substitute.For<IPersonStore>();
+
+    private IPersonStore? _personStore;
+
+    [SetUp]
+    public void SetUpPersonStore()
+    {
+        _personStore?.ClearSubstitute();
+    }
+
+    #endregion PersonStore.
 
     #region PlayerStore.
 
