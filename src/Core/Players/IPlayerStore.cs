@@ -16,5 +16,5 @@ public interface IPlayerStore
 
     Task<Ulid?> IdentifyAsync(string name, CancellationToken cancellationToken = default);
 
-    Task<IImmutableList<Player>> IndexAsync(CancellationToken cancellationToken = default);
+    Task<ImmutableList<Player>> IndexAsync(CancellationToken cancellationToken = default);
 }

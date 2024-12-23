@@ -2,10 +2,10 @@ import ApiClient from '../App/ApiClient';
 
 class TimeClient extends ApiClient {
 
-  static baseUri = '/api/time/';
+  static baseUri = '/api/times/';
 
-  async insertAsync(time) {
-    const response = await super.fetchAsync(
+  async createAsync(time) {
+    return super.fetchAsync(
       TimeClient.baseUri,
       {
         method: "POST",
@@ -16,7 +16,6 @@ class TimeClient extends ApiClient {
         body: JSON.stringify(time),
       }
     );
-    return await response.json();
   }
 }
 

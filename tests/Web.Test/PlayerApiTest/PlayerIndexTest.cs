@@ -16,7 +16,7 @@ public class PlayerIndexTest : EndpointTest
         [
             new() { Name = "John Doe" }
         ];
-        PlayerStore.IndexAsync().Returns(expected);
+        PlayerStore.IndexAsync().Returns(Task.FromResult(expected));
         HttpRequestMessage request = new(HttpMethod.Get, "/api/players/");
 
         // Act.

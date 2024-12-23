@@ -1,5 +1,8 @@
+using Ardalis.Result;
+using Ardalis.SharedKernel;
 using Microsoft.Extensions.DependencyInjection;
 using Mk8.Core.DependencyInjection;
+using Mk8.Core.Times.Create;
 
 namespace Mk8.Core.Times;
 
@@ -8,7 +11,7 @@ internal static class ServiceCollectionExtensions
     internal static void AddTimes(this IServiceCollection services)
     {
         services.AddTimeCaching();
-        services.AddSingleton<ITimeService, TimeService>();
+        services.AddSingleton<ICommandHandler<CreateTimeCommand, Result>, CreateTimeHandler>();
     }
 
     private static IServiceCollection AddTimeCaching(this IServiceCollection services)

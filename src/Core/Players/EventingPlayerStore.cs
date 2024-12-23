@@ -3,8 +3,9 @@ using static Mk8.Core.Players.IPlayerStoreEvents;
 
 namespace Mk8.Core.Players;
 
-internal class EventingPlayerStore(IPlayerStore innerData)
-    : IPlayerStore, IPlayerStoreEvents
+internal class EventingPlayerStore(
+    IPlayerStore innerData
+) : IPlayerStore, IPlayerStoreEvents
 {
 
     #region Create.
@@ -52,7 +53,7 @@ internal class EventingPlayerStore(IPlayerStore innerData)
         return innerData.IdentifyAsync(name, cancellationToken);
     }
 
-    public Task<IImmutableList<Player>> IndexAsync(CancellationToken cancellationToken = default)
+    public Task<ImmutableList<Player>> IndexAsync(CancellationToken cancellationToken = default)
     {
         return innerData.IndexAsync(cancellationToken);
     }

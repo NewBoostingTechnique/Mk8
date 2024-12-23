@@ -4,6 +4,7 @@
     <ProjectReference Include="..\MySql\MySql.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Ardalis.Result.AspNetCore" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" />
   </ItemGroup>
   <PropertyGroup>

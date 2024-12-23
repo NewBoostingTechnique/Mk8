@@ -222,7 +222,7 @@ internal class PlayerService(
 
     #endregion Import.
 
-    public Task<IImmutableList<Player>> IndexAsync(CancellationToken cancellationToken = default)
+    public Task<ImmutableList<Player>> IndexAsync(CancellationToken cancellationToken = default)
     {
         return playerStore.IndexAsync(cancellationToken);
     }

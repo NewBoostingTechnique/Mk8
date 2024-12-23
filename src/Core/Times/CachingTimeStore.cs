@@ -9,14 +9,14 @@ internal class CachingTimeStore(
     ITimeStoreEvents timeEvents
 ) : ITimeStore
 {
-    public Task<bool> ExistsAsync(Ulid courseId, Ulid playerId)
+    public Task<bool> ExistsAsync(Ulid courseId, Ulid playerId, CancellationToken cancellationToken = default)
     {
         return cache.GetOrCreateAsync
         (
             $"Time_Exists:{courseId}:{playerId}",
             async entry =>
             {
-                bool exists = await innerData.ExistsAsync(courseId, playerId).ConfigureAwait(false);
+                bool exists = await innerData.ExistsAsync(courseId, playerId, cancellationToken).ConfigureAwait(false);
                 entry.AddExpirationToken(new ExistsChangeToken(courseId, playerId, timeEvents));
                 return exists;
             }
@@ -103,8 +103,8 @@ internal class CachingTimeStore(
 
     }
 
-    public Task CreateAsync(Time time)
+    public Task CreateAsync(Time time, CancellationToken cancellationToken = default)
     {
-        return innerData.CreateAsync(time);
+        return innerData.CreateAsync(time, cancellationToken);
     }
 }

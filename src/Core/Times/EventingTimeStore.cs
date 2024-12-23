@@ -7,16 +7,16 @@ internal class EventingTimeStore(ITimeStore innerStore) : ITimeStore, ITimeStore
 
     public event EventHandler<ITimeStoreEvents.CreatedEventArgs>? Created;
 
-    public async Task CreateAsync(Time time)
+    public async Task CreateAsync(Time time, CancellationToken cancellationToken = default)
     {
-        await innerStore.CreateAsync(time).ConfigureAwait(false);
+        await innerStore.CreateAsync(time, cancellationToken).ConfigureAwait(false);
         Created?.Invoke(this, new ITimeStoreEvents.CreatedEventArgs(time));
     }
 
     #endregion Create.
 
-    public Task<bool> ExistsAsync(Ulid courseId, Ulid playerId)
+    public Task<bool> ExistsAsync(Ulid courseId, Ulid playerId, CancellationToken cancellationToken = default)
     {
-        return innerStore.ExistsAsync(courseId, playerId);
+        return innerStore.ExistsAsync(courseId, playerId, cancellationToken);
     }
 }

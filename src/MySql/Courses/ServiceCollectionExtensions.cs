@@ -7,6 +7,6 @@ internal static class ServiceCollectionExtensions
 {
     internal static IServiceCollection AddCourses(this IServiceCollection services)
     {
-        return services.AddSingleton<ICourseData, MySqlCourseData>();
+        return services.AddSingleton<ICourseStore, MySqlCourseData>();
     }
 }

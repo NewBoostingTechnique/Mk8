@@ -6,25 +6,24 @@ namespace Mk8.Core.Courses;
 
 internal class CachingCourseData(
     IMemoryCache cache,
-    ICourseData innerData,
+    ICourseStore innerStore,
     ICourseDataEvents courseEvents
-) : ICourseData
+) : ICourseStore
 {
 
     #region ExistsAsync.
 
-    public Task<bool> ExistsAsync(string courseName)
+    public Task<bool> ExistsAsync(string courseName, CancellationToken cancellationToken = default)
     {
         return cache.GetOrCreateAsync
         (
             $"Course_Exists:{courseName}",
             async entry =>
             {
-                bool exists = await innerData.ExistsAsync(courseName).ConfigureAwait(false);
+                bool exists = await innerStore.ExistsAsync(courseName, cancellationToken).ConfigureAwait(false);
                 entry.AddExpirationToken(new ExistsChangeToken(courseEvents, courseName));
                 return exists;
             }
-
         );
     }
 
@@ -73,10 +72,10 @@ internal class CachingCourseData(
                 _events = events;
                 _state = state;
 
-                events.Inserted += OnInserted;
+                events.Created += OnInserted;
             }
 
-            private void OnInserted(object? sender, ICourseDataEvents.InsertedEventArgs e)
+            private void OnInserted(object? sender, ICourseDataEvents.CreatedEventArgs e)
             {
                 if (e.Course.Name == _courseName)
                     _callback(_state);
@@ -90,7 +89,7 @@ internal class CachingCourseData(
             {
                 if (!_disposed)
                 {
-                    _events.Inserted -= OnInserted;
+                    _events.Created -= OnInserted;
                     _disposed = true;
                 }
             }
@@ -105,16 +104,16 @@ internal class CachingCourseData(
 
     #endregion ExistsAsync.
 
-    #region IdentifyAsync.
+    #region Identify.
 
-    public Task<Ulid?> IdentifyAsync(string courseName)
+    public Task<Ulid?> IdentifyAsync(string courseName, CancellationToken cancellationToken = default)
     {
         return cache.GetOrCreateAsync
         (
             $"Course_Identify:{courseName}",
             async entry =>
             {
-                Ulid? id = await innerData.IdentifyAsync(courseName).ConfigureAwait(false);
+                Ulid? id = await innerStore.IdentifyAsync(courseName, cancellationToken).ConfigureAwait(false);
                 entry.AddExpirationToken(new IdentifyChangeToken(courseEvents, courseName));
                 return id;
             }
@@ -166,10 +165,10 @@ internal class CachingCourseData(
                 _courseName = courseName;
                 _state = state;
 
-                _events.Inserted += OnInserted;
+                _events.Created += OnCreated;
             }
 
-            private void OnInserted(object? sender, ICourseDataEvents.InsertedEventArgs e)
+            private void OnCreated(object? sender, ICourseDataEvents.CreatedEventArgs e)
             {
                 if (e.Course.Name == _courseName)
                     _callback(_state);
@@ -183,7 +182,7 @@ internal class CachingCourseData(
             {
                 if (!_disposed)
                 {
-                    _events.Inserted -= OnInserted;
+                    _events.Created -= OnCreated;
                     _disposed = true;
                 }
             }
@@ -198,28 +197,28 @@ internal class CachingCourseData(
 
     #endregion IdentifyAsync.
 
-    public Task CreateAsync(Course course)
+    public Task CreateAsync(Course course, CancellationToken cancellationToken = default)
     {
-        return innerData.CreateAsync(course);
+        return innerStore.CreateAsync(course, cancellationToken);
     }
 
-    #region ListAsync.
+    #region Index.
 
-    public Task<IImmutableList<Course>> IndexAsync()
+    public Task<ImmutableList<Course>> IndexAsync(CancellationToken cancellationToken = default)
     {
         return cache.GetOrCreateAsync
         (
-            "Course_List",
+            "Course_Index",
             async entry =>
             {
-                IImmutableList<Course> list = await innerData.IndexAsync().ConfigureAwait(false);
-                entry.AddExpirationToken(new ListChangeToken(courseEvents));
-                return list;
+                ImmutableList<Course> index = await innerStore.IndexAsync(cancellationToken).ConfigureAwait(false);
+                entry.AddExpirationToken(new IndexChangeToken(courseEvents));
+                return index;
             }
         )!;
     }
 
-    private sealed class ListChangeToken(
+    private sealed class IndexChangeToken(
        ICourseDataEvents events
    ) : IChangeToken
     {
@@ -229,7 +228,7 @@ internal class CachingCourseData(
 
         public IDisposable RegisterChangeCallback(Action<object?> callback, object? state)
         {
-            return new ListChangeTokenRegistration
+            return new IndexChangeTokenRegistration
             (
                 state =>
                 {
@@ -241,13 +240,13 @@ internal class CachingCourseData(
             );
         }
 
-        private sealed class ListChangeTokenRegistration : IDisposable
+        private sealed class IndexChangeTokenRegistration : IDisposable
         {
             private readonly Action<object?> _callback;
             private readonly ICourseDataEvents _events;
             private readonly object? _state;
 
-            internal ListChangeTokenRegistration(
+            internal IndexChangeTokenRegistration(
                 Action<object?> callback,
                 ICourseDataEvents events,
                 object? state
@@ -257,10 +256,10 @@ internal class CachingCourseData(
                 _events = events;
                 _state = state;
 
-                _events.Inserted += OnInserted;
+                _events.Created += OnCreated;
             }
 
-            private void OnInserted(object? sender, ICourseDataEvents.InsertedEventArgs e)
+            private void OnCreated(object? sender, ICourseDataEvents.CreatedEventArgs e)
             {
                 _callback.Invoke(_state);
             }
@@ -273,7 +272,7 @@ internal class CachingCourseData(
             {
                 if (!_disposed)
                 {
-                    _events.Inserted -= OnInserted;
+                    _events.Created -= OnCreated;
 
                     _disposed = true;
                 }

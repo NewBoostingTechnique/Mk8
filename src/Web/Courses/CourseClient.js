@@ -4,7 +4,7 @@ class CourseClient extends ApiClient {
 
   static baseUri = '/api/course/';
 
-  async listAsync() {
+  async indexAsync() {
     const response = await super.fetchAsync(CourseClient.baseUri);
     return await response.json();
   }

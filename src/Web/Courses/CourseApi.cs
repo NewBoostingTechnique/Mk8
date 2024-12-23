@@ -11,6 +11,6 @@ public class CourseApi(ICourseService courseService) : Api
     [AllowAnonymous, HttpGet("")]
     public async Task<IActionResult> ListAsync()
     {
-        return Ok(await courseService.ListAsync());
+        return Ok(await courseService.IndexAsync());
     }
 }

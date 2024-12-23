@@ -1,4 +1,4 @@
-import useTimeClient from './TimeClient.js';
+import useTimeClient from '../TimeClient.js';
 import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
@@ -37,7 +37,7 @@ export default function TimeCreate() {
     let time = Object.fromEntries(new FormData(e.currentTarget).entries());
     time.date = dayjs(time.date, loaderData.localeName).toISOString().split('T')[0];
     time.span = `00:${time.span.replace(/'/g, ':').replace(/"/g, '.')}`;
-    await timeClient.insertAsync(time);
+    await timeClient.createAsync(time);
     navigate(`/players/detail/${playerName}`);
   }
 

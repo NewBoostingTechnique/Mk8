@@ -8,9 +8,9 @@ using MySql.Data.MySqlClient;
 
 namespace Mk8.MySql.Courses;
 
-internal class MySqlCourseData(IOptions<Mk8Settings> mk8Options) : ICourseData
+internal class MySqlCourseData(IOptions<Mk8Settings> mk8Options) : ICourseStore
 {
-    public async Task CreateAsync(Course course)
+    public async Task CreateAsync(Course course, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(course.Id);
 
@@ -21,11 +21,11 @@ internal class MySqlCourseData(IOptions<Mk8Settings> mk8Options) : ICourseData
         command.AddParameter("Id", course.Id);
         command.AddParameter("Name", course.Name);
 
-        await connection.OpenAsync().ConfigureAwait(false);
-        await command.ExecuteNonQueryAsync().ConfigureAwait(false);
+        await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+        await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task<bool> ExistsAsync(string courseName)
+    public async Task<bool> ExistsAsync(string courseName, CancellationToken cancellationToken = default)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
@@ -33,11 +33,11 @@ internal class MySqlCourseData(IOptions<Mk8Settings> mk8Options) : ICourseData
         command.CommandType = CommandType.StoredProcedure;
         command.AddParameter("Name", courseName);
 
-        await connection.OpenAsync().ConfigureAwait(false);
-        return await command.ExecuteBoolAsync().ConfigureAwait(false);
+        await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+        return await command.ExecuteBoolAsync(cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task<Ulid?> IdentifyAsync(string courseName)
+    public async Task<Ulid?> IdentifyAsync(string courseName, CancellationToken cancellationToken = default)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
@@ -45,11 +45,11 @@ internal class MySqlCourseData(IOptions<Mk8Settings> mk8Options) : ICourseData
         command.CommandType = CommandType.StoredProcedure;
         command.AddParameter("Name", courseName);
 
-        await connection.OpenAsync().ConfigureAwait(false);
-        return await command.ExecuteUlidAsync().ConfigureAwait(false);
+        await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+        return await command.ExecuteUlidAsync(cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task<IImmutableList<Course>> IndexAsync()
+    public async Task<ImmutableList<Course>> IndexAsync(CancellationToken cancellationToken = default)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
@@ -57,9 +57,9 @@ internal class MySqlCourseData(IOptions<Mk8Settings> mk8Options) : ICourseData
         command.CommandType = CommandType.StoredProcedure;
 
         ImmutableList<Course>.Builder builder = ImmutableList.CreateBuilder<Course>();
-        await connection.OpenAsync().ConfigureAwait(false);
-        using DbDataReader reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
-        while (await reader.ReadAsync().ConfigureAwait(false))
+        await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+        using DbDataReader reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
         {
             builder.Add(new Course
             {

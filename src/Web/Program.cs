@@ -4,6 +4,7 @@ using Mk8.Web.Authentication;
 using Mk8.Web.Authorization;
 using Mk8.Web.Text.Json.Serialization;
 using Mk8.MySql;
+using Mk8.Web.Times.CreateTime;
 
 namespace Mk8.Web;
 
@@ -33,6 +34,7 @@ public class Program
         app.UseStaticFiles();
         app.UseAuthorization();
         app.MapControllers().RequireAuthorization();
+        app.MapCreateTime();
 
         app.MapFallbackToFile("App/Index.html");
         await app.RunAsync();

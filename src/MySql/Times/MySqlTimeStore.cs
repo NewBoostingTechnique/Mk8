@@ -8,23 +8,23 @@ namespace Mk8.MySql.Times;
 
 internal class MySqlTimeStore(IOptions<Mk8Settings> mk8Options) : ITimeStore
 {
-    public async Task CreateAsync(Time time)
+    public async Task CreateAsync(Time time, CancellationToken cancellationToken = default)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
         using MySqlCommand command = new("time_create", connection);
         command.CommandType = CommandType.StoredProcedure;
         command.AddParameter("Id", time.Id);
+        command.AddParameter("Span", time.Span);
+        command.AddParameter("Date", time.Date);
         command.AddParameter("CourseId", time.CourseId);
         command.AddParameter("PlayerId", time.PlayerId);
-        command.AddParameter("TimeDate", time.Date);
-        command.AddParameter("TimeSpan", time.Span);
 
-        await connection.OpenAsync().ConfigureAwait(false);
-        await command.ExecuteNonQueryAsync().ConfigureAwait(false);
+        await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+        await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task<bool> ExistsAsync(Ulid courseId, Ulid playerId)
+    public async Task<bool> ExistsAsync(Ulid courseId, Ulid playerId, CancellationToken cancellationToken = default)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
@@ -33,7 +33,7 @@ internal class MySqlTimeStore(IOptions<Mk8Settings> mk8Options) : ITimeStore
         command.AddParameter("CourseId", courseId);
         command.AddParameter("PlayerId", playerId);
 
-        await connection.OpenAsync().ConfigureAwait(false);
-        return await command.ExecuteBoolAsync().ConfigureAwait(false);
+        await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+        return await command.ExecuteBoolAsync(cancellationToken).ConfigureAwait(false);
     }
 }
