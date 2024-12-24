@@ -34,9 +34,7 @@ export default function ErrorBoundary({ children }) {
             <Typography variant='h3'>Trace Identifier</Typography>
             <Typography variant='body'>{error.traceId}</Typography>
           </>
-          : <>
-            <Typography variant='h2'>An error occurred</Typography>
-          </>
+          : <Typography variant='h2'>An error occurred</Typography>
       }
     </Layout>
   );

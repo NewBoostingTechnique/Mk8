@@ -17,6 +17,9 @@ export default class ApiClient {
       throw new ApiError(data.title, data.traceId);
     }
 
+    if (!response.ok)
+      throw new Error(response.statusText);
+
     return response;
   };
 }
