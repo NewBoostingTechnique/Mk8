@@ -11,10 +11,3 @@ dotnet_diagnostic.CA2016.severity = warning
 
 # CS8619: Nullability of reference types in value doesn't match target type.
 dotnet_diagnostic.CS8619.severity = error
-
-dotnet_naming_rule.camel_case.style = camel_case_style
-dotnet_naming_rule.camel_case.symbols = camel_case_symbols
-dotnet_naming_rule.camel_case.severity = suggestion
-dotnet_naming_style.camel_case_style.capitalization = camel_case
-dotnet_naming_symbols.camel_case_symbols.applicable_kinds = property,method,event
-dotnet_naming_symbols.camel_case_symbols.applicable_accessibilities = private

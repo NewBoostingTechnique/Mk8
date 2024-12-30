@@ -18,7 +18,7 @@ public class Program
         builder.AddAuthentication();
         builder.AddAuthorization();
         builder.Services.AddMySql();
-        builder.AddMk8();
+        builder.AddMk8Core();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new TimeSpanJsonConverter()));
 
@@ -34,7 +34,7 @@ public class Program
         app.UseStaticFiles();
         app.UseAuthorization();
         app.MapControllers().RequireAuthorization();
-        app.MapCreateTime();
+        app.MapCreateTimeApi();
 
         app.MapFallbackToFile("App/Index.html");
         await app.RunAsync();

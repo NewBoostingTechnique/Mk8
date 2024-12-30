@@ -11,7 +11,7 @@ builder.Configuration.AddUserSecrets(Assembly.GetExecutingAssembly());
 builder.Services.AddHostedService<ConsoleService>();
 builder.Services.AddMySql();
 builder.Services.AddSingleton<DeployCommand>();
-builder.AddMk8();
+builder.AddMk8Core();
 
 IHost host = builder.Build();
 await host.RunAsync();

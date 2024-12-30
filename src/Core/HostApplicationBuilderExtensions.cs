@@ -16,7 +16,7 @@ namespace Mk8.Core;
 
 public static class HostApplicationBuilderExtensions
 {
-    public static void AddMk8(this IHostApplicationBuilder builder)
+    public static void AddMk8Core(this IHostApplicationBuilder builder)
     {
         IServiceCollection services = builder.Services;
 

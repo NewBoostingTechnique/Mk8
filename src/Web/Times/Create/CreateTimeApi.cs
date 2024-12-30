@@ -8,18 +8,11 @@ namespace Mk8.Web.Times.Create;
 
 internal static class CreateTimeApi
 {
-    internal static void MapCreateTime(this IEndpointRouteBuilder builder)
+    internal static void MapCreateTimeApi(this IEndpointRouteBuilder builder)
     {
-        // TODO: Api should have dedicated request and response records.
-
-        // TODO: Test valid request data is required.
-
-        // TODO: Add server-side validation with FluentValidation (See Ardalis).
-
-        // TODO: Perhaps all these will call straight to the command handler.
-        // So can we put a generic layer to convert the results into minimal API results.
-
         // TODO: Add test(s) for backend.
+
+        // TODO: Require tests on PRs (not on main).
 
         // TODO: Add client-side validation.
 
@@ -31,19 +24,23 @@ internal static class CreateTimeApi
         (
             "/api/times/",
             async (
-                [FromBody] CreateTimeRequest request,
+                [FromBody] CreateTimeRequest? request,
                 [FromServices] ICommandHandler<CreateTimeCommand, Result> handler,
                 CancellationToken cancellationToken = default
             ) =>
             {
+                request ??= CreateTimeRequest.Default;
+                if (!request.Validate(out var errors))
+                    return Results.ValidationProblem(errors);
+
                 Result result = await handler.Handle
                 (
                     new CreateTimeCommand
                     {
                         CourseName = request.CourseName,
-                        Date = request.Date,
+                        Date = request.Date.Value,
                         PlayerName = request.PlayerName,
-                        Span = request.Span
+                        Span = request.Span.Value
                     },
                     cancellationToken
                 );
