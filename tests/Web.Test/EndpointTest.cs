@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Mk8.Core.Countries;
+using Mk8.Core.Courses;
 using Mk8.Core.Logins;
 using Mk8.Core.Persons;
 using Mk8.Core.Players;
+using Mk8.Core.Times;
 using Mk8.Web.Test.Authentication;
 using NSubstitute;
 using NSubstitute.ClearExtensions;
@@ -54,22 +56,24 @@ public class EndpointTest
         }
     }
 
-    private ILoginStore loginStore => loginStoreField ??= Substitute.For<ILoginStore>();
-    private ILoginStore? loginStoreField;
+    private ILoginStore LoginStore => _loginStore ??= Substitute.For<ILoginStore>();
+    private ILoginStore? _loginStore;
 
     [SetUp]
     public void SetUpLoginStore()
     {
-        loginStoreField?.ClearSubstitute();
+        _loginStore?.ClearSubstitute();
     }
 
     protected virtual void ConfigureTestServices(IServiceCollection services)
     {
         configureAuthenticationServices(services);
-        services.AddSingleton(loginStore);
+        services.AddSingleton(LoginStore);
         services.AddSingleton(CountryStore);
+        services.AddSingleton(CourseStore);
         services.AddSingleton(PersonStore);
         services.AddSingleton(PlayerStore);
+        services.AddSingleton(TimeStore);
     }
 
     #region Authentication.
@@ -116,7 +120,7 @@ public class EndpointTest
     protected void GivenImAuthorized(bool authorized)
     {
         GivenImAuthenticated();
-        loginStore.ExistsAsync(Arg.Any<string>()).Returns(authorized);
+        LoginStore.ExistsAsync(Arg.Any<string>()).Returns(authorized);
     }
 
     protected void GivenImAuthorized() => GivenImAuthorized(true);
@@ -149,6 +153,20 @@ public class EndpointTest
 
     #endregion CountryStore.
 
+    #region CourseStore.
+
+    protected ICourseStore CourseStore => _courseStore ??= Substitute.For<ICourseStore>();
+
+    private ICourseStore? _courseStore;
+
+    [SetUp]
+    public void SetUpCourseStore()
+    {
+        _courseStore?.ClearSubstitute();
+    }
+
+    #endregion CourseStore.
+
     #region PersonStore.
 
     protected IPersonStore PersonStore => _personStore ??= Substitute.For<IPersonStore>();
@@ -176,5 +194,19 @@ public class EndpointTest
     }
 
     #endregion PlayerStore.
+
+    #region TimeStore.
+
+    protected ITimeStore TimeStore => _timeStore ??= Substitute.For<ITimeStore>();
+
+    private ITimeStore? _timeStore;
+
+    [SetUp]
+    public void SetUpTimeStore()
+    {
+        _timeStore?.ClearSubstitute();
+    }
+
+    #endregion TimeStore
 
 }

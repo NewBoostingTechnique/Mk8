@@ -14,7 +14,7 @@ public class PlayerCreateTest : EndpointTest
         GivenImAuthorized();
 
         // Act.
-        WhenIPostANewPlayerToApiPlayerResult result = await whenIPostANewPlayerAsync();
+        WhenIPostANewPlayerToApiPlayerResult result = await WhenIPostANewPlayerAsync();
 
         // Assert.
         Assert.Multiple(async () =>
@@ -39,7 +39,7 @@ public class PlayerCreateTest : EndpointTest
         GivenImNotAuthorized();
 
         // Act.
-        WhenIPostANewPlayerToApiPlayerResult result = await whenIPostANewPlayerAsync();
+        WhenIPostANewPlayerToApiPlayerResult result = await WhenIPostANewPlayerAsync();
 
         // Assert.
         Assert.That(result.Response.StatusCode, Is.EqualTo(HttpStatusCode.Forbidden));
@@ -52,13 +52,13 @@ public class PlayerCreateTest : EndpointTest
         GivenImNotAuthenticated();
 
         // Act.
-        WhenIPostANewPlayerToApiPlayerResult result = await whenIPostANewPlayerAsync();
+        WhenIPostANewPlayerToApiPlayerResult result = await WhenIPostANewPlayerAsync();
 
         // Then I receive a '401 Unauthorized' response.
         Assert.That(result.Response.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
     }
 
-    private async Task<WhenIPostANewPlayerToApiPlayerResult> whenIPostANewPlayerAsync()
+    private async Task<WhenIPostANewPlayerToApiPlayerResult> WhenIPostANewPlayerAsync()
     {
         // Arrange.
         Player player = new()
