@@ -6,7 +6,7 @@ public record Time
 
     #region Course.
 
-    public Ulid CourseId { get; internal init; }
+    public Ulid CourseId { get; init; }
 
     public string? CourseName { get; init; }
 
@@ -16,7 +16,7 @@ public record Time
 
     #region Player.
 
-    public Ulid PlayerId { get; internal init; }
+    public Ulid PlayerId { get; init; }
 
     public string? PlayerName { get; init; }
 
