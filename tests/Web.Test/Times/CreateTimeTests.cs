@@ -117,7 +117,21 @@ public class CreateTimeTests : EndpointTest
         HttpResponseMessage response = await PostAsync(entities);
 
         // Assert.
-        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+        AssertNotFoundOutcome(response);
+    }
+
+    [Test]
+    public async Task GivenCourseDoesNotExist_WhenNewTimePosted_ThenNotFoundOutcome()
+    {
+        // Arrange.
+        Entities entities = GetEntities();
+        InsertPlayer(entities.Player);
+
+        // Act.
+        HttpResponseMessage response = await PostAsync(entities);
+
+        // Assert.
+        AssertNotFoundOutcome(response);
     }
 
     #region Arrange.
@@ -219,6 +233,11 @@ public class CreateTimeTests : EndpointTest
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
             await TimeStore.DidNotReceive().CreateAsync(Arg.Any<Time>(), Arg.Any<CancellationToken>());
         });
+    }
+
+    private static void AssertNotFoundOutcome(HttpResponseMessage response)
+    {
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
     }
 
     #endregion Assert.
