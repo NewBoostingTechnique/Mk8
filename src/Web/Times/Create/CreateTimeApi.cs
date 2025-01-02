@@ -12,7 +12,6 @@ internal static class CreateTimeApi
     internal static void MapCreateTimeApi(this IEndpointRouteBuilder builder)
     {
         // TODO: Add test(s) for backend.
-        // 4. Invalid course name.
         // 5. Invalid player name.
         // 6. Conflict - time already exists.
 

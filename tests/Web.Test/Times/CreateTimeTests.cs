@@ -18,17 +18,11 @@ public class CreateTimeTests : EndpointTest
     public async Task GivenHappyArrangement_WhenNewTimePosted_ThenHappyOutcome()
     {
         // Arrange.
-        HappyArrangement arrangement = ArrangeHappyPath();
+        Entities entities = ArrangeHappyPath();
 
         // Act.
-        CreateTimeRequest requestContent = new()
-        {
-            CourseName = arrangement.Course.Name,
-            Date = DateOnly.FromDayNumber(1),
-            PlayerName = arrangement.Player.Name,
-            Span = TimeSpan.FromMinutes(1)
-        };
-        HttpResponseMessage response = await PostContent(JsonContent.Create(requestContent));
+        CreateTimeRequest request = GetCreateTimeRequest(entities);
+        HttpResponseMessage response = await PostAsync(request);
 
         // Assert.
         Assert.Multiple(() =>
@@ -37,10 +31,10 @@ public class CreateTimeTests : EndpointTest
             TimeStore.Received(1).CreateAsync
             (
                 Arg.Is<Time>(time =>
-                    time.CourseId == arrangement.Course.Id &&
-                    time.Date == requestContent.Date &&
-                    time.PlayerId == arrangement.Player.Id &&
-                    time.Span == requestContent.Span
+                    time.CourseId == entities.Course.Id &&
+                    time.Date == request.Date &&
+                    time.PlayerId == entities.Player.Id &&
+                    time.Span == request.Span
                 ),
                 Arg.Any<CancellationToken>()
             );
@@ -55,7 +49,7 @@ public class CreateTimeTests : EndpointTest
 
         // Act.
         HttpContent? content = null;
-        HttpResponseMessage response = await PostContent(content);
+        HttpResponseMessage response = await PostAsync(content);
 
         // Assert.
         AssertPreValidationBadRequestOutcome(response);
@@ -70,7 +64,7 @@ public class CreateTimeTests : EndpointTest
         // Act.
         HttpContent content = new StringContent("Not json");
         content.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Json);
-        HttpResponseMessage response = await PostContent(content);
+        HttpResponseMessage response = await PostAsync(content);
 
         // Assert.
         AssertPreValidationBadRequestOutcome(response);
@@ -83,8 +77,7 @@ public class CreateTimeTests : EndpointTest
         ArrangeHappyPath();
 
         // Act.
-        HttpContent content = JsonContent.Create(new { });
-        HttpResponseMessage response = await PostContent(content);
+        HttpResponseMessage response = await PostAsync(JsonContent.Create(new { }));
 
         // Assert.
         Assert.Multiple(async () =>
@@ -113,29 +106,69 @@ public class CreateTimeTests : EndpointTest
         });
     }
 
+    [Test]
+    public async Task GivenPlayerDoesNotExist_WhenNewTimePosted_ThenNotFoundOutcome()
+    {
+        // Arrange.
+        Entities entities = GetEntities();
+        InsertCourse(entities.Course);
+
+        // Act.
+        HttpResponseMessage response = await PostAsync(entities);
+
+        // Assert.
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+    }
+
     #region Arrange.
 
-    private HappyArrangement ArrangeHappyPath()
+    private Entities ArrangeHappyPath()
     {
-        Course course = new() { Id = Ulid.NewUlid(), Name = "Mushroom Cup" };
-        CourseStore.IdentifyAsync(Arg.Is(course.Name), Arg.Any<CancellationToken>())
-            .Returns(_ => Task.FromResult(course.Id));
+        Entities entities = GetEntities();
+        InsertCourse(entities.Course);
+        InsertPlayer(entities.Player);
+        return entities;
+    }
 
-        Player player = new() { Id = Ulid.NewUlid(), Name = "John Doe" };
-        PlayerStore.IdentifyAsync(Arg.Is(player.Name), Arg.Any<CancellationToken>())
-            .Returns(_ => Task.FromResult(player.Id));
-
-        TimeStore.ExistsAsync(Arg.Is(course.Id.Value), Arg.Is(player.Id.Value), Arg.Any<CancellationToken>())
-            .Returns(false);
-
-        return new HappyArrangement
+    private static Entities GetEntities()
+    {
+        return new Entities
         {
-            Course = course,
-            Player = player
+            Course = new() { Id = Ulid.NewUlid(), Name = "Mushroom Cup" },
+            Player = new() { Id = Ulid.NewUlid(), Name = "John Doe" }
         };
     }
 
-    private sealed record HappyArrangement
+    private static CreateTimeRequest GetCreateTimeRequest(Entities entities)
+    {
+        return new CreateTimeRequest
+        {
+            Date = DateOnly.FromDayNumber(1),
+            Span = TimeSpan.FromSeconds(1),
+            CourseName = entities.Course.Name,
+            PlayerName = entities.Player.Name
+        };
+    }
+
+    private void InsertCourse(Course course)
+    {
+        CourseStore.IdentifyAsync(Arg.Is(course.Name), Arg.Any<CancellationToken>())
+            .Returns(_ => Task.FromResult(course.Id));
+    }
+
+    private void InsertPlayer(Player player)
+    {
+        PlayerStore.IdentifyAsync(Arg.Is(player.Name), Arg.Any<CancellationToken>())
+            .Returns(_ => Task.FromResult(player.Id));
+    }
+
+    private void InsertTime(Time time)
+    {
+        TimeStore.ExistsAsync(Arg.Is(time.CourseId), Arg.Is(time.PlayerId), Arg.Any<CancellationToken>())
+            .Returns(true);
+    }
+
+    private sealed record Entities
     {
         internal required Course Course { get; init; }
         internal required Player Player { get; init; }
@@ -145,15 +178,25 @@ public class CreateTimeTests : EndpointTest
 
     #region Act.
 
-    private Task<HttpResponseMessage> PostContent(HttpContent? content)
+    private Task<HttpResponseMessage> PostAsync(HttpContent? content)
     {
-        return HttpClient.SendAsync
-        (
-            new(HttpMethod.Post, "/api/times/")
-            {
-                Content = content
-            }
-        );
+        HttpRequestMessage message = new(HttpMethod.Post, "/api/times/")
+        {
+            Content = content
+        };
+        return HttpClient.SendAsync(message);
+    }
+
+    private Task<HttpResponseMessage> PostAsync(Entities entities)
+    {
+        CreateTimeRequest request = GetCreateTimeRequest(entities);
+        return PostAsync(request);
+    }
+
+    private Task<HttpResponseMessage> PostAsync(CreateTimeRequest request)
+    {
+        JsonContent content = JsonContent.Create(request);
+        return PostAsync(content);
     }
 
     #endregion Act.

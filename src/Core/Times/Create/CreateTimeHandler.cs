@@ -32,8 +32,8 @@ internal class CreateTimeHandler(
                 Id = Ulid.NewUlid(),
                 Date = request.Date,
                 Span = request.Span,
-                CourseId = courseId,
-                PlayerId = playerId
+                CourseId = courseId.Value,
+                PlayerId = playerId.Value
             },
             cancellationToken
         )
