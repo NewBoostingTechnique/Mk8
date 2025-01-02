@@ -2,6 +2,7 @@ using Ardalis.Result;
 using Ardalis.Result.AspNetCore;
 using Ardalis.SharedKernel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Mk8.Core.Times.Create;
 
 namespace Mk8.Web.Times.Create;
@@ -11,11 +12,13 @@ internal static class CreateTimeApi
     internal static void MapCreateTimeApi(this IEndpointRouteBuilder builder)
     {
         // TODO: Add test(s) for backend.
-        // 2. No body.
-        // 3. Invalid body.
         // 4. Invalid course name.
         // 5. Invalid player name.
         // 6. Conflict - time already exists.
+
+        // TODO: Create issue for:
+        // Entities should not be public.
+        // Consider adding a test API for creating entities.
 
         // TODO: Require tests on PRs (not on main).
 
@@ -29,12 +32,11 @@ internal static class CreateTimeApi
         (
             "/api/times/",
             async (
-                [FromBody] CreateTimeRequest? request,
+                [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Disallow)] CreateTimeRequest request,
                 [FromServices] ICommandHandler<CreateTimeCommand, Result> handler,
                 CancellationToken cancellationToken = default
             ) =>
             {
-                request ??= CreateTimeRequest.Default;
                 if (!request.Validate(out var errors))
                     return Results.ValidationProblem(errors);
 

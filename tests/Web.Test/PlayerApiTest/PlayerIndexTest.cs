@@ -11,7 +11,7 @@ public class PlayerIndexTest : EndpointTest
     public async Task ShouldReturnPlayers_WhenPlayersExist([Values] bool authorized)
     {
         // Arrange.
-        GivenImAuthorized(authorized);
+        GivenAuthorization(authorized);
         ImmutableList<Player> expected =
         [
             new() { Name = "John Doe" }

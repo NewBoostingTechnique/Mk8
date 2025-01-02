@@ -8,13 +8,13 @@ namespace Mk8.Web.Test.PlayerApiTest;
 public class PlayerCreateTest : EndpointTest
 {
     [Test]
-    public async Task GivenImAuthorized_WhenIPostANewPlayer_ThenIReceive200Ok_AndThePlayerIsCreated()
+    public async Task GivenHappyArrangement_WhenNewPlayerPosted_ThenHappyOutcome()
     {
         // Arrange.
-        GivenImAuthorized();
+        ArrangeAuthorization();
 
         // Act.
-        WhenIPostANewPlayerToApiPlayerResult result = await WhenIPostANewPlayerAsync();
+        PostNewPlayerResult result = await PostNewPlayerAsync();
 
         // Assert.
         Assert.Multiple(async () =>
@@ -33,32 +33,34 @@ public class PlayerCreateTest : EndpointTest
     }
 
     [Test]
-    public async Task GivenImNotAuthorized_WhenIPostANewPlayer_ThenIReceive403Forbidden()
+    public async Task GivenNoAuthorization_WhenNewPlayerPosted_ThenForbiddenOutcome()
     {
         // Arrange.
-        GivenImNotAuthorized();
+        ArrangeUnauthorized();
 
         // Act.
-        WhenIPostANewPlayerToApiPlayerResult result = await WhenIPostANewPlayerAsync();
+        PostNewPlayerResult result = await PostNewPlayerAsync();
 
         // Assert.
         Assert.That(result.Response.StatusCode, Is.EqualTo(HttpStatusCode.Forbidden));
     }
 
     [Test]
-    public async Task GivenImNotAuthenticated_WhenIPostANewPlayer_ThenIReceive401Unauthorized()
+    public async Task GivenImNotAuthentication_WhenNewPlayerPosted_ThenUnauthorizedOutcome()
     {
         // Arrange.
-        GivenImNotAuthenticated();
+        ArrangeUnauthenticated();
 
         // Act.
-        WhenIPostANewPlayerToApiPlayerResult result = await WhenIPostANewPlayerAsync();
+        PostNewPlayerResult result = await PostNewPlayerAsync();
 
-        // Then I receive a '401 Unauthorized' response.
+        // Assert.
         Assert.That(result.Response.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
     }
 
-    private async Task<WhenIPostANewPlayerToApiPlayerResult> WhenIPostANewPlayerAsync()
+    #region Act.
+
+    private async Task<PostNewPlayerResult> PostNewPlayerAsync()
     {
         // Arrange.
         Player player = new()
@@ -71,16 +73,19 @@ public class PlayerCreateTest : EndpointTest
             Content = JsonContent.Create(player)
         };
 
-        return new WhenIPostANewPlayerToApiPlayerResult
+        return new PostNewPlayerResult
         {
             Player = player,
             Response = await HttpClient.SendAsync(request)
         };
     }
 
-    private sealed record WhenIPostANewPlayerToApiPlayerResult
+    private sealed record PostNewPlayerResult
     {
         internal required Player Player { get; init; }
         internal required HttpResponseMessage Response { get; init; }
     }
+
+    #endregion Act.
+
 }

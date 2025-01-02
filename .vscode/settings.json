@@ -12,6 +12,7 @@
         "prooftypes",
         "rimraf",
         "vite",
+        "vstest",
         "wwwroot"
     ]
 }

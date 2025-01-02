@@ -46,7 +46,4 @@ jobs:
           name: Web.Test
 
       - name: Run Tests
-        run: >-
-          dotnet vstest Mk8.Web.Test.dll
-          -e:Authentication__Google__ClientId=MyClientId
-          -e:Authentication__Google__ClientSecret=MyClientSecret
+        run: dotnet vstest Mk8.Web.Test.dll

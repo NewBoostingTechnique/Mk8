@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Mk8.Core.Countries;
 using Mk8.Core.Courses;
 using Mk8.Core.Logins;
@@ -19,6 +20,12 @@ namespace Mk8.Web.Test;
 
 public class EndpointTest
 {
+    static EndpointTest()
+    {
+        Environment.SetEnvironmentVariable("Authentication:Google:ClientId", "MyClientId");
+        Environment.SetEnvironmentVariable("Authentication:Google:ClientSecret", "MyClientSecret");
+    }
+
     protected EndpointTest() { }
 
     #region HttpClient.
@@ -52,6 +59,7 @@ public class EndpointTest
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            builder.UseEnvironment("Test");
             builder.ConfigureTestServices(configureTestServices);
         }
     }
@@ -97,7 +105,7 @@ public class EndpointTest
         authenticatorField?.ClearSubstitute();
     }
 
-    protected void GivenImAuthenticated()
+    protected void GivenAuthentication()
     {
         Claim[] claims = [new Claim(ClaimTypes.Email, "email@adress.domain")];
         ClaimsIdentity identity = new(claims, authSchemeName);
@@ -107,7 +115,7 @@ public class EndpointTest
         authenticator.AuthenticateAsync().Returns(result);
     }
 
-    protected void GivenImNotAuthenticated()
+    protected void ArrangeUnauthenticated()
     {
         AuthenticateResult result = AuthenticateResult.Fail("My Failure Message");
         authenticator.AuthenticateAsync().Returns(result);
@@ -117,15 +125,15 @@ public class EndpointTest
 
     #region Authorization.
 
-    protected void GivenImAuthorized(bool authorized)
+    protected void ArrangeAuthorization() => GivenAuthorization(true);
+
+    protected void GivenAuthorization(bool authorized)
     {
-        GivenImAuthenticated();
+        GivenAuthentication();
         LoginStore.ExistsAsync(Arg.Any<string>()).Returns(authorized);
     }
 
-    protected void GivenImAuthorized() => GivenImAuthorized(true);
-
-    protected void GivenImNotAuthorized() => GivenImAuthorized(false);
+    protected void ArrangeUnauthorized() => GivenAuthorization(false);
 
     #endregion Authorization.
 
