@@ -51,7 +51,7 @@ const PlayerUi = {
   Detail: lazy(() => playerUiImport.then(module => ({ default: module.Detail })))
 };
 const RuleList = lazy(() => import('../Rules/RuleList.jsx'));
-const TimeCreate = lazy(() => import('../Times/TimeCreate.jsx'));
+const CreateTime = lazy(() => import('../Times/Create/CreateTime.jsx'));
 
 const courseClient = useCourseClient();
 const countryClient = useCountryClient();
@@ -153,11 +153,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/times/create/:playerName/:courseName/',
-        element: <TimeCreate />,
+        element: <CreateTime />,
         loader: async ({ params }) => {
           const [players, courses] = await Promise.all([
-            playerClient.listAsync(),
-            courseClient.listAsync()
+            playerClient.indexAsync(),
+            courseClient.indexAsync()
           ]);
           return ({
             courseName: params.courseName,

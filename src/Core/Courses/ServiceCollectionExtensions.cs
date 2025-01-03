@@ -15,18 +15,18 @@ internal static class ServiceCollectionExtensions
     {
         services.AddMemoryCache();
 
-        ServiceDescriptor? descriptor = services.GetServiceDescriptor<ICourseData>()
+        ServiceDescriptor? descriptor = services.GetServiceDescriptor<ICourseStore>()
             ?? throw new InvalidOperationException("An implementation of ICourseData must be registered before calling AddCourseCaching.");
 
         services.AddSingleton(sp => ActivatorUtilities.CreateInstance<EventingCourseData>
         (
             sp,
-            (ICourseData)descriptor.CreateInstance(sp)
+            (ICourseStore)descriptor.CreateInstance(sp)
         ));
 
         services.AddSingleton<ICourseDataEvents>(sp => sp.GetRequiredService<EventingCourseData>());
 
-        services.AddSingleton<ICourseData>
+        services.AddSingleton<ICourseStore>
         (
             sp =>
             {

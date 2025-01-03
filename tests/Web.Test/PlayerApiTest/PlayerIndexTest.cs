@@ -11,12 +11,12 @@ public class PlayerIndexTest : EndpointTest
     public async Task ShouldReturnPlayers_WhenPlayersExist([Values] bool authorized)
     {
         // Arrange.
-        GivenImAuthorized(authorized);
+        GivenAuthorization(authorized);
         ImmutableList<Player> expected =
         [
             new() { Name = "John Doe" }
         ];
-        PlayerStore.IndexAsync().Returns(expected);
+        PlayerStore.IndexAsync().Returns(Task.FromResult(expected));
         HttpRequestMessage request = new(HttpMethod.Get, "/api/players/");
 
         // Act.

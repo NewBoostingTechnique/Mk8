@@ -119,7 +119,7 @@ internal class MySqlPlayerStore(IOptions<Mk8Settings> mk8Options) : IPlayerStore
         return await command.ExecuteUlidAsync(cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task<IImmutableList<Player>> IndexAsync(CancellationToken cancellationToken = default)
+    public async Task<ImmutableList<Player>> IndexAsync(CancellationToken cancellationToken = default)
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 

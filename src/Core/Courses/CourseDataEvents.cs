@@ -5,9 +5,9 @@ internal interface ICourseDataEvents
 
     #region Inserted.
 
-    event EventHandler<InsertedEventArgs>? Inserted;
+    event EventHandler<CreatedEventArgs>? Created;
 
-    internal sealed class InsertedEventArgs(Course course) : EventArgs
+    internal sealed class CreatedEventArgs(Course course) : EventArgs
     {
         internal Course Course { get; } = course;
     }

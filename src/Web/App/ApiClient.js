@@ -17,6 +17,12 @@ export default class ApiClient {
       throw new ApiError(data.title, data.traceId);
     }
 
+    if (response.status === HttpStatusCode.Unauthorized)
+      return response;
+
+    if (!response.ok)
+      throw new Error(response.statusText);
+
     return response;
   };
 }

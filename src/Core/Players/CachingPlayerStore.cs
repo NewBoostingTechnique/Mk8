@@ -32,7 +32,7 @@ internal class CachingPlayerStore(
 
     #endregion Delete.
 
-    #region DetailAsync.
+    #region Detail.
 
     public Task<Player?> DetailAsync(Ulid id, CancellationToken cancellationToken = default)
     {
@@ -149,9 +149,9 @@ internal class CachingPlayerStore(
 
     }
 
-    #endregion DetailAsync.
+    #endregion Detail.
 
-    #region ExistsAsync.
+    #region Exists.
 
     public Task<bool> ExistsAsync(string name, CancellationToken cancellationToken = default)
     {
@@ -249,10 +249,10 @@ internal class CachingPlayerStore(
 
     }
 
-    #endregion ExistsAsync.
+    #endregion Exists.
 
 
-    #region IdentifyAsync.
+    #region Identify.
 
     public Task<Ulid?> IdentifyAsync(string name, CancellationToken cancellationToken = default)
     {
@@ -356,18 +356,18 @@ internal class CachingPlayerStore(
 
     }
 
-    #endregion IdentifyAsync.
+    #endregion Identify.
 
-    #region IndexAsync.
+    #region Index.
 
-    public Task<IImmutableList<Player>> IndexAsync(CancellationToken cancellationToken = default)
+    public Task<ImmutableList<Player>> IndexAsync(CancellationToken cancellationToken = default)
     {
         return cache.GetOrCreateAsync
         (
             "Player.Index",
             async entry =>
             {
-                IImmutableList<Player> players = await innerStore.IndexAsync(cancellationToken).ConfigureAwait(false);
+                ImmutableList<Player> players = await innerStore.IndexAsync(cancellationToken).ConfigureAwait(false);
                 entry.AddExpirationToken(new IndexChangeToken(playerEvents, timeEvents));
                 return players;
             }
@@ -458,6 +458,6 @@ internal class CachingPlayerStore(
         }
     }
 
-    #endregion IndexAsync.
+    #endregion Index.
 
 }

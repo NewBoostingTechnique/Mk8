@@ -4,9 +4,9 @@ namespace Mk8.Core.Courses;
 
 public interface ICourseService
 {
-    Task<bool> ExistsAsync(string courseName);
+    Task<bool> ExistsAsync(string courseName, CancellationToken cancellationToken = default);
 
-    Task<IImmutableList<Course>> ListAsync();
+    Task<ImmutableList<Course>> IndexAsync(CancellationToken cancellationToken = default);
 
-    Task SeedAsync();
+    Task SeedAsync(CancellationToken cancellationToken = default);
 }
