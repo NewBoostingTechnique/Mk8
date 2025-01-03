@@ -20,22 +20,22 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-            node-version: 18.17.x
+          node-version: 18.17.x
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-            version: 8.6.x
+          version: 8.6.x
 
       - name: Compile Code
-        run: dotnet publish -r linux-x64
+        run: dotnet publish
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: Web.Test
           path: artifacts/publish/Web.Test/release_linux-x64
-  
+
   Test:
     runs-on: ubuntu-24.04
     needs: Build

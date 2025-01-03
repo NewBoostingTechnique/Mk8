@@ -3,4 +3,7 @@
     <Content Update="**/appsettings.*.json" CopyToPublishDirectory="Never" />
     <Content Update="**/appsettings.$(DOTNET_ENVIRONMENT).json" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
+  <Target Name="CheckOperationSystem" BeforeTargets="BeforeBuild">
+    <Error Condition="'$(OS)'!='Unix'" Text="The project is for Linux only. This error prevents building on non-Unix operating systems." />
+  </Target>
 </Project>
