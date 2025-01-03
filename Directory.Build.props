@@ -10,6 +10,7 @@
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
     <RootNamespace>$(AssemblyName)</RootNamespace>
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <TargetFramework>net8.0</TargetFramework>
     <UseArtifactsOutput>true</UseArtifactsOutput>
