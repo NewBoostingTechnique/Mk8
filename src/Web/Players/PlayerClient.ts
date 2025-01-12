@@ -1,11 +1,12 @@
 import ApiClient from '../App/ApiClient';
+import Player from './Player';
 
 class PlayerClient extends ApiClient {
 
-  static baseUri = '/api/players/';
+  private static readonly baseUri = '/api/players/';
 
-  async createAsync(player) {
-    const response = await super.fetchAsync(
+  async createAsync(player: Player) {
+    return super.fetchAsync(
       PlayerClient.baseUri,
       {
         method: "POST",
@@ -16,10 +17,9 @@ class PlayerClient extends ApiClient {
         body: JSON.stringify(player),
       }
     );
-    return await response.json();
   }
 
-  deleteAsync(playerName) {
+  deleteAsync(playerName: string) {
     return super.fetchAsync(
       `${PlayerClient.baseUri}${playerName}/`,
       {
@@ -28,7 +28,7 @@ class PlayerClient extends ApiClient {
     );
   }
 
-  async detailAsync(playerName) {
+  async detailAsync(playerName: string) {
     const response = await super.fetchAsync(`${PlayerClient.baseUri}${playerName}/`);
     return (response.status >= 200 && response.status <= 300)
       ? await response.json()

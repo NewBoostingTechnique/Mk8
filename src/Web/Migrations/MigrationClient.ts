@@ -1,33 +1,28 @@
 import ApiClient from '../App/ApiClient'
 
 class MigrationClient extends ApiClient {
-  static baseUri = '/api/migrations/';
+  private static readonly baseUri = '/api/migrations/';
 
-  async createAsync($import) {
+  async createAsync() {
     const response = await super.fetchAsync(
       MigrationClient.baseUri,
       {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-        },
-        body: JSON.stringify($import),
+        method: "POST"
       }
     );
     return await response.json();
   }
 
-  async detailAsync(id) {
+  async detailAsync(id: string) {
     const response = await super.fetchAsync(`${MigrationClient.baseUri}${id}/`);
     return (response.status >= 200 && response.status <= 300)
       ? await response.json()
       : null;
   }
 
-  async indexAsync(after) {
+  async indexAsync(after: { [key: string]: string } | null = null) {
     let url = new URL(MigrationClient.baseUri, window.location.origin);
-    Object.keys(after ?? {}).forEach(key => url.searchParams.append(`after.${key}`, after[key]));
+    Object.keys(after ?? {}).forEach(key => url.searchParams.append(`after.${key}`, after![key]));
     const response = await super.fetchAsync(url);
     return await response.json();
   }

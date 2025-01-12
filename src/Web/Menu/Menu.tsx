@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import List from '@mui/material/List';
@@ -13,7 +12,12 @@ import PeopleIcon from '@mui/icons-material/People';
 import PublishIcon from '@mui/icons-material/Publish';
 import RuleIcon from '@mui/icons-material/Rule';
 
-export default function Menu({ authorization, showProgress }) {
+interface MenuProps {
+  readonly authorization: boolean;
+  readonly showProgress: () => void;
+}
+
+export default function Menu({ authorization, showProgress }: MenuProps) {
   return (
     <List className='menu' onClick={showProgress}>
       <ListItem key='News' disablePadding>
@@ -64,8 +68,3 @@ export default function Menu({ authorization, showProgress }) {
     </List>
   );
 }
-
-Menu.propTypes = {
-  authorization: PropTypes.bool.isRequired,
-  showProgress: PropTypes.func.isRequired,
-};

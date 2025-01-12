@@ -6,7 +6,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "dotnet: build",
-      "program": "${workspaceFolder}/artifacts/bin/Web/debug/Mk8.Web.dll",
+      "program": "${workspaceFolder}/artifacts/bin/Web/debug_linux-x64/Mk8.Web.dll",
       "cwd": "${workspaceFolder}/src/Web",
       "stopAtEntry": false,
       "serverReadyAction": {
