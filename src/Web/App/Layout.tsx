@@ -98,7 +98,7 @@ export default function Layout({ authorization, children }: LayoutProps) {
         <Box margin="auto" sx={{ width: { md: `calc(100% - ${drawerWidth}px)` } }}>
           <Toolbar />
           <Box margin="auto" mb="1em" width={{ xs: '%100', sm: 583, md: 683, lg: 983 }} >
-            <Image alt="Banner" src="banner.jpg" shift="right" />
+            <Image alt="Banner" src="/banner.jpg" shift="right" />
             {children}
           </Box>
         </Box>
