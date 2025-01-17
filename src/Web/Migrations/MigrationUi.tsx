@@ -5,17 +5,18 @@ import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   Typography
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 
 import useMigrationClient from './MigrationClient.js';
+import Migration from './Migration.js';
 
 
 export function Create() {
   const migrationClient = useMigrationClient();
   const navigate = useNavigate();
 
-  async function onSubmitAsync(e) {
+  async function onSubmitAsync(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const migration = await migrationClient.createAsync();
     navigate(`/migrations/detail/${migration.id}`);
@@ -96,7 +97,7 @@ export function Index() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {migrations.map(migration => (
+            {migrations.map((migration: Migration) => (
               <TableRow key={migration.id} onClick={() => navigate(`/migrations/detail/${migration.id}`)}>
                 <TableCell>{migration.startTime}</TableCell>
                 <TableCell>{migration.description}</TableCell>

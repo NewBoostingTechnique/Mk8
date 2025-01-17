@@ -22,15 +22,14 @@ import { useLocation } from 'react-router-dom'
 const Menu = lazy(() => import('../Menu/Menu.jsx'));
 
 const drawerWidth = 200;
-let progressTimeout;
+let progressTimeout: number;
 
-import PropTypes from 'prop-types';
+interface LayoutProps {
+  readonly authorization: boolean,
+  readonly children: React.ReactNode;
+}
 
-export default function Layout({ authorization, children }) {
-  Layout.propTypes = {
-    authorization: PropTypes.object.isRequired,
-    children: PropTypes.node.isRequired
-  };
+export default function Layout({ authorization, children }: LayoutProps) {
   // Progress indicator state (open/close).
   const [isProgressShown, setIsProgressShown] = useState(false);
   function showProgress() {
@@ -99,7 +98,7 @@ export default function Layout({ authorization, children }) {
         <Box margin="auto" sx={{ width: { md: `calc(100% - ${drawerWidth}px)` } }}>
           <Toolbar />
           <Box margin="auto" mb="1em" width={{ xs: '%100', sm: 583, md: 683, lg: 983 }} >
-            <Image alt="Banner" src="banner.jpg" shift="right" sx={{ mb: '1em' }} />
+            <Image alt="Banner" src="/banner.jpg" shift="right" />
             {children}
           </Box>
         </Box>

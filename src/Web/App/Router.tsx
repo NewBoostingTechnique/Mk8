@@ -2,22 +2,22 @@ import { lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 
-import useAuthorizationClient from '../Authorization/AuthorizationClient.js';
+import useAuthorizationClient from '../Authorization/AuthorizationClient.ts';
 import useCountryClient from '../Countries/CountryClient.js';
 import useCourseClient from '../Courses/CourseClient.js';
 import useMigrationClient from '../Migrations/MigrationClient.js';
 import useNewClient from '../News/NewClient.js';
 import usePlayerClient from '../Players/PlayerClient.js';
 
-import getLocaleNameAsync from './Locale.jsx';
+import getLocaleNameAsync from './Locale.js';
 const localeNamePromise = getLocaleNameAsync();
 
 const App = lazy(() => import('./App.jsx'));
 
-const Authorization = lazy(() => import('../Authorization/Authorization.jsx'));
+const Authorization = lazy(() => import('../Authorization/Authorization.js'));
 const authorizationPromise = useAuthorizationClient().getAsync();
 
-const ErrorBoundary = lazy(() => import('../Errors/ErrorBoundary.jsx'));
+const ErrorBoundary = lazy(() => import('../Errors/ErrorBoundary.js'));
 
 const migrationClient = useMigrationClient();
 const migrationUiImport = import('../Migrations/MigrationUi.jsx');
@@ -96,11 +96,15 @@ const router = createBrowserRouter([
       {
         path: '/migrations/detail/:id/',
         element: <MigrationUi.Detail />,
-        loader: async ({ params }) => ({
-          migration: await migrationClient.detailAsync(params.id)
-        })
-      },
-      {
+        loader: async ({ params }) => {
+          if (params.id == null)
+            return Promise.reject(new Error("Migration id is undefined. Expected '/migrations/detail/:id'"));
+
+          return {
+            migration: await migrationClient.detailAsync(params.id)
+          };
+        },
+      }, {
         path: '/news/',
         element: <NewUi.Index />,
         loader: newIndexLoader
@@ -135,10 +139,14 @@ const router = createBrowserRouter([
         path: '/players/detail/:name/',
         element: <PlayerUi.Detail />,
         loader: async ({ params }) => {
+          if (params.name == null)
+            return Promise.reject(new Error("Player name is undefined. Expected '/players/detail/:name'"));
+
           const [authorization, player] = await Promise.all([
             authorizationPromise,
             playerClient.detailAsync(params.name)
           ]);
+
           return ({
             authorization: authorization,
             player: player
@@ -172,6 +180,11 @@ const router = createBrowserRouter([
   }
 ])
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+const root = document.getElementById('root');
+
+if (root === null)
+  throw new Error("Root element not found.");
+
+ReactDOM.createRoot(root).render(
   <RouterProvider router={router} />
 );

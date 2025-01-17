@@ -1,10 +1,11 @@
 import ApiClient from '../App/ApiClient';
+import Time from './Time';
 
 class TimeClient extends ApiClient {
 
-  static baseUri = '/api/times/';
+  public static readonly baseUri = '/api/times/';
 
-  async createAsync(time) {
+  async createAsync(time: Time) {
     return super.fetchAsync(
       TimeClient.baseUri,
       {

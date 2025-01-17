@@ -1,7 +1,7 @@
 import ApiClient from '../App/ApiClient';
 
 class RegionClient extends ApiClient {
-  async listAsync(countryName) {
+  async listAsync(countryName: string) {
     const response = await super.fetchAsync(`/api/regions/${countryName}/`);
     return await response.json();
   }

@@ -16,6 +16,10 @@ import duration from 'dayjs/plugin/duration';
 import PropTypes from 'prop-types';
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import * as React from 'react';
+import Player from './Player.js';
+import Time from '../Times/Time.js';
+import Region from '../Regions/Region.js';
+import Country from '../Countries/Country.js';
 
 export function Create() {
   const loaderData = useLoaderData();
@@ -23,29 +27,29 @@ export function Create() {
   const regionClient = useRegionClient();
   const navigate = useNavigate();
 
-  const [country, setCountry] = React.useState();
-  const [proof, setProof] = React.useState();
-  const [region, setRegion] = React.useState();
+  const [countryName, setCountryName] = React.useState<string>();
+  const [regionName, setRegionName] = React.useState<string>();
   const [regions, setRegions] = React.useState([]);
 
-  const onCountryChange = async (event) => {
-    setCountry(event.target.value);
+  const onCountryChange = async (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCountryName(event.target.value);
     setRegions(await regionClient.listAsync(event.target.value));
   };
 
-  const onProofChange = (event) => {
-    setProof(event.target.value);
-  };
-
-  const onRegionChange = (event) => {
-    setRegion(event.target.value);
+  const onRegionChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setRegionName(event.target.value);
   }
 
-  async function onSubmitAsync(e) {
+  async function onSubmitAsync(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    let player = Object.fromEntries(formData.entries());
-    player = await playerClient.insertAsync(player);
+    const elements = e.currentTarget.elements;
+    const player = new Player(
+      (elements.namedItem('name') as HTMLInputElement).value,
+      null,
+      (elements.namedItem('countryName') as HTMLInputElement).value,
+      (elements.namedItem('regionName') as HTMLInputElement).value
+    );
+    await playerClient.createAsync(player);
     navigate(`/players/detail/${player.name}`);
   }
 
@@ -53,19 +57,14 @@ export function Create() {
     <Stack component="form" onSubmit={onSubmitAsync} sx={{ gap: { xs: 2, md: 3 } }}>
       <Typography variant='h2'>Create Player</Typography>
       <TextField autoFocus name="name" label="Name" required />
-      <TextField name="countryName" label="Country" onChange={onCountryChange} required select value={country}>
-        {loaderData.countries.map(country =>
+      <TextField name="countryName" label="Country" onChange={onCountryChange} required select value={countryName}>
+        {loaderData.countries.map((country: Country) =>
           <MenuItem key={country.name} value={country.name}>{country.name}</MenuItem>
         )}
       </TextField>
-      <TextField name="regionName" label="Town/Region" onChange={onRegionChange} required select value={region} >
-        {regions.map(region =>
+      <TextField name="regionName" label="Town/Region" onChange={onRegionChange} required select value={regionName} >
+        {regions.map((region: Region) =>
           <MenuItem key={region.name} value={region.name}>{region.name}</MenuItem>
-        )}
-      </TextField>
-      <TextField name="proofTypeDescription" label="Proof" onChange={onProofChange} required select value={proof}>
-        {loaderData.proofTypes.map(proofType =>
-          <MenuItem key={proofType.description} value={proofType.description}>{proofType.description}</MenuItem>
         )}
       </TextField>
       <Button type="submit" variant="contained">Submit</Button>
@@ -81,7 +80,7 @@ export function Detail() {
   const navigate = useNavigate();
   const playerClient = usePlayerClient();
 
-  async function deletePlayerAsync(name) {
+  async function deletePlayerAsync(name: string) {
     await playerClient.deleteAsync(name);
     navigate('/players/');
   }
@@ -142,7 +141,7 @@ export function Detail() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {loaderData.player.times?.map(time => (
+            {loaderData.player.times?.map((time: Time) => (
               <TimeRow authorization={loaderData.authorization} key={`${time.courseName}-${time.playerName}`} player={loaderData.player} time={time}></TimeRow>
             ))}
           </TableBody>
@@ -154,7 +153,8 @@ export function Detail() {
 
 dayjs.extend(duration);
 
-function formatTimeSpan(timeSpan) {
+// TODO: Consider a timeSpan class with internal string representation.
+function formatTimeSpan(timeSpan: string) {
   if (!timeSpan)
     return "-'--\"---";
 
@@ -172,7 +172,7 @@ function formatTimeSpan(timeSpan) {
   }).format('m\'ss"SSS');
 }
 
-function TimeCells({ time }) {
+function TimeCells({ time }: Readonly<{ time: Time }>) {
   return (
     <>
       <TableCell>{time.courseName}</TableCell>
@@ -185,8 +185,7 @@ TimeCells.propTypes = {
   time: PropTypes.object.isRequired
 };
 
-
-function TimeRow({ authorization, player, time }) {
+function TimeRow({ authorization, player, time }: Readonly<{ authorization: boolean, player: Player, time: Time }>) {
   const navigate = useNavigate();
   if (authorization) {
     if (time.span) {
@@ -226,7 +225,7 @@ export function Index() {
   const loaderData = useLoaderData();
   const navigate = useNavigate();
 
-  function getActive(player) {
+  function getActive(player: Player) {
     if (!player.active)
       return 'Never';
 
@@ -254,7 +253,7 @@ export function Index() {
     return 'Today';
   }
 
-  function getLocation(player) {
+  function getLocation(player: Player) {
     let location = player.regionName ? `${player.regionName}, ` : '';
     location += player.countryName;
     return location;
@@ -286,7 +285,7 @@ export function Index() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {loaderData.players.map(player => (
+            {loaderData.players.map((player: Player) => (
               <TableRow key={player.name} onClick={() => navigate(`/players/detail/${player.name}`)}>
                 <TableCell>{player.name}</TableCell>
                 <TableCell>{getLocation(player)}</TableCell>

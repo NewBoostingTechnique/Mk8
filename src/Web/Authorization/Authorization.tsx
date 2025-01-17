@@ -10,7 +10,7 @@ export default function Authorization() {
   authorizationClient.postAsync().then(async response => {
 
     if (response.status == HttpStatusCode.Unauthorized) {
-      window.location = await response.text();
+      window.location.href = await response.text();
     }
     else {
       navigate('/');

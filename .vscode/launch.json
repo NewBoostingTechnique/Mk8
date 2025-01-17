@@ -6,7 +6,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "dotnet: build",
-      "program": "${workspaceFolder}/artifacts/bin/Web/debug/Mk8.Web.dll",
+      "program": "${workspaceFolder}/artifacts/bin/Web/debug_linux-x64/Mk8.Web.dll",
       "cwd": "${workspaceFolder}/src/Web",
       "stopAtEntry": false,
       "serverReadyAction": {
@@ -23,7 +23,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "dotnet: build",
-      "program": "${workspaceFolder}/src/MySql.Console/bin/Debug/net8.0/Mk8.MySql.Console.dll",
+      "program": "${workspaceFolder}/artifacts/bin/MySql.Console/debug_linux-x64/Mk8.MySql.Console.dll",
       "cwd": "${workspaceFolder}/src/MySql.Console",
       "stopAtEntry": false
     },
@@ -32,7 +32,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "dotnet: build",
-      "program": "${workspaceFolder}/src/MySql.Console/bin/Debug/net8.0/Mk8.MySql.Console.dll",
+      "program": "${workspaceFolder}/artifacts/bin/MySql.Console/debug_linux-x64/Mk8.MySql.Console.dll",
       "args": [
         "seed"
       ],

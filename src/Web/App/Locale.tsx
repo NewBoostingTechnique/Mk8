@@ -1,4 +1,4 @@
-let localeName = null;
+let localeName: string | null = null;
 
 export default async function getLocaleNameAsync() {
   if (localeName)

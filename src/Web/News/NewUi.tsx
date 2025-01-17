@@ -4,11 +4,12 @@ import localizedFormat from 'dayjs/plugin/duration';
 import DOMPurify from 'dompurify';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import useNewClient from './NewClient';
+import NewIndexLoaderData from './NewIndexLoaderData';
 
 dayjs.extend(localizedFormat);
 
 export function Index() {
-  const loaderData = useLoaderData();
+  const loaderData: NewIndexLoaderData = useLoaderData();
   const navigate = useNavigate();
   const newClient = useNewClient();
 
@@ -34,7 +35,7 @@ export function Index() {
           <Grid item key={$new.title}>
             <Card sx={{ padding: { xs: 1, md: 3 } }}>
               <Typography variant='h4'>{$new.title}</Typography>
-              <Typography variant='p'>By {$new.authorName} on {dayjs($new.date).format('LL')}.</Typography>
+              <Typography variant='body1'>By {$new.authorName} on {dayjs($new.date).format('LL')}.</Typography>
               <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize($new.body, { USE_PROFILES: { html: true } }) }} />
             </Card>
           </Grid>

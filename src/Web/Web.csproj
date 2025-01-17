@@ -22,13 +22,13 @@
     <ItemGroup>
       <Content Remove="$(FrontEndOutDir)/**/*" />
     </ItemGroup>
-    <Exec Command="npx vite build --mode $(Mode) --outDir $(FrontEndOutDir)" LogStandardErrorAsError="true" />
+    <Exec Command="bunx tsc --build &amp;&amp; bunx vite build --mode $(Mode) --outDir $(FrontEndOutDir)" LogStandardErrorAsError="true" />
     <ItemGroup>
       <Content Include="$(FrontEndOutDir)/**/*" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
   </Target>
   <Target Name="RestoreFrontEnd" BeforeTargets="_GenerateRestoreProjectSpec" Inputs="package.json" Outputs="node_modules/.install-stamp">
-    <Exec Command="pnpm i" LogStandardErrorAsError="true" />
+    <Exec Command="bunx bun i" LogStandardErrorAsError="true" />
     <Touch Files="node_modules/.install-stamp" AlwaysCreate="true" />
   </Target>
 </Project>

@@ -8,7 +8,7 @@ export default class ApiClient {
     }
   }
 
-  async fetchAsync(...args) {
+  async fetchAsync(...args: any[]) {
     let [resource, config] = args;
     const response = await fetch(resource, config);
 

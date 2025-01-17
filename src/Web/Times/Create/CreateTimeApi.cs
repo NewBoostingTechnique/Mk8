@@ -11,18 +11,7 @@ internal static class CreateTimeApi
 {
     internal static void MapCreateTimeApi(this IEndpointRouteBuilder builder)
     {
-        // TODO: Add test(s) for backend.
-        // 6. Conflict - time already exists.
-
-        // TODO: Create issue for:
-        // Entities should not be public.
-        // Consider adding a test API for creating entities.
-
-        // TODO: Require tests on PRs (not on main).
-
         // TODO: Add client-side validation.
-
-        // TODO: Convert front-end to Typescript + Bun.
 
         // TODO: Add front-end tests.
 

@@ -1,14 +1,15 @@
 import Layout from '../App/Layout';
 import ApiError from './ApiError';
 import { Typography } from '@mui/material';
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { useRouteError } from 'react-router-dom';
+import { ReactNode } from 'react';
 
-export default function ErrorBoundary({ children }) {
-  let [error, setError] = React.useState();
+export default function ErrorBoundary({ children }: Readonly<{ children?: ReactNode }>) {
+  let [error, setError] = React.useState<Error>();
+  const routeError = useRouteError() as Error;
 
-  const promiseRejectionHandler = React.useCallback((event) => {
+  const promiseRejectionHandler = React.useCallback((event: PromiseRejectionEvent) => {
     setError(event.reason);
   }, []);
 
@@ -20,25 +21,22 @@ export default function ErrorBoundary({ children }) {
     };
   }, []);
 
-  error ??= useRouteError();
+  error = error ?? routeError;
 
   if (!error)
     return (children);
 
   return (
-    <Layout>
+    <Layout authorization={false}>
       {
         error instanceof ApiError
           ? <>
             <Typography variant='h2'>{error.message}</Typography>
             <Typography variant='h3'>Trace Identifier</Typography>
-            <Typography variant='body'>{error.traceId}</Typography>
+            <Typography variant='body2'>{error.traceId}</Typography>
           </>
           : <Typography variant='h2'>An error occurred</Typography>
       }
     </Layout>
   );
 }
-ErrorBoundary.propTypes = {
-  children: PropTypes.string
-};
