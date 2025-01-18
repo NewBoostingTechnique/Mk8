@@ -40,7 +40,7 @@ internal sealed class MySqlRegionData(IOptions<Mk8Settings> mk8Options) : IRegio
     {
         using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
 
-        using MySqlCommand command = new("region_identify", connection);
+        using MySqlCommand command = new("region_index", connection);
         command.CommandType = CommandType.StoredProcedure;
         command.AddParameter("CountryId", countryId);
 
