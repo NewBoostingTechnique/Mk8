@@ -7,6 +7,6 @@ internal static class ServiceCollectionExtensions
 {
     internal static void AddPersons(this IServiceCollection services)
     {
-        services.AddSingleton<IPersonStore, MySqlPersonData>();
+        services.AddSingleton<IPersonStore, MySqlPersonStore>();
     }
 }

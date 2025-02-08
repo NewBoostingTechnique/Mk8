@@ -17,12 +17,12 @@ public class Program
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
         builder.AddAuthentication();
         builder.AddAuthorization();
-        builder.Services.AddMySql();
+        builder.AddMySql();
         builder.AddMk8Core();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new TimeSpanJsonConverter()));
 
-        WebApplication app = builder.Build();
+        using WebApplication app = builder.Build();
         app.UseForwardedHeaders(new ForwardedHeadersOptions
         {
             ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto

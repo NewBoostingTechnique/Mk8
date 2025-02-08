@@ -2,18 +2,19 @@ using System.Collections.Immutable;
 using System.Data;
 using System.Data.Common;
 using Microsoft.Extensions.Options;
-using Mk8.Core;
 using Mk8.Core.Migrations;
 using Mk8.Data.Common;
 using MySql.Data.MySqlClient;
 
 namespace Mk8.MySql.Migrations;
 
-sealed internal class MySqlMigrationStore(IOptions<Mk8Settings> mk8Options) : IMigrationStore
+sealed internal class MySqlMigrationStore(
+    IOptions<MySqlSettings> options
+) : IMigrationStore
 {
     public async Task CreateAsync(Migration migration, CancellationToken cancellationToken = default)
     {
-        using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
+        using MySqlConnection connection = new(options.Value.ConnectionString);
 
         using MySqlCommand command = new("migration_create", connection);
         command.CommandType = CommandType.StoredProcedure;
@@ -28,7 +29,7 @@ sealed internal class MySqlMigrationStore(IOptions<Mk8Settings> mk8Options) : IM
 
     public async Task<Migration?> DetailAsync(Ulid id, CancellationToken cancellationToken = default)
     {
-        using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
+        using MySqlConnection connection = new(options.Value.ConnectionString);
 
         using MySqlCommand command = new("migration_detail", connection);
         command.CommandType = CommandType.StoredProcedure;
@@ -53,7 +54,7 @@ sealed internal class MySqlMigrationStore(IOptions<Mk8Settings> mk8Options) : IM
 
     public async Task<ImmutableList<Migration>> IndexAsync(Migration? after, CancellationToken cancellationToken = default)
     {
-        using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
+        using MySqlConnection connection = new(options.Value.ConnectionString);
 
         using MySqlCommand command = new("migration_index", connection);
         command.CommandType = CommandType.StoredProcedure;
@@ -82,7 +83,7 @@ sealed internal class MySqlMigrationStore(IOptions<Mk8Settings> mk8Options) : IM
 
     public async Task UpdateAsync(Migration migration, CancellationToken cancellationToken = default)
     {
-        using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
+        using MySqlConnection connection = new(options.Value.ConnectionString);
 
         using MySqlCommand command = new("migration_update", connection);
         command.CommandType = CommandType.StoredProcedure;

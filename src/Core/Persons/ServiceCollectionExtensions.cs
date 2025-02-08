@@ -8,7 +8,6 @@ internal static class ServiceCollectionExtensions
     internal static void AddPersons(this IServiceCollection services)
     {
         services.AddPersonCaching();
-        services.AddSingleton<IPersonService, PersonService>();
     }
 
     private static void AddPersonCaching(this IServiceCollection services)

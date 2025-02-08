@@ -4,13 +4,23 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "src\Core\Core.csproj", "{7EAE7DF2-B934-4815-99FF-90B6054E16E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySql.Console", "src\MySql.Console\MySql.Console.csproj", "{463FFFCD-2ABC-4E91-8714-D80597B2588E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Management.Console", "src\Management.Console\Management.Console.csproj", "{463FFFCD-2ABC-4E91-8714-D80597B2588E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySql", "src\MySql\MySql.csproj", "{B8A4151F-E43B-4F48-95C8-16D7176B9824}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "src\Web\Web.csproj", "{7D68E900-0D43-4FB0-92A1-A4BB51186A06}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Test", "tests\Web.Test\Web.Test.csproj", "{F25B9081-D655-46AA-8D43-D2657720ABCB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{968E68D9-AFA0-4FF4-87FE-CA7071B2A932}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySql.Test", "tests\MySql.Test\MySql.Test.csproj", "{2722BAD3-F0A9-4202-8061-4A8932FED1C9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{92953592-1BB4-4DB9-8C2A-1B19409C6C9C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Management.MySql", "src\Management.MySql\Management.MySql.csproj", "{03E4CE7C-F3E4-48D5-A333-040685AB6BA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Management.Core", "src\Management.Core\Management.Core.csproj", "{C6E1B7D7-662C-4E61-9650-A45D32F88170}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,5 +51,22 @@ Global
 		{B8A4151F-E43B-4F48-95C8-16D7176B9824}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8A4151F-E43B-4F48-95C8-16D7176B9824}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8A4151F-E43B-4F48-95C8-16D7176B9824}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2722BAD3-F0A9-4202-8061-4A8932FED1C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2722BAD3-F0A9-4202-8061-4A8932FED1C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2722BAD3-F0A9-4202-8061-4A8932FED1C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2722BAD3-F0A9-4202-8061-4A8932FED1C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03E4CE7C-F3E4-48D5-A333-040685AB6BA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03E4CE7C-F3E4-48D5-A333-040685AB6BA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03E4CE7C-F3E4-48D5-A333-040685AB6BA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03E4CE7C-F3E4-48D5-A333-040685AB6BA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6E1B7D7-662C-4E61-9650-A45D32F88170}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6E1B7D7-662C-4E61-9650-A45D32F88170}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6E1B7D7-662C-4E61-9650-A45D32F88170}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6E1B7D7-662C-4E61-9650-A45D32F88170}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2722BAD3-F0A9-4202-8061-4A8932FED1C9} = {968E68D9-AFA0-4FF4-87FE-CA7071B2A932}
+		{03E4CE7C-F3E4-48D5-A333-040685AB6BA9} = {92953592-1BB4-4DB9-8C2A-1B19409C6C9C}
+		{C6E1B7D7-662C-4E61-9650-A45D32F88170} = {92953592-1BB4-4DB9-8C2A-1B19409C6C9C}
 	EndGlobalSection
 EndGlobal

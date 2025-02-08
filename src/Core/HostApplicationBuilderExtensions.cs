@@ -8,7 +8,6 @@ using Mk8.Core.Times;
 using Mk8.Core.Logins;
 using Mk8.Core.Migrations;
 using Mk8.Core.Persons;
-using Mk8.Core.Seeds;
 using Mk8.Core.Countries;
 using Mk8.Core.Regions;
 
@@ -27,7 +26,6 @@ public static class HostApplicationBuilderExtensions
         services.AddPersons();
         services.AddPlayers();
         services.AddRegions();
-        services.AddSeeds();
         services.AddMigrations();
         services.AddTimes();
         services.AddLogins();

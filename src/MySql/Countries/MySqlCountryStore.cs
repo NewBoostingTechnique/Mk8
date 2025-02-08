@@ -2,17 +2,18 @@ using System.Collections.Immutable;
 using System.Data;
 using System.Data.Common;
 using Microsoft.Extensions.Options;
-using Mk8.Core;
 using Mk8.Core.Countries;
 using MySql.Data.MySqlClient;
 
 namespace Mk8.MySql.Countries;
 
-internal class MySqlCountryStore(IOptions<Mk8Settings> mk8Options) : ICountryStore
+internal class MySqlCountryStore(
+    IOptions<MySqlSettings> options
+) : ICountryStore
 {
     public async Task CreateAsync(Country country, CancellationToken cancellationToken = default)
     {
-        using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
+        using MySqlConnection connection = new(options.Value.ConnectionString);
 
         using MySqlCommand command = new("country_create", connection);
         command.CommandType = CommandType.StoredProcedure;
@@ -25,7 +26,7 @@ internal class MySqlCountryStore(IOptions<Mk8Settings> mk8Options) : ICountrySto
 
     public async Task<Ulid?> IdentifyAsync(string name, CancellationToken cancellationToken = default)
     {
-        using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
+        using MySqlConnection connection = new(options.Value.ConnectionString);
 
         using MySqlCommand command = new("country_identify", connection);
         command.CommandType = CommandType.StoredProcedure;
@@ -37,7 +38,7 @@ internal class MySqlCountryStore(IOptions<Mk8Settings> mk8Options) : ICountrySto
 
     public async Task<IImmutableList<Country>> IndexAsync(CancellationToken cancellationToken = default)
     {
-        using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
+        using MySqlConnection connection = new(options.Value.ConnectionString);
 
         using MySqlCommand command = new("country_index", connection);
         command.CommandType = CommandType.StoredProcedure;

@@ -1,11 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <Content Include="**/*.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Remove="bin/**" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="MySql.Data" />
   </ItemGroup>
   <ItemGroup>

@@ -16,7 +16,7 @@ internal class PlayerService(
     IOptionsMonitor<Mk8Settings> options,
     IPersonStore personStore,
     IPlayerStore playerStore,
-    IRegionData regionData
+    IRegionStore regionData
 ) : IPlayerService
 {
     public async Task<Player> CreateAsync(Player player, CancellationToken cancellationToken = default)

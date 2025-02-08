@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <UserSecretsId>899d21f1-1a37-43b4-841b-e4387c64366c</UserSecretsId>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\MySql\MySql.csproj" />
+        <ProjectReference Include="..\..\src\Management.MySql\Management.MySql.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Hosting" />
+    </ItemGroup>
+</Project>

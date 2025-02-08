@@ -12,14 +12,14 @@ internal class CachingLoginData(
 
     #region Exists.
 
-    public Task<bool> ExistsAsync(string email)
+    public Task<bool> ExistsAsync(string email, CancellationToken cancellationToken = default)
     {
         return cache.GetOrCreateAsync
         (
             $"Course_Exists:{email}",
             async entry =>
             {
-                bool exists = await innerData.ExistsAsync(email).ConfigureAwait(false);
+                bool exists = await innerData.ExistsAsync(email, cancellationToken).ConfigureAwait(false);
                 entry.AddExpirationToken(new ExistsChangeToken(events, email));
                 return exists;
             }
@@ -103,8 +103,8 @@ internal class CachingLoginData(
 
     #endregion Exists.
 
-    public Task CreateAsync(Login login)
+    public Task CreateAsync(Login login, CancellationToken cancellationToken = default)
     {
-        return innerData.CreateAsync(login);
+        return innerData.CreateAsync(login, cancellationToken);
     }
 }

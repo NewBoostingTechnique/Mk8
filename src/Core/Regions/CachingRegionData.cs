@@ -6,9 +6,9 @@ namespace Mk8.Core.Regions;
 
 internal class CachingRegionData(
     IMemoryCache cache,
-    IRegionData innerData,
+    IRegionStore innerData,
     IRegionDataEvents events
-) : IRegionData
+) : IRegionStore
 {
 
     #region Identify.

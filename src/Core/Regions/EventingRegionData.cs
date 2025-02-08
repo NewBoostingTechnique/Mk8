@@ -4,8 +4,8 @@ using static Mk8.Core.Regions.IRegionDataEvents;
 namespace Mk8.Core.Regions;
 
 internal class EventingRegionData(
-    IRegionData innerData
-) : IRegionData, IRegionDataEvents
+    IRegionStore innerData
+) : IRegionStore, IRegionDataEvents
 {
     public Task<Ulid?> IdentifyAsync(string name, CancellationToken cancellationToken = default)
     {

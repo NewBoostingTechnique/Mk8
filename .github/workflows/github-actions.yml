@@ -26,17 +26,45 @@ jobs:
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.1.42
-
       - name: Compile Code
         run: dotnet publish
 
-      - name: Upload artifact
+        # Add MySql test project
+        # Upload MySql test artifact
+        # Install db and test IF MySql project has changes.
+
+      - name: Upload Artifact 'MySql.Test'
+        uses: actions/upload-artifact@v4
+        with:
+          name: MySql.Test
+          path: artifacts/publish/MySql.Test/release_linux-x64
+
+      - name: Upload Artifact 'Web.Test'
         uses: actions/upload-artifact@v4
         with:
           name: Web.Test
           path: artifacts/publish/Web.Test/release_linux-x64
 
-  Test:
+  MySql_Test:
+    name: MySql.Test
+    runs-on: ubuntu-24.04
+    needs: Build
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: MySql.Test
+          
+        # GitHub Actions Runner already has MySql installed.s
+      - name: Start MySql Server
+        run: sudo mysql --user=root --password=root
+
+        # Pass the root user connection string into the test dll.
+      - name: Run Tests
+        run: dotnet vstest Mk8.MySql.Test.dll
+
+  Web_Test:
+    name: Web.Test
     runs-on: ubuntu-24.04
     needs: Build
     steps:

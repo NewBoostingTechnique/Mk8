@@ -12,7 +12,7 @@
     <UserSecretsId>4cfe11b2-1d73-47d9-86bb-695aea43903c</UserSecretsId>
   </PropertyGroup>
   <Target Name="CleanFrontEnd" BeforeTargets="Clean">
-    <Exec Command="npx rimraf $(FrontEndOutDir)" LogStandardErrorAsError="true" />
+    <Exec Command="bunx rimraf $(FrontEndOutDir)" LogStandardErrorAsError="true" />
   </Target>
   <Target Name="BuildFrontEnd" BeforeTargets="BeforeBuild">
     <PropertyGroup>
