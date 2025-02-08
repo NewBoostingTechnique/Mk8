@@ -37,13 +37,13 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: MySql.Test
-          path: artifacts/publish/MySql.Test/release_linux-x64
+          path: tests/artifacts/publish/MySql.Test/release_linux-x64
 
       - name: Upload Artifact 'Web.Test'
         uses: actions/upload-artifact@v4
         with:
           name: Web.Test
-          path: artifacts/publish/Web.Test/release_linux-x64
+          path: tests/artifacts/publish/Web.Test/release_linux-x64
 
   MySql_Test:
     name: MySql.Test
