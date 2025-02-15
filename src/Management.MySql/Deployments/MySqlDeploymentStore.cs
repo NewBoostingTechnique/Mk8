@@ -12,7 +12,7 @@ internal class MySqlDeploymentStore(
     {
         // Require the target and root connection strings to be on the same server.
         MySqlConnectionStringBuilder rootConnectionStringBuilder = new(options.Value.RootConnectionString);
-        MySqlConnectionStringBuilder targetConnectionStringBuilder = new(options.Value.ConnectionString);
+        MySqlConnectionStringBuilder targetConnectionStringBuilder = new(options.Value.GetTargetConnectionString(deployment.Name));
         if (targetConnectionStringBuilder.Server != rootConnectionStringBuilder.Server)
             throw new InvalidOperationException("The target connection string must point a the same server as the root connection string.");
 

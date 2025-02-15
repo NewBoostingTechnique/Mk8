@@ -14,27 +14,6 @@ public class MySqlTest
 {
     protected MySqlTest() { }
 
-    #region ConnectionStringBuilder.
-
-    private MySqlConnectionStringBuilder ConnectionStringBuilder
-    {
-        get
-        {
-            if (_connectionStringBuilder is null)
-            {
-                _connectionStringBuilder = new(RootConnectionString)
-                {
-                    Database = DatabaseName
-                };
-            }
-            return _connectionStringBuilder;
-        }
-    }
-
-    private MySqlConnectionStringBuilder? _connectionStringBuilder;
-
-    #endregion ConnectionStringBuilder.
-
     #region DatabaseName.
 
     private string DatabaseName => _databaseName ??= Ulid.NewUlid().ToString();
@@ -51,9 +30,9 @@ public class MySqlTest
         {
             if (_host is null)
             {
-                MySqlConnectionStringBuilder connectionStringBuilder = ConnectionStringBuilder;
+                string targetConnectionString = Settings.GetTargetConnectionString(DatabaseName);
                 HostApplicationBuilder hostApplicationBuilder = HostApplicationBuilder;
-                hostApplicationBuilder.Configuration[$"{MySqlSettings.SectionName}:{nameof(MySqlSettings.ConnectionString)}"] = connectionStringBuilder.ConnectionString;
+                hostApplicationBuilder.Configuration[$"{MySqlSettings.SectionName}:{nameof(MySqlSettings.ConnectionString)}"] = targetConnectionString;
                 hostApplicationBuilder.AddMySql();
                 hostApplicationBuilder.AddMySqlManagement();
                 _host = hostApplicationBuilder.Build();
@@ -88,28 +67,26 @@ public class MySqlTest
 
     #endregion HostApplicationBuilder.
 
-    #region RootConnectionString.
+    #region Settings.
 
-    private string RootConnectionString
+    private MySqlManagementSettings Settings
     {
         get
         {
-            if (_rootConnectionString is null)
+            if (_settings is null)
             {
-                MySqlManagementSettings? settings = HostApplicationBuilder.Configuration
-                    .GetRequiredSection(MySqlSettings.SectionName)
-                    .Get<MySqlManagementSettings>()
-                    ?? throw new InvalidOperationException("Failed to get the MySQL management settings.");
-
-                _rootConnectionString = settings.RootConnectionString;
+                _settings = HostApplicationBuilder.Configuration
+                   .GetRequiredSection(MySqlManagementSettings.SectionName)
+                   .Get<MySqlManagementSettings>()
+                   ?? throw new InvalidOperationException("Failed to get the MySQL management settings.");
             }
-            return _rootConnectionString;
+            return _settings;
         }
     }
 
-    private string? _rootConnectionString;
+    private MySqlManagementSettings? _settings;
 
-    #endregion RootConnectionString.
+    #endregion Settings;
 
     #region ServiceProviderTask.
 
@@ -136,7 +113,8 @@ public class MySqlTest
         if (_databaseName is null)
             return;
 
-        using MySqlConnection connection = new(RootConnectionString);
+        // TODO: Use a command handler for this, just like the CreateDeploymentCommand used above.
+        using MySqlConnection connection = new(Settings.RootConnectionString);
         using MySqlCommand command = new($"drop database {DatabaseName};", connection);
         await connection.OpenAsync();
         await command.ExecuteNonQueryAsync();

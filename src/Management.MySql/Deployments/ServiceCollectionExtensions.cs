@@ -7,7 +7,6 @@ internal static class ServiceCollectionExtensions
 {
     internal static void AddDeployments(this IServiceCollection services)
     {
-        services.TryAddSingleton<StoreManagerAssistant>();
         services.TryAddSingleton<IDeploymentStore, MySqlDeploymentStore>();
     }
 }

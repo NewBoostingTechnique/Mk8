@@ -22,7 +22,7 @@ internal class CreateDeploymentHandler(
 
         foreach (IStoreManager storeManager in storeManagers)
         {
-            await storeManager.DeployAsync(deployment, cancellationToken).ConfigureAwait(false);
+            await storeManager.DeployAsync(deployment.Name, cancellationToken).ConfigureAwait(false);
         }
 
         return Result.Success();
