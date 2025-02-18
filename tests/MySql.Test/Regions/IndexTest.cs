@@ -7,9 +7,6 @@ namespace Mk8.MySql.Test.Regions;
 
 /*
 * TODO:
-* - Make this test green.
-* - Keep is green while sorting out other TODOs.
-* - Regression test the console.
 * - Pipeline create a database server instance.
 * - Pipeline executes these tests passing in a connection string for the root user 'Mk8:MySql:Management:RootConnectionString'.
 */

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mk8.Core.Countries;
@@ -12,6 +13,7 @@ using Mk8.Core.Logins;
 using Mk8.Core.Persons;
 using Mk8.Core.Players;
 using Mk8.Core.Times;
+using Mk8.MySql;
 using Mk8.Web.Test.Authentication;
 using NSubstitute;
 using NSubstitute.ClearExtensions;
@@ -57,6 +59,17 @@ public class EndpointTest
 
     private sealed class Mk8WebApplicationFactory(Action<IServiceCollection> configureTestServices) : WebApplicationFactory<Program>
     {
+        protected override IHost CreateHost(IHostBuilder builder)
+        {
+            builder.ConfigureHostConfiguration(ConfigureHostConfiguration);
+            return base.CreateHost(builder);
+        }
+
+        private static void ConfigureHostConfiguration(IConfigurationBuilder builder)
+        {
+            builder.AddInMemoryCollection([new KeyValuePair<string, string?>(MySqlSettings.SectionName, "")]);
+        }
+
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.UseEnvironment("Test");
@@ -75,7 +88,7 @@ public class EndpointTest
 
     protected virtual void ConfigureTestServices(IServiceCollection services)
     {
-        configureAuthenticationServices(services);
+        ConfigureAuthenticationServices(services);
         services.AddSingleton(LoginStore);
         services.AddSingleton(CountryStore);
         services.AddSingleton(CourseStore);
@@ -86,7 +99,7 @@ public class EndpointTest
 
     #region Authentication.
 
-    private void configureAuthenticationServices(IServiceCollection services)
+    private void ConfigureAuthenticationServices(IServiceCollection services)
     {
         AuthenticationBuilder authenticationBuilder = services.AddAuthentication(defaultScheme: authSchemeName);
         authenticationBuilder.AddScheme<AuthenticationSchemeOptions, FakeAuthenticationHandler>(authSchemeName, _ => { });
