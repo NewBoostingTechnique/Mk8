@@ -54,10 +54,14 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: MySql.Test
-          
+
         # GitHub Actions Runner already has MySql installed.s
       - name: Start MySql Server
-        run: sudo mysql --user=root --password=root
+        uses: actions/setup-mysql@v1
+        with:
+          mysql-version: '8.0'
+          root-password: 'your_password'
+      - run: mysql -u root -p -e "SELECT VERSION()"
 
         # Pass the root user connection string into the test dll.
       - name: Run Tests
