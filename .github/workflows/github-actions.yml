@@ -55,17 +55,15 @@ jobs:
         with:
           name: MySql.Test
 
-        # GitHub Actions Runner already has MySql installed.s
+        # GitHub Actions Runner already has MySql installed?
       - name: Start MySql Server
-        uses: actions/setup-mysql@v1
-        with:
-          mysql-version: '8.0'
-          root-password: 'your_password'
-      - run: mysql -u root -p -e "SELECT VERSION()"
+        run: sudo mysql --host=127.0.0.1 --user=root --password=root
 
-        # Pass the root user connection string into the test dll.
       - name: Run Tests
         run: dotnet vstest Mk8.MySql.Test.dll
+        env:
+          Mk8__Management__MySql__TargetConnectionStringTemplate: "server=127.0.0.1;user=mk8;password=97PsgBZ4aubUnU;database=${database}"
+          Mk8__Management__MySql__RootConnectionString: "server=127.0.0.1;port=3306;user=root;password=root"
 
   Web_Test:
     name: Web.Test
