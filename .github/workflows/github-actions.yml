@@ -29,10 +29,6 @@ jobs:
       - name: Compile Code
         run: dotnet publish
 
-        # Add MySql test project
-        # Upload MySql test artifact
-        # Install db and test IF MySql project has changes.
-
       - name: Upload Artifact 'MySql.Test'
         uses: actions/upload-artifact@v4
         with:
@@ -62,7 +58,7 @@ jobs:
         run: dotnet vstest Mk8.MySql.Test.dll
         env:
           Mk8__Management__MySql__RootConnectionString: server=127.0.0.1;port=3306;user=root;password=root
-          Mk8__Management__MySql__TargetConnectionStringTemplate: server=127.0.0.1;user=mk8;password=97PsgBZ4aubUnU;database=${database}
+          Mk8__Management__MySql__TargetConnectionStringTemplate: server=127.0.0.1;user=mk8;password=mk8;database=${database}
 
   Web_Test:
     name: Web.Test
