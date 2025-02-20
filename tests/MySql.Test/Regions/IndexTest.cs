@@ -5,12 +5,6 @@ using Mk8.Core.Regions;
 
 namespace Mk8.MySql.Test.Regions;
 
-/*
-* TODO:
-* - Pipeline create a database server instance.
-* - Pipeline executes these tests passing in a connection string for the root user 'Mk8:MySql:Management:RootConnectionString'.
-*/
-
 public class IndexTest : MySqlTest
 {
     [Test]
