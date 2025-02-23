@@ -5,8 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mk8.Management.Core.Deployments.Create;
+using Mk8.Management.Core.Deployments.Delete;
 using Mk8.Management.MySql;
-using MySql.Data.MySqlClient;
 
 namespace Mk8.MySql.Test;
 
@@ -14,13 +14,13 @@ public class MySqlTest
 {
     protected MySqlTest() { }
 
-    #region DatabaseName.
+    #region DeploymentName.
 
-    private string DatabaseName => _databaseName ??= Ulid.NewUlid().ToString();
+    private string DeploymentName => _deploymentName ??= Ulid.NewUlid().ToString();
 
-    private string? _databaseName;
+    private string? _deploymentName;
 
-    #endregion DatabaseName.
+    #endregion DeploymentName.
 
     #region Host.
 
@@ -30,7 +30,7 @@ public class MySqlTest
         {
             if (_host is null)
             {
-                string targetConnectionString = Settings.GetTargetConnectionString(DatabaseName);
+                string targetConnectionString = Settings.GetTargetConnectionString(DeploymentName);
                 HostApplicationBuilder hostApplicationBuilder = HostApplicationBuilder;
                 hostApplicationBuilder.Configuration[$"{MySqlSettings.SectionName}:{nameof(MySqlSettings.ConnectionString)}"] = targetConnectionString;
                 hostApplicationBuilder.AddMySql();
@@ -98,7 +98,7 @@ public class MySqlTest
             {
                 IHost host = Host;
                 ICommandHandler<CreateDeploymentCommand, Result> createDeploymentHandler = host.Services.GetRequiredService<ICommandHandler<CreateDeploymentCommand, Result>>();
-                _serviceProviderTask = createDeploymentHandler.Handle(new CreateDeploymentCommand { Name = DatabaseName }, CancellationToken.None)
+                _serviceProviderTask = createDeploymentHandler.Handle(new() { Name = DeploymentName }, CancellationToken.None)
                     .ContinueWith(antecedent => antecedent.IsFaulted ? throw antecedent.Exception.InnerException! : host.Services);
             }
             return _serviceProviderTask;
@@ -108,16 +108,13 @@ public class MySqlTest
     private Task<IServiceProvider>? _serviceProviderTask;
 
     [TearDown]
-    public async Task TearDownDatabaseAsync()
+    public Task TearDownDatabaseAsync()
     {
-        if (_databaseName is null)
-            return;
+        if (_deploymentName is null)
+            return Task.CompletedTask;
 
-        // TODO: Use a command handler for this, just like the CreateDeploymentCommand used above.
-        using MySqlConnection connection = new(Settings.RootConnectionString);
-        using MySqlCommand command = new($"drop database {DatabaseName};", connection);
-        await connection.OpenAsync();
-        await command.ExecuteNonQueryAsync();
+        ICommandHandler<DeleteDeploymentCommand, Result> deleteDeploymentHandler = Host.Services.GetRequiredService<ICommandHandler<DeleteDeploymentCommand, Result>>();
+        return deleteDeploymentHandler.Handle(new() { Name = DeploymentName }, CancellationToken.None);
     }
 
     #endregion ServiceProviderTask.
