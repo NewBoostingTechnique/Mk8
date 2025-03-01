@@ -67,7 +67,14 @@ public class EndpointTest
 
         private static void ConfigureHostConfiguration(IConfigurationBuilder builder)
         {
-            builder.AddInMemoryCollection([new KeyValuePair<string, string?>(MySqlSettings.SectionName, "")]);
+            builder.AddInMemoryCollection
+            ([
+                new KeyValuePair<string, string?>
+                (
+                    $"{MySqlSettings.SectionName}:{nameof(MySqlSettings.ConnectionString)}",
+                    "not a real connection string"
+                )
+            ]);
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)

@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mk8.MySql.Countries;
@@ -26,6 +25,10 @@ public static class HostApplicationBuilderExtensions
         builder.Services.AddRegions();
         builder.Services.AddTimes();
         builder.Services.AddMigrations();
-        builder.Services.Configure<MySqlSettings>(builder.Configuration.GetRequiredSection(MySqlSettings.SectionName));
+
+        builder.Services.AddOptions<MySqlSettings>()
+            .BindConfiguration(MySqlSettings.SectionName)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
     }
 }

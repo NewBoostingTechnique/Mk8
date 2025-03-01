@@ -20,7 +20,11 @@ public static class HostApplicationBuilderExtensions
     public static void AddMySqlManagement(this IHostApplicationBuilder builder)
     {
         builder.Services.AddManagement();
-        builder.Services.Configure<MySqlManagementSettings>(builder.Configuration.GetRequiredSection(MySqlManagementSettings.SectionName));
+
+        builder.Services.AddOptions<MySqlManagementSettings>()
+            .BindConfiguration(MySqlManagementSettings.SectionName)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
 
         // TODO: Currently these need to be in dependency order.
         // Consider making this all independent units somehow.
