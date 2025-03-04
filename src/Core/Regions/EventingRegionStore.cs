@@ -3,13 +3,13 @@ using static Mk8.Core.Regions.IRegionDataEvents;
 
 namespace Mk8.Core.Regions;
 
-internal class EventingRegionData(
-    IRegionStore innerData
+internal class EventingRegionStore(
+    IRegionStore innerStore
 ) : IRegionStore, IRegionDataEvents
 {
     public Task<Ulid?> IdentifyAsync(string name, CancellationToken cancellationToken = default)
     {
-        return innerData.IdentifyAsync(name, cancellationToken);
+        return innerStore.IdentifyAsync(name, cancellationToken);
     }
 
     #region Insert.
@@ -18,7 +18,7 @@ internal class EventingRegionData(
 
     public async Task CreateAsync(Region region, CancellationToken cancellationToken = default)
     {
-        await innerData.CreateAsync(region, cancellationToken).ConfigureAwait(false);
+        await innerStore.CreateAsync(region, cancellationToken).ConfigureAwait(false);
         Inserted?.Invoke(this, new InsertedEventArgs(region));
     }
 
@@ -26,6 +26,6 @@ internal class EventingRegionData(
 
     public Task<IImmutableList<Region>> IndexAsync(Ulid countryId, CancellationToken cancellationToken = default)
     {
-        return innerData.IndexAsync(countryId, cancellationToken);
+        return innerStore.IndexAsync(countryId, cancellationToken);
     }
 }

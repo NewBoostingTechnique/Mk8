@@ -4,9 +4,9 @@ using Microsoft.Extensions.Primitives;
 
 namespace Mk8.Core.Regions;
 
-internal class CachingRegionData(
+internal class CachingRegionStore(
     IMemoryCache cache,
-    IRegionStore innerData,
+    IRegionStore innerStore,
     IRegionDataEvents events
 ) : IRegionStore
 {
@@ -20,7 +20,7 @@ internal class CachingRegionData(
             $"Region_Identify:{name}",
             async entry =>
             {
-                Ulid? id = await innerData.IdentifyAsync(name, cancellationToken).ConfigureAwait(false);
+                Ulid? id = await innerStore.IdentifyAsync(name, cancellationToken).ConfigureAwait(false);
                 entry.AddExpirationToken(new IdentifyChangeToken(events, name));
                 return id;
             }
@@ -106,7 +106,7 @@ internal class CachingRegionData(
 
     public Task CreateAsync(Region region, CancellationToken cancellationToken = default)
     {
-        return innerData.CreateAsync(region, cancellationToken);
+        return innerStore.CreateAsync(region, cancellationToken);
     }
 
     #region List.
@@ -118,7 +118,7 @@ internal class CachingRegionData(
             $"Region_List:{countryId}",
             async entry =>
             {
-                IImmutableList<Region> regions = await innerData.IndexAsync(countryId, cancellationToken).ConfigureAwait(false);
+                IImmutableList<Region> regions = await innerStore.IndexAsync(countryId, cancellationToken).ConfigureAwait(false);
                 entry.AddExpirationToken(new ListChangeToken(events));
                 return regions;
             }

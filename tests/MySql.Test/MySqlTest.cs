@@ -33,8 +33,8 @@ public class MySqlTest
                 string targetConnectionString = Settings.GetTargetConnectionString(DeploymentName);
                 HostApplicationBuilder hostApplicationBuilder = HostApplicationBuilder;
                 hostApplicationBuilder.Configuration[$"{MySqlSettings.SectionName}:{nameof(MySqlSettings.ConnectionString)}"] = targetConnectionString;
-                hostApplicationBuilder.AddMySql();
-                hostApplicationBuilder.AddMySqlManagement();
+                hostApplicationBuilder.Services.AddMySql();
+                hostApplicationBuilder.Services.AddMySqlManagement();
                 _host = hostApplicationBuilder.Build();
             }
             return _host;

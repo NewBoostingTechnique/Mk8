@@ -17,8 +17,8 @@ public class Program
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
         builder.AddAuthentication();
         builder.AddAuthorization();
-        builder.AddMySql();
-        builder.AddMk8Core();
+        builder.Services.AddMySql();
+        builder.Services.AddMk8Core();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new TimeSpanJsonConverter()));
 

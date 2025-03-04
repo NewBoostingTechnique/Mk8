@@ -9,10 +9,9 @@ public record MySqlManagementSettings
     [Required]
     public required string RootConnectionString { get; init; }
 
-    // Then PR review....
+    // Add issues for TODOs.
 
-    // Resolve TODO's on new code.
-    // Add issues for TODO's on old code.
+    // PR review.
 
     [Required]
     public required string TargetConnectionStringTemplate { get; init; }

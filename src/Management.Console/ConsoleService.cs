@@ -7,7 +7,7 @@ using Mk8.Management.Core.Deployments.Seed;
 
 namespace Mk8.Management.Console;
 
-internal partial class ConsoleService(
+internal class ConsoleService(
     IHostApplicationLifetime hostApplicationLifetime,
     ICommandHandler<CreateDeploymentCommand, Result> createDeploymentCommand,
     ICommandHandler<SeedDeploymentCommand, Result> seedDeploymentCommand
@@ -17,18 +17,19 @@ internal partial class ConsoleService(
     {
         hostApplicationLifetime.ApplicationStarted.Register(async () =>
         {
-            RootCommand rootCommand = new("MK8 MySQL Console");
+            RootCommand rootCommand = new("MK8 Management Console");
 
             Command deploy = new("deploy");
             rootCommand.Add(deploy);
-            deploy.SetHandler
-            (
-                () => createDeploymentCommand.Handle
+            Task deployHandler()
+            {
+                return createDeploymentCommand.Handle
                 (
                     new CreateDeploymentCommand { Name = "mk8" },
                     cancellationToken
-                )
-            );
+                );
+            }
+            deploy.SetHandler(deployHandler);
 
             Command seed = new("seed");
             rootCommand.Add(seed);
@@ -41,9 +42,9 @@ internal partial class ConsoleService(
                 )
             );
 
-            rootCommand.SetHandler(deploy.Handler!.InvokeAsync);
+            rootCommand.SetHandler(deployHandler);
 
-            string[] args = Environment.GetCommandLineArgs().Skip(1).ToArray();
+            string[] args = [.. Environment.GetCommandLineArgs().Skip(1)];
             await rootCommand.InvokeAsync(args);
 
             hostApplicationLifetime.StopApplication();

@@ -9,8 +9,8 @@ using Mk8.MySql;
 HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 builder.Configuration.AddUserSecrets(Assembly.GetExecutingAssembly());
 builder.Services.AddHostedService<ConsoleService>();
-builder.AddMySql();
-builder.AddMySqlManagement();
+builder.Services.AddMySql();
+builder.Services.AddMySqlManagement();
 
 using IHost host = builder.Build();
 await host.RunAsync();
