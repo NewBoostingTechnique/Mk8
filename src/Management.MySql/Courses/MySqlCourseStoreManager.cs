@@ -19,8 +19,6 @@ internal class MySqlCourseStoreManager(
         await StoreManagerAssistant.ExecuteScriptFile
         (
             targetConnectionString,
-            // TODO: Break these 'table' scripts apart into individual pieces.
-            // We may be able to run some in parallel.
             "Courses/CourseTable.sql",
             cancellationToken
         );
