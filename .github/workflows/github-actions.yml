@@ -26,17 +26,42 @@ jobs:
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.1.42
-
       - name: Compile Code
         run: dotnet publish
 
-      - name: Upload artifact
+      - name: Upload Artifact 'MySql.Test'
+        uses: actions/upload-artifact@v4
+        with:
+          name: MySql.Test
+          path: tests/artifacts/publish/MySql.Test/release_linux-x64
+
+      - name: Upload Artifact 'Web.Test'
         uses: actions/upload-artifact@v4
         with:
           name: Web.Test
-          path: artifacts/publish/Web.Test/release_linux-x64
+          path: tests/artifacts/publish/Web.Test/release_linux-x64
 
-  Test:
+  MySql_Test:
+    name: MySql.Test
+    runs-on: ubuntu-24.04
+    needs: Build
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: MySql.Test
+
+      - name: Start MySql Server
+        run: sudo systemctl start mysql.service
+
+      - name: Run Tests
+        run: dotnet vstest Mk8.MySql.Test.dll
+        env:
+          Mk8__Management__MySql__RootConnectionString: server=127.0.0.1;port=3306;user=root;password=root
+          Mk8__Management__MySql__TargetConnectionStringTemplate: server=127.0.0.1;user=mk8;password=mk8;database=${database}
+
+  Web_Test:
+    name: Web.Test
     runs-on: ubuntu-24.04
     needs: Build
     steps:

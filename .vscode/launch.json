@@ -1,48 +1,48 @@
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Web",
-      "type": "coreclr",
-      "request": "launch",
-      "preLaunchTask": "dotnet: build",
-      "program": "${workspaceFolder}/artifacts/bin/Web/debug_linux-x64/Mk8.Web.dll",
-      "cwd": "${workspaceFolder}/src/Web",
-      "stopAtEntry": false,
-      "serverReadyAction": {
-        "action": "openExternally",
-        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-      },
-      "env": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "NODE_ENV": "development"
-      }
-    },
-    {
-      "name": "MySql.Console",
-      "type": "coreclr",
-      "request": "launch",
-      "preLaunchTask": "dotnet: build",
-      "program": "${workspaceFolder}/artifacts/bin/MySql.Console/debug_linux-x64/Mk8.MySql.Console.dll",
-      "cwd": "${workspaceFolder}/src/MySql.Console",
-      "stopAtEntry": false
-    },
-    {
-      "name": "MySql.Console seed",
-      "type": "coreclr",
-      "request": "launch",
-      "preLaunchTask": "dotnet: build",
-      "program": "${workspaceFolder}/artifacts/bin/MySql.Console/debug_linux-x64/Mk8.MySql.Console.dll",
-      "args": [
-        "seed"
-      ],
-      "cwd": "${workspaceFolder}/src/MySql.Console",
-      "stopAtEntry": false
-    },
-    {
-      "name": ".NET Core Attach",
-      "type": "coreclr",
-      "request": "attach"
-    }
-  ]
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Web",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "dotnet: build",
+            "program": "${workspaceFolder}/artifacts/bin/Web/debug_linux-x64/Mk8.Web.dll",
+            "cwd": "${workspaceFolder}/src/Web",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "NODE_ENV": "development"
+            }
+        },
+        {
+            "name": "Management.Console",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "dotnet: build",
+            "program": "${workspaceFolder}/artifacts/bin/Management.Console/debug_linux-x64/Mk8.Management.Console.dll",
+            "cwd": "${workspaceFolder}/src/Management.Console",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Management.Console seed",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "dotnet: build",
+            "program": "${workspaceFolder}/artifacts/bin/Management.Console/debug_linux-x64/Mk8.Management.Console.dll",
+            "args": [
+                "seed"
+            ],
+            "cwd": "${workspaceFolder}/src/Management.Console",
+            "stopAtEntry": false
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
+        }
+    ]
 }

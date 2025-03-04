@@ -7,6 +7,6 @@ internal static class ServiceCollectionExtensions
 {
     internal static IServiceCollection AddRegions(this IServiceCollection services)
     {
-        return services.AddSingleton<IRegionData, MySqlRegionData>();
+        return services.AddSingleton<IRegionStore, MySqlRegionStore>();
     }
 }

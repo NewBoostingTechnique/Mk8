@@ -7,18 +7,18 @@ internal class EventingLoginData(
     ILoginStore innerData
 ) : ILoginStore, ILoginDataEvents
 {
-    public Task<bool> ExistsAsync(string email)
+    public Task<bool> ExistsAsync(string email, CancellationToken cancellationToken = default)
     {
-        return innerData.ExistsAsync(email);
+        return innerData.ExistsAsync(email, cancellationToken);
     }
 
     #region Insert.
 
     public event EventHandler<InsertedEventArgs>? Inserted;
 
-    public async Task CreateAsync(Login login)
+    public async Task CreateAsync(Login login, CancellationToken cancellationToken = default)
     {
-        await innerData.CreateAsync(login).ConfigureAwait(false);
+        await innerData.CreateAsync(login, cancellationToken).ConfigureAwait(false);
         Inserted?.Invoke(this, new InsertedEventArgs(login));
     }
 

@@ -24,5 +24,10 @@ public static class ServiceCollectionExtensions
         services.AddRegions();
         services.AddTimes();
         services.AddMigrations();
+
+        services.AddOptions<MySqlSettings>()
+            .BindConfiguration(MySqlSettings.SectionName)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
     }
 }

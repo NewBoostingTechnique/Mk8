@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Options;
-using Mk8.Core;
 using Mk8.Core.Players;
 using Mk8.Core.Times;
 using Mk8.Data.Common;
@@ -10,11 +9,13 @@ using System.Data.Common;
 
 namespace Mk8.MySql.Players;
 
-internal class MySqlPlayerStore(IOptions<Mk8Settings> mk8Options) : IPlayerStore
+internal class MySqlPlayerStore(
+    IOptions<MySqlSettings> options
+) : IPlayerStore
 {
     public async Task CreateAsync(Player player, CancellationToken cancellationToken = default)
     {
-        using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
+        using MySqlConnection connection = new(options.Value.ConnectionString);
 
         using MySqlCommand command = new("player_create", connection);
         command.CommandType = CommandType.StoredProcedure;
@@ -40,7 +41,7 @@ internal class MySqlPlayerStore(IOptions<Mk8Settings> mk8Options) : IPlayerStore
 
     private async Task deleteAsync(Ulid? id, CancellationToken cancellationToken = default)
     {
-        using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
+        using MySqlConnection connection = new(options.Value.ConnectionString);
 
         using MySqlCommand command = new("player_delete", connection);
         command.CommandType = CommandType.StoredProcedure;
@@ -54,7 +55,7 @@ internal class MySqlPlayerStore(IOptions<Mk8Settings> mk8Options) : IPlayerStore
 
     public async Task<Player?> DetailAsync(Ulid id, CancellationToken cancellationToken = default)
     {
-        using var connection = new MySqlConnection(mk8Options.Value.ConnectionString);
+        using var connection = new MySqlConnection(options.Value.ConnectionString);
 
         using var command = new MySqlCommand("player_detail", connection);
         command.CommandType = CommandType.StoredProcedure;
@@ -97,7 +98,7 @@ internal class MySqlPlayerStore(IOptions<Mk8Settings> mk8Options) : IPlayerStore
 
     public async Task<bool> ExistsAsync(string name, CancellationToken cancellationToken = default)
     {
-        using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
+        using MySqlConnection connection = new(options.Value.ConnectionString);
 
         using MySqlCommand command = new("player_exists", connection);
         command.CommandType = CommandType.StoredProcedure;
@@ -109,7 +110,7 @@ internal class MySqlPlayerStore(IOptions<Mk8Settings> mk8Options) : IPlayerStore
 
     public async Task<Ulid?> IdentifyAsync(string name, CancellationToken cancellationToken = default)
     {
-        using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
+        using MySqlConnection connection = new(options.Value.ConnectionString);
 
         using MySqlCommand command = new("player_identify", connection);
         command.CommandType = CommandType.StoredProcedure;
@@ -121,7 +122,7 @@ internal class MySqlPlayerStore(IOptions<Mk8Settings> mk8Options) : IPlayerStore
 
     public async Task<ImmutableList<Player>> IndexAsync(CancellationToken cancellationToken = default)
     {
-        using MySqlConnection connection = new(mk8Options.Value.ConnectionString);
+        using MySqlConnection connection = new(options.Value.ConnectionString);
 
         using MySqlCommand command = new("player_index", connection);
         command.CommandType = CommandType.StoredProcedure;

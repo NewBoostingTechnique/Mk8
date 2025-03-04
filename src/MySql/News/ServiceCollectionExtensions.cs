@@ -7,6 +7,6 @@ internal static class ServiceCollectionExtensions
 {
     internal static void AddNews(this IServiceCollection services)
     {
-        services.AddSingleton<INewStore, MySqlNewData>();
+        services.AddSingleton<INewStore, MySqlNewStore>();
     }
 }
