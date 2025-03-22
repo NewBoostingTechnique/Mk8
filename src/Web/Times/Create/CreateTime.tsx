@@ -2,12 +2,29 @@ import useTimeClient from '../TimeClient.js';
 import Time from '../Time.ts';
 import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import * as React from 'react';
-import InputMask from "react-input-mask";
+import { IMaskInput } from 'react-imask';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import Player from '../../Players/Player.ts';
 import Course from '../../Courses/Course.ts';
+
+interface CustomProps {
+  inputRef: React.Ref<HTMLInputElement>;
+  onChange: (event: { target: { name: string; value: string } }) => void;
+  name: string;
+}
+
+const TimeSpanInput = React.forwardRef<HTMLElement, CustomProps>(
+  function TextMaskCustom(props, ref) {
+    const { onChange, ...other } = props;
+    return (
+      <IMaskInput {...other} definitions={{ '5': /[1-5]/ }} mask="0{:}50{.}000" placeholder="-:--.---" inputRef={ref as React.Ref<HTMLInputElement>}
+        onAccept={(value: any) => onChange({ target: { name: props.name, value } })}
+        overwrite />
+    );
+  }
+);
 
 export default function TimeCreate() {
   const loaderData = useLoaderData();
@@ -15,7 +32,7 @@ export default function TimeCreate() {
   const timeClient = useTimeClient();
 
   const [courseName, setCourseName] = React.useState(loaderData.courseName);
-  const [date, setDate] = React.useState<Dayjs | null>(new Dayjs());
+  const [date, setDate] = React.useState<dayjs.Dayjs | null>(null);
   const [playerName, setPlayerName] = React.useState(loaderData.playerName);
   const [timeSpan, setTimeSpan] = React.useState<string>();
 
@@ -23,7 +40,7 @@ export default function TimeCreate() {
     setCourseName(event.target.value);
   };
 
-  const onDateChange = (value: Dayjs | null) => {
+  const onDateChange = (value: dayjs.Dayjs | null) => {
     setDate(value);
   };
 
@@ -31,7 +48,7 @@ export default function TimeCreate() {
     setPlayerName(event.target.value);
   };
 
-  const onTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onTimeAccept = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTimeSpan(event.target.value);
   };
 
@@ -40,13 +57,13 @@ export default function TimeCreate() {
     const elements = e.currentTarget.elements;
 
     const time = new Time(
-      dayjs((elements.namedItem('data') as HTMLInputElement).value, loaderData.localeName).toISOString().split('T')[0],
+      dayjs((elements.namedItem('date') as HTMLInputElement).value, loaderData.localeName).toISOString().split('T')[0],
       `00:${(elements.namedItem('span') as HTMLInputElement).value.replace(/'/g, ':').replace(/"/g, '.')} `,
       (elements.namedItem('courseName') as HTMLInputElement).value,
       (elements.namedItem('playerName') as HTMLInputElement).value
     );
     await timeClient.createAsync(time);
-    navigate(`/ players / detail / ${playerName} `);
+    navigate(`/players/detail/${playerName}`);
   }
 
   return (
@@ -62,9 +79,11 @@ export default function TimeCreate() {
           <MenuItem key={course.name} value={course.name}>{course.name}</MenuItem>
         )}
       </TextField>
-      <InputMask mask="9'99&quot;999" value={timeSpan} disabled={false} maskChar="-" onChange={onTimeChange} required>
-        {() => <TextField label="Time" name="span" />}
-      </InputMask>
+      <TextField label="Time" name="span" value={timeSpan} onChange={onTimeAccept} required slotProps={{
+        input: {
+          inputComponent: TimeSpanInput as any,
+        },
+      }} />
       <DatePicker label="Date" name="date" value={dayjs(date)} onChange={onDateChange} />
       <Button type="submit" variant="contained">Submit</Button>
     </Stack>
