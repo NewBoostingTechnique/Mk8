@@ -22,7 +22,7 @@ import { useLocation } from 'react-router-dom'
 const Menu = lazy(() => import('../Menu/Menu.jsx'));
 
 const drawerWidth = 200;
-let progressTimeout: number;
+let progressTimeout: NodeJS.Timeout;
 
 interface LayoutProps {
   readonly authorization: boolean,
