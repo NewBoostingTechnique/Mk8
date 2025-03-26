@@ -153,7 +153,6 @@ export function Detail() {
 
 dayjs.extend(duration);
 
-// TODO: Consider a timeSpan class with internal string representation.
 function formatTimeSpan(timeSpan: string) {
   if (!timeSpan)
     return "-'--\"---";
@@ -169,7 +168,7 @@ function formatTimeSpan(timeSpan: string) {
     minutes,
     seconds,
     milliseconds
-  }).format('m\'ss"SSS');
+  }).format('m:ss.SSS');
 }
 
 function TimeCells({ time }: Readonly<{ time: Time }>) {

@@ -19,10 +19,10 @@ import { lazy, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom'
 
 // Get is authorized, and show Migrations in menu if authorized..
-const Menu = lazy(() => import('../Menu/Menu.jsx'));
+const Menu = lazy(() => import('../Menu/Menu.tsx'));
 
 const drawerWidth = 200;
-let progressTimeout: number;
+let progressTimeout: NodeJS.Timeout;
 
 interface LayoutProps {
   readonly authorization: boolean,

@@ -28,7 +28,7 @@
     </ItemGroup>
   </Target>
   <Target Name="RestoreFrontEnd" BeforeTargets="_GenerateRestoreProjectSpec" Inputs="package.json" Outputs="node_modules/.install-stamp">
-    <Exec Command="bunx bun i" LogStandardErrorAsError="true" />
+    <Exec Command="bunx bun i --frozen-lockfile" LogStandardErrorAsError="true" />
     <Touch Files="node_modules/.install-stamp" AlwaysCreate="true" />
   </Target>
 </Project>

@@ -6,5 +6,3 @@ export default class Time {
     public playerName: string
   ) { }
 }
-
-//TODO: Strongly type date and span.

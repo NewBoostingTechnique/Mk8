@@ -9,10 +9,10 @@ import useMigrationClient from '../Migrations/MigrationClient.js';
 import useNewClient from '../News/NewClient.js';
 import usePlayerClient from '../Players/PlayerClient.js';
 
-import getLocaleNameAsync from './Locale.js';
+import getLocaleNameAsync from './Locale.tsx';
 const localeNamePromise = getLocaleNameAsync();
 
-const App = lazy(() => import('./App.jsx'));
+const App = lazy(() => import('./App.tsx'));
 
 const Authorization = lazy(() => import('../Authorization/Authorization.js'));
 const authorizationPromise = useAuthorizationClient().getAsync();
@@ -20,7 +20,7 @@ const authorizationPromise = useAuthorizationClient().getAsync();
 const ErrorBoundary = lazy(() => import('../Errors/ErrorBoundary.js'));
 
 const migrationClient = useMigrationClient();
-const migrationUiImport = import('../Migrations/MigrationUi.jsx');
+const migrationUiImport = import('../Migrations/MigrationUi.tsx');
 const MigrationUi = {
   Create: lazy(() => migrationUiImport.then(module => ({ default: module.Create }))),
   Detail: lazy(() => migrationUiImport.then(module => ({ default: module.Detail }))),
@@ -28,7 +28,7 @@ const MigrationUi = {
 };
 
 const newClient = useNewClient();
-const newUiImport = import('../News/NewUi.jsx');
+const newUiImport = import('../News/NewUi.tsx');
 const NewUi = {
   Index: lazy(() => newUiImport.then(module => ({ default: module.Index })))
 };
@@ -44,14 +44,14 @@ async function newIndexLoader() {
 };
 
 const playerClient = usePlayerClient();
-const playerUiImport = import('../Players/PlayerUi.jsx');
+const playerUiImport = import('../Players/PlayerUi.tsx');
 const PlayerUi = {
   Index: lazy(() => playerUiImport.then(module => ({ default: module.Index }))),
   Create: lazy(() => playerUiImport.then(module => ({ default: module.Create }))),
   Detail: lazy(() => playerUiImport.then(module => ({ default: module.Detail })))
 };
-const RuleList = lazy(() => import('../Rules/RuleList.jsx'));
-const CreateTime = lazy(() => import('../Times/Create/CreateTime.jsx'));
+const RuleList = lazy(() => import('../Rules/RuleList.tsx'));
+const CreateTime = lazy(() => import('../Times/Create/CreateTime.tsx'));
 
 const courseClient = useCourseClient();
 const countryClient = useCountryClient();

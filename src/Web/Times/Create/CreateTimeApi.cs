@@ -11,10 +11,6 @@ internal static class CreateTimeApi
 {
     internal static void MapCreateTimeApi(this IEndpointRouteBuilder builder)
     {
-        // TODO: Add client-side validation.
-
-        // TODO: Add front-end tests.
-
         builder.MapPost
         (
             "/api/times/",
