@@ -168,7 +168,7 @@ function formatTimeSpan(timeSpan: string) {
     minutes,
     seconds,
     milliseconds
-  }).format('m\'ss"SSS');
+  }).format('m:ss.SSS');
 }
 
 function TimeCells({ time }: Readonly<{ time: Time }>) {

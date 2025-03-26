@@ -58,7 +58,7 @@ export default function TimeCreate() {
 
     const time = new Time(
       dayjs((elements.namedItem('date') as HTMLInputElement).value, loaderData.localeName).toISOString().split('T')[0],
-      `00:${(elements.namedItem('span') as HTMLInputElement).value.replace(/'/g, ':').replace(/"/g, '.')} `,
+      `00:${(elements.namedItem('span') as HTMLInputElement).value}`,
       (elements.namedItem('courseName') as HTMLInputElement).value,
       (elements.namedItem('playerName') as HTMLInputElement).value
     );
