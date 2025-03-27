@@ -44,12 +44,10 @@ async function newIndexLoader() {
 };
 
 const playerClient = usePlayerClient();
-const playerUiImport = import('../Players/PlayerUi.tsx');
-const PlayerUi = {
-  Index: lazy(() => playerUiImport.then(module => ({ default: module.Index }))),
-  Create: lazy(() => playerUiImport.then(module => ({ default: module.Create }))),
-  Detail: lazy(() => playerUiImport.then(module => ({ default: module.Detail })))
-};
+const CreatePlayer = lazy(() => import('../Players/Create/CreatePlayer.tsx'));
+const PlayerDetail = lazy(() => import('../Players/Detail/PlayerDetail.tsx'));
+const PlayerIndex = lazy(() => import('../Players/Index/PlayerIndex.tsx'));
+
 const RuleList = lazy(() => import('../Rules/RuleList.tsx'));
 const CreateTime = lazy(() => import('../Times/Create/CreateTime.tsx'));
 
@@ -111,7 +109,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/players/',
-        element: <PlayerUi.Index />,
+        element: <PlayerIndex />,
         loader: async () => {
           const [authorization, players] = await Promise.all([
             authorizationPromise,
@@ -125,7 +123,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/players/create/',
-        element: <PlayerUi.Create />,
+        element: <CreatePlayer />,
         loader: async () => {
           const [countries] = await Promise.all([
             countryClient.indexAsync()
@@ -137,7 +135,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/players/detail/:name/',
-        element: <PlayerUi.Detail />,
+        element: <PlayerDetail />,
         loader: async ({ params }) => {
           if (params.name == null)
             return Promise.reject(new Error("Player name is undefined. Expected '/players/detail/:name'"));
