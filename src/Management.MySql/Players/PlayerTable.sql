@@ -43,8 +43,6 @@ END;
 
 -- #region Detail
 
--- TODO: SPlit this file.
-
 DROP PROCEDURE IF EXISTS `player_detail`;
 
 CREATE PROCEDURE `player_detail` (
