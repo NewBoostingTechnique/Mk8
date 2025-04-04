@@ -43,6 +43,8 @@ END;
 
 -- #region Detail
 
+-- TODO: SPlit this file.
+
 DROP PROCEDURE IF EXISTS `player_detail`;
 
 CREATE PROCEDURE `player_detail` (
@@ -75,11 +77,7 @@ BEGIN
   FROM
     course
     LEFT OUTER JOIN
-      time ON course.Id = time.CourseId
-  WHERE
-    time.PlayerId IS NULL
-    OR
-      time.PlayerId = Id;
+      time ON course.Id = time.CourseId AND time.PlayerId = Id;
 END;
 
 -- #endregion Detail

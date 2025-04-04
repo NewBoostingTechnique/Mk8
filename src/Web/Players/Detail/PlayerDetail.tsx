@@ -97,7 +97,7 @@ dayjs.extend(duration);
 
 function formatTimeSpan(timeSpan: string) {
   if (!timeSpan)
-    return "-'--\"---";
+    return "-:--.---";
 
   const parts = timeSpan.split(':');
   const hours = parseInt(parts[0]);
