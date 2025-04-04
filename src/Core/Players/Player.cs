@@ -13,7 +13,7 @@ public record Player : Person
 
     #region Country.
 
-    public Ulid? CountryId { get; internal init; }
+    public Ulid? CountryId { get; init; }
 
     public string? CountryName { get; init; }
 
@@ -21,7 +21,7 @@ public record Player : Person
 
     #region Region.
 
-    public Ulid? RegionId { get; internal init; }
+    public Ulid? RegionId { get; init; }
 
     public string? RegionName { get; init; }
 

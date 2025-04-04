@@ -2,7 +2,7 @@ namespace Mk8.Core.Times;
 
 public record Time
 {
-    public Ulid? Id { get; internal init; }
+    public Ulid? Id { get; init; }
 
     #region Course.
 
