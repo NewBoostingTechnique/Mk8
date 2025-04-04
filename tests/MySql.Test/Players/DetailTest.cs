@@ -103,6 +103,4 @@ public class DetailTest : MySqlTest
         // Assert.
         Assert.That(result?.Times.Count, Is.EqualTo(courses.Length));
     }
-
-    // TODO: There's another bug, where the player does not have a region specified.
 }
